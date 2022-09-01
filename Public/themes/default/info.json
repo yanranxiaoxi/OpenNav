@@ -1,0 +1,13 @@
+{
+	"name": "OpenNav Default",
+	"description": "OpenNav 默认主题",
+	"homepage_url": "https:\/\/opennav.soraharu.com\/",
+	"help_url": "https:\/\/opennav.soraharu.com\/",
+	"version": "0.1.0",
+	"check_version_link": "https:\/\/opennav.soraharu.com\/theme\/default\/info.json",
+	"update_timestamp": "2022\/08\/19",
+	"author": "XiaoXi <admin@soraharu.com>",
+	"screenshot_url": "https:\/\/opennav.soraharu.com\/theme\/default\/screenshot.png",
+	"demo_url": "https:\/\/opennav.soraharu.com\/demo\/",
+	"require_version": "0.1.0"
+}

@@ -1,0 +1,21 @@
+{
+	"name": "yanranxiaoxi/opennav",
+	"type": "project",
+	"require": {
+		"catfan/medoo": "^2.1",
+		"arthurhoaro/favicon": "^1.3.3",
+		"robthree/twofactorauth": "^1.8.2"
+	},
+	"license": "Mozilla Public License Version 2.0",
+	"autoload": {
+		"psr-4": {
+			"yanranxiaoxi\\OpenNav\\": "Data/"
+		}
+	},
+	"authors": [
+		{
+			"name": "XiaoXi",
+			"email": "admin@soraharu.com"
+		}
+	]
+}

@@ -1,0 +1,7 @@
+/Cache/*
+!/Cache/.gitkeep
+/Data/config.php
+/Data/database.db3
+/Public/node_modules/
+/vendor/
+.vscode
