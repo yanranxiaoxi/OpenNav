@@ -694,7 +694,7 @@ class GlobalHelper {
 	/**
 	 * 删除链接「Auth Required」
 	 * 
-	 * @param	int		$link_id	链接 ID
+	 * @param int $link_id 链接 ID
 	 */
 	public function deleteLink_AuthRequired($link_id) {
 		$this->database->delete('on_links', [
@@ -749,7 +749,7 @@ class GlobalHelper {
 	/**
 	 * 修改主题选项「Auth Required」
 	 * 
-	 * @param	string	$options_theme	主题
+	 * @param string $options_theme 主题
 	 */
 	public function setOptionsTheme_AuthRequired($options_theme) {
 		$options_theme = $this->database->update('on_options', [
@@ -775,7 +775,7 @@ class GlobalHelper {
 	/**
 	 * 修改站点设置选项「Auth Required」
 	 * 
-	 * @param	array	$options_settings_site	站点设置
+	 * @param array $options_settings_site 站点设置
 	 */
 	public function setOptionsSettingsSite_AuthRequired($options_settings_site) {
 		$options_settings_site = serialize($options_settings_site);
@@ -802,7 +802,7 @@ class GlobalHelper {
 	/**
 	 * 修改过渡页设置选项「Auth Required」
 	 * 
-	 * @param	array	$options_settings_transition_page	过渡页设置
+	 * @param array $options_settings_transition_page 过渡页设置
 	 */
 	public function setOptionsSettingsTransitionPage_AuthRequired($options_settings_transition_page) {
 		$options_settings_transition_page = serialize($options_settings_transition_page);
@@ -829,7 +829,7 @@ class GlobalHelper {
 	/**
 	 * 修改订阅设置选项「Auth Required」
 	 * 
-	 * @param	array	$options_settings_subscribe	订阅设置
+	 * @param array $options_settings_subscribe 订阅设置
 	 */
 	public function setOptionsSettingsSubscribe_AuthRequired($options_settings_subscribe) {
 		$options_settings_subscribe = serialize($options_settings_subscribe);
