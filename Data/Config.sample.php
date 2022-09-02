@@ -40,3 +40,5 @@ define('COOKIE_SECRET_KEY', '{cookie_secret_key}');
 define('API_URL', 'https://opennav.soraharu.com/API/v1/');
 // 检查更新 API 地址
 define('CHECK_UPDATE_API_URL', 'https://gitlab.soraharu.com/api/v4/projects/90/releases');
+// DEBUG 模式
+define('DEBUG_MODE', false);

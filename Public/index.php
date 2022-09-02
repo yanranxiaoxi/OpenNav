@@ -33,7 +33,9 @@ $helper = new GlobalHelper($database);
 // 程序版本
 define('VERSION', '0.1.0');
 // 关闭 PHP 警告提示
-//error_reporting(E_ALL^E_NOTICE^E_WARNING^E_DEPRECATED);
+if (DEBUG_MODE === false) {
+	error_reporting(E_ALL^E_NOTICE^E_WARNING^E_DEPRECATED);
+}
 // 设置 PHP 超时时限
 ini_set('max_execution_time', 60);
 // 设置 Contect-Type 请求头为 text/html
