@@ -42,10 +42,11 @@ composer-install:
 upload:
   stage: upload
   tags:
-    - windows10shell
+    - windowsserver2022powershell
   rules:
     - if: $CI_COMMIT_TAG
   script:
+    - ${webrootDir} = "D:\wwwroot\downloadserver.soraharu.com\OpenNav\${CI_COMMIT_TAG}\";
     - ${nodeModulesDirArray} =
         "blueimp-md5\js",
         "bootstrap\dist",
@@ -63,8 +64,17 @@ upload:
         Move-Item ".\node_modules\${nodeModulesDir}\*" ".\Public\node_modules\${nodeModulesDir}\";
       }
     - Remove-Item ".\node_modules\" -Recurse;
-    - PowerShell -Command "& {7z a .\OpenNav-compiled.zip .\*}";
-    - Move-Item ".\OpenNav-compiled.zip" "D:\wwwroot\downloadserver.soraharu.com\OpenNav\${CI_COMMIT_TAG}\";
+    - Set-Location "..\";
+    - if (Test-Path -Path ".\OpenNav-compiled.zip" -PathType Leaf) {
+        Remove-Item ".\OpenNav-compiled.zip" -Recurse;
+      }
+    - PowerShell -Command "& {7z a .\OpenNav-compiled.zip .\OpenNav\*}";
+    - if (Test-Path -Path "${webrootDir}") {
+        Remove-Item "${webrootDir}*" -Recurse;
+      } else {
+        New-Item -Path "${webrootDir}" -ItemType Directory;
+      }
+    - Move-Item ".\OpenNav-compiled.zip" "${webrootDir}";
 
 #########################
 #        Release        #
