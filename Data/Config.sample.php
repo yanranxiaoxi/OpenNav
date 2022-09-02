@@ -9,6 +9,7 @@
  * @link		https://opennav.soraharu.com/
  */
 
+
 /**
  * 用户初始化设置
  */
@@ -16,13 +17,26 @@
 define('USERNAME', '{username}');
 // 密码
 define('PASSWORD', '{password}');
-// 邮箱，用于后台 Gravatar 头像显示
+// 电子邮箱
 define('EMAIL', '{email}');
+
+
+/**
+ * 安全设置
+ */
+// 强制 HTTPS 连接验证
+// 启用此功能可以在进行高危操作（如登录）时强制 HTTPS 连接验证
+define('ONLY_SECURE_CONNECTION', false);
+
+
+/**
+ * 系统设置
+ */
 // TOTP SecretKey
 define('TOTP_SECRET_KEY', '{totp_secret_key}');
 // COOKIE SecretKey
 define('COOKIE_SECRET_KEY', '{cookie_secret_key}');
-
-// 定义在线服务 API 地址
-// 你可以将 API_URL 定义为空以完全禁用在线服务
-define('API_URL', 'https://opennav.soraharu.com');
+// 在线服务 API 地址
+define('API_URL', 'https://opennav.soraharu.com/API/v1/');
+// 检查更新 API 地址
+define('CHECK_UPDATE_API_URL', 'https://gitlab.soraharu.com/api/v4/projects/90/releases');

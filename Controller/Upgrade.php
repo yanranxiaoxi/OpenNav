@@ -27,7 +27,7 @@ if (!$helper->isLogin()) {
  * 查询最新版本
  */
 if ($page === 'CheckLatestVersion') {
-	$curl_get_content = $helper->curlGet('https://gitlab.soraharu.com/api/v4/projects/90/releases');
+	$curl_get_content = $helper->curlGet(CHECK_UPDATE_API_URL);
 	if ($curl_get_content !== false && $curl_get_content !=='[]') {
 		$curl_get_content = json_decode($curl_get_content, true);
 		$data = [

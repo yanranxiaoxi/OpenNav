@@ -39,7 +39,7 @@
 					</div>
 				</div>
 				<!-- 搜索框 END -->
-				<a class="mdui-hidden-xs" href="https://github.com/yanranxiaoxi/OpenNav" rel="nofollow" target="_blank" class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '查看 GitHub'}">
+				<a class="mdui-hidden-xs" href="https://github.com/yanranxiaoxi/OpenNav" rel="nofollow" target="_blank" class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" title="查看 GitHub" mdui-tooltip="{content: '查看 GitHub'}">
 					<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 36 36" enable-background="new 0 0 36 36" xml:space="preserve" class="mdui-icon" style="width: 24px; height: 24px;">
 						<path fill-rule="evenodd" clip-rule="evenodd" fill="#ffffff" d="M18,1.4C9,1.4,1.7,8.7,1.7,17.7c0,7.2,4.7,13.3,11.1,15.5
 							c0.8,0.1,1.1-0.4,1.1-0.8c0-0.4,0-1.4,0-2.8c-4.5,1-5.5-2.2-5.5-2.2c-0.7-1.9-1.8-2.4-1.8-2.4c-1.5-1,0.1-1,0.1-1
@@ -181,9 +181,9 @@
 								<div class="mdui-card-primary-title link-title">
 									<!-- 网站图标显示方式 -->
 									<?php if ($theme_config['online_favicon'] === true) { ?>
-									<img src="./index.php?c=Favicon&page=Online&url=<?php echo $link_value['url']; ?>" width="16" height="16" />
+									<img src="./index.php?c=Favicon&page=Online&url=<?php echo $link_value['url']; ?>" alt="<?php echo $link_value['title']; ?>" width="16" height="16" />
 									<?php } else { ?>
-									<img src="./index.php?c=Favicon&page=Offline&title=<?php echo $link_value['title']; ?>" width="16" height="16" />
+									<img src="./index.php?c=Favicon&page=Offline&title=<?php echo $link_value['title']; ?>" alt="<?php echo $link_value['title']; ?>" width="16" height="16" />
 									<?php } ?>
 									<span class="link_title"><?php echo htmlspecialchars_decode($link_value['title']); ?></span>
 								</div>

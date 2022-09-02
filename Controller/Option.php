@@ -132,7 +132,7 @@ if ($page === 'SetSubscribe') {
 			'email' => htmlspecialchars(trim($_POST['email']))
 		];
 		// 请求订阅查询接口返回数据
-		$curl_subscribe_data = $helper->curlGet('https://opennav.soraharu.com/API/v1/CheckSubscribe.php', $options_settings_subscribe, 20);
+		$curl_subscribe_data = $helper->curlGet(API_URL . 'CheckSubscribe.php', $options_settings_subscribe, 20);
 		// 如果请求到了数据
 		if ($curl_subscribe_data !== false) {
 			// 解码请求到的数据

@@ -19,7 +19,7 @@ class GlobalHelper {
 	public function __construct($database) {
 		$this->database = $database;
 		// 返回 JSON 类型
-		header('Content-Type: application/json; charset=utf-8');
+		// header('Content-Type: application/json; charset=utf-8');
 	}
 
 	/**
@@ -86,7 +86,13 @@ class GlobalHelper {
 		// 如果已经成功登录
 		if ($cookie_session_key === $local_key_hash) {
 			// 延长 Cookie 时间为 30 天
-			return setcookie('opennav_session_key', $local_key_hash, time() + 60 * 60 * 24 * 30, '/', null, false, true);
+			if (ONLY_SECURE_CONNECTION === true) {
+				// 仅 HTTPS 设置 Session Cookie
+				setcookie('opennav_session_key', $local_key_hash, time() + 60 * 60 * 24 * 30, '/', null, true, true);
+			} else {
+				// 设置 Session Cookie
+				setcookie('opennav_session_key', $local_key_hash, time() + 60 * 60 * 24 * 30, '/', null, false, true);
+			}
 			return true;
 		} else {
 			return false;
@@ -103,8 +109,13 @@ class GlobalHelper {
 		$visitor_infomation = ($visitor_ip === null) ? $_SERVER['HTTP_USER_AGENT'] : $visitor_ip;
 		$local_key = USERNAME . COOKIE_SECRET_KEY . 'opennav' . $visitor_infomation;
 		$local_key_hash = hash('sha256', $local_key);
-		// 设置 Session Cookie
-		return setcookie('opennav_session_key', $local_key_hash, time() + 60 * 60 * 24 * 30, '/', null, false, true);
+		if (ONLY_SECURE_CONNECTION === true) {
+			// 仅 HTTPS 设置 Session Cookie
+			return setcookie('opennav_session_key', $local_key_hash, time() + 60 * 60 * 24 * 30, '/', null, true, true);
+		} else {
+			// 设置 Session Cookie
+			return setcookie('opennav_session_key', $local_key_hash, time() + 60 * 60 * 24 * 30, '/', null, false, true);
+		}
 	}
 
 	/**
@@ -841,7 +852,7 @@ class GlobalHelper {
 		$domain_array = explode(':', htmlspecialchars(trim($_SERVER['HTTP_HOST'])));
 		$options_settings_subscribe['domain'] = $domain_array[0];
 		// 请求查询接口返回数据
-		$curl_subscribe_data = $this->curlGet('https://opennav.soraharu.com/API/v1/CheckSubscribe.php', $options_settings_subscribe);
+		$curl_subscribe_data = $this->curlGet(API_URL . 'CheckSubscribe.php', $options_settings_subscribe);
 		// 如果请求到了数据
 		if ($curl_subscribe_data !== false) {
 			// 解码请求到的数据
