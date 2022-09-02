@@ -28,10 +28,27 @@ $helper = new GlobalHelper($database);
 
 
 /**
+ * 载入配置文件
+ */
+// 如果配置文件不存在，则载入初始化控制器
+if (!file_exists('../Data/Config.php')) {
+	require_once('../Controller/Install.php');
+	exit();
+}
+// 检查数据库是否存在，不存在则复制数据库
+if (!file_exists('../Data/Database.db3') || filesize('../Data/Database.db3') === 0) {
+	if (!copy('../Data/Database.sample.db3', '../Data/Database.db3')) {
+		exit('数据库初始化失败，请检查 Data 目录是否拥有写入权限！');
+	}
+}
+require_once('../Data/Config.php');
+
+
+/**
  * 初始参数
  */
 // 程序版本
-define('VERSION', '0.1.0');
+define('VERSION', '0.1.1');
 // 关闭 PHP 警告提示
 if (DEBUG_MODE === false) {
 	error_reporting(E_ALL^E_NOTICE^E_WARNING^E_DEPRECATED);
@@ -42,23 +59,6 @@ ini_set('max_execution_time', 60);
 header('Content-Type: text/html; charset=utf-8');
 // 获取控制器，并使用二进制安全的方式剥去字符串左右的空白与其中的 HTML 标签
 $controller = empty($_GET['c']) ? 'Index' : htmlspecialchars(trim($_GET['c']));
-
-
-/**
- * 载入配置文件
- */
-// 如果配置文件不存在，则载入初始化控制器
-if (!file_exists('../Data/Config.php')) {
-	require_once('../Controller/Install.php');
-	exit();
-}
-// 检查数据库是否存在，不存在则复制数据库
-if (!file_exists('../Data/Database.db3')) {
-	if (!copy('../Data/Database.sample.db3', '../Data/Database.db3')) {
-		exit('数据库初始化失败，请检查 Data 目录是否拥有写入权限！');
-	}
-}
-require_once('../Data/Config.php');
 
 
 /**
