@@ -1,0 +1,84 @@
+stages:
+    - build
+    - upload
+    - release
+
+#########################
+#         Build         #
+#########################
+
+npm-install:
+  stage: build
+  tags:
+    - linuxdocker
+  image: node:latest
+  script:
+    - npm install
+  artifacts:
+    name: "OpenNav-$CI_JOB_NAME-$CI_COMMIT_TAG"
+    paths:
+      - ./node_modules/
+  rules:
+    - if: $CI_COMMIT_TAG
+
+composer-install:
+  stage: build
+  tags:
+    - linuxdocker
+  image: composer:2
+  script:
+    - composer install
+  artifacts:
+    name: "OpenNav-$CI_JOB_NAME-$CI_COMMIT_TAG"
+    paths:
+      - ./vendor/
+  rules:
+    - if: $CI_COMMIT_TAG
+
+#########################
+#        Upload         #
+#########################
+
+upload:
+  stage: upload
+  tags:
+    - windows10shell
+  rules:
+    - if: $CI_COMMIT_TAG
+  script:
+    - ${nodeModulesDirArray} =
+        "blueimp-md5\js",
+        "bootstrap\dist",
+        "font-awesome\css",
+        "font-awesome\fonts",
+        "font-awesome\less",
+        "holmes.js\js",
+        "jquery\dist",
+        "jquery-contextmenu\dist",
+        "layui\dist",
+        "layui-layer-src\dist",
+        "mdui\dist";
+    - foreach (${nodeModulesDir} in ${nodeModulesDirArray}) {
+        New-Item -Path ".\Public\node_modules\${nodeModulesDir}\" -ItemType Directory;
+        Move-Item ".\node_modules\${nodeModulesDir}\*" ".\Public\node_modules\${nodeModulesDir}\";
+      }
+    - Remove-Item ".\node_modules\" -Recurse;
+    - PowerShell -Command "& {7z a .\OpenNav-compiled.zip .\*}";
+    - Move-Item ".\OpenNav-compiled.zip" "D:\wwwroot\downloadserver.soraharu.com\OpenNav\${CI_COMMIT_TAG}\";
+
+#########################
+#        Release        #
+#########################
+
+release:
+  stage: release
+  tags:
+    - linuxdocker
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  rules:
+    - if: $CI_COMMIT_TAG
+  dependencies: []
+  script:
+    - |
+      release-cli create --name "Release $CI_COMMIT_TAG" --tag-name $CI_COMMIT_TAG \
+        --assets-link "{\"name\":\"OpenNav-compiled.zip\",\"url\":\"https://downloadserver.soraharu.com:7000/OpenNav/$CI_COMMIT_TAG/OpenNav-compiled.zip\",\"link_type\":\"package\"}"
