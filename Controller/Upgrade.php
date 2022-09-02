@@ -30,10 +30,11 @@ if ($page === 'CheckLatestVersion') {
 	$curl_get_content = $helper->curlGet(CHECK_UPDATE_API_URL);
 	if ($curl_get_content !== false && $curl_get_content !=='[]') {
 		$curl_get_content = json_decode($curl_get_content, true);
+		$version = substr($curl_get_content[0]['tag_name'], 1);
 		$data = [
 			'code' => 200,
 			'message' => 'success',
-			'data' => $curl_get_content[0]['name']
+			'data' => $version
 		];
 	} else {
 		$data = [
