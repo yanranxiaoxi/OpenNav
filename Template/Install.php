@@ -58,7 +58,7 @@
 						<div class="layui-form-item">
 							<label class="layui-form-label">电子邮箱</label>
 							<div class="layui-input-block">
-								<input type="email" name="email" lay-verify="email" placeholder="可选，用于获取 Gravatar 头像" autocomplete="off" class="layui-input" />
+								<input type="email" name="email" placeholder="可选，用于获取 Gravatar 头像" autocomplete="off" class="layui-input" />
 							</div>
 						</div>
 

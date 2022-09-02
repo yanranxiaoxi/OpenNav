@@ -1,7 +1,8 @@
+/.vscode/
 /Cache/*
 !/Cache/.gitkeep
 /Data/config.php
 /Data/database.db3
+/node_modules/
 /Public/node_modules/
 /vendor/
-.vscode
