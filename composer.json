@@ -2,9 +2,10 @@
 	"name": "yanranxiaoxi/opennav",
 	"type": "project",
 	"require": {
+		"arthurhoaro/favicon": "^1.3",
 		"catfan/medoo": "^2.1",
-		"arthurhoaro/favicon": "^1.3.3",
-		"robthree/twofactorauth": "^1.8.2"
+		"chillerlan/php-qrcode": "^4.3",
+		"robthree/twofactorauth": "^1.8"
 	},
 	"license": "Mozilla Public License Version 2.0",
 	"autoload": {
