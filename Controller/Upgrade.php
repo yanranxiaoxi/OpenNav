@@ -1,6 +1,6 @@
 <?php
 /**
- * 自动更新控制器
+ * 更新控制器
  * 
  * @author		XiaoXi <admin@soraharu.com>
  * @copyright	All rights reserved by XiaoXi

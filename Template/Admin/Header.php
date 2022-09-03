@@ -23,11 +23,12 @@
 				<ul class="layui-nav layui-layout-right">
 					<li class="layui-nav-item">
 						<a href="javascript:;">
-							<!-- #TODO# --><img src="https://gravatar.loli.net/avatar/<?php echo md5(EMAIL); ?>" class="layui-nav-img" />
+							<img src="<?php echo GRAVATAR_API_URL; ?>/avatar/<?php echo md5(EMAIL); ?>" class="layui-nav-img" />
 							<?php echo USERNAME; ?>
 						</a>
 						<dl class="layui-nav-child">
-							<dd><a href="./index.php?c=Login&page=Logout">退出</a></dd>
+							<!-- #TODO# --><!-- <dd><a href="./index.php?c=User&page=Options">用户设置</a></dd> -->
+							<dd><a href="./index.php?c=Login&page=Logout">退出登录</a></dd>
 						</dl>
 					</li>
 				</ul>

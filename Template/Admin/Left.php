@@ -1,7 +1,6 @@
 <div class="layui-side layui-bg-black">
 	<div class="layui-side-scroll">
 
-		<!-- 左侧导航区域 -->
 		<ul class="layui-nav layui-nav-tree" lay-filter="navbar">
 			<li class="layui-nav-item layui-nav-itemed">
 				<a href="javascript:;">分类管理</a>
@@ -22,7 +21,6 @@
 			</li>
 		</ul>
 
-		<!-- 系统设置 -->
 		<ul class="layui-nav layui-nav-tree" lay-filter="navbar">
 			<li class="layui-nav-item layui-nav-itemed">
 				<a href="javascript:;">系统设置</a>
@@ -36,7 +34,16 @@
 				</dl>
 			</li>
 		</ul>
-		<!-- 系统设置 END -->
+
+		<ul class="layui-nav layui-nav-tree" lay-filter="navbar">
+			<li class="layui-nav-item layui-nav-itemed">
+				<a href="javascript:;">安全设置</a>
+				<dl class="layui-nav-child">
+					<!-- #TODO# --><!-- <dd><a href="./index.php?c=User&page=Options">用户设置</a></dd> -->
+					<dd><a href="./index.php?c=TimeBaseValidator&page=Setup">时基验证</a></dd>
+				</dl>
+			</li>
+		</ul>
 
 	</div>
 </div>

@@ -32,6 +32,8 @@ define('ONLY_SECURE_CONNECTION', false);
 /**
  * 系统设置
  */
+// Gravatar API 地址
+define('GRAVATAR_API_URL', 'https://secure.gravatar.com');
 // TOTP SecretKey
 define('TOTP_SECRET_KEY', '{totp_secret_key}');
 // COOKIE SecretKey
