@@ -5,4 +5,6 @@
 /Data/database.db3
 /node_modules/
 /Public/node_modules/
+/Public/themes/*
+!/Public/themes/.gitkeep
 /vendor/
