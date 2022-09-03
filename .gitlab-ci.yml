@@ -64,6 +64,8 @@ upload:
         Move-Item ".\node_modules\${nodeModulesDir}\*" ".\Public\node_modules\${nodeModulesDir}\";
       }
     - Remove-Item ".\node_modules\" -Recurse;
+    - PowerShell -Command "& {git clone https://gitlab.soraharu.com/XiaoXi/OpenNav-Material-Design .\Public\themes\material-design\}";
+    - Remove-Item ".\Public\themes\material-design\.git\" -Recurse;
     - Set-Location "..\";
     - if (Test-Path -Path ".\OpenNav-compiled.zip" -PathType Leaf) {
         Remove-Item ".\OpenNav-compiled.zip" -Recurse;

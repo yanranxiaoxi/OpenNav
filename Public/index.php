@@ -48,7 +48,7 @@ require_once('../Data/Config.php');
  * 初始参数
  */
 // 程序版本
-define('VERSION', '0.1.1');
+define('VERSION', '0.1.2');
 // 关闭 PHP 警告提示
 if (DEBUG_MODE === false) {
 	error_reporting(E_ALL^E_NOTICE^E_WARNING^E_DEPRECATED);
