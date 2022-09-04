@@ -353,6 +353,20 @@ class GlobalHelper {
 	}
 
 	/**
+	 * 获取指定分类 ID 的分类 [fid, property]「Auth Required」
+	 * 
+	 * @param	int		$category_id	分类 ID
+	 * 
+	 * @return	array	分类数组 [fid, property]
+	 */
+	public function getCategoryFidPropertyByCategoryId_AuthRequired($category_id) {
+		$category_value = $this->database->get('on_categorys', ['fid', 'property'], [
+			'id' => $category_id
+		]);
+		return $category_value;
+	}
+
+	/**
 	 * 获取指定分类的链接「With Auth」
 	 * 
 	 * @param	int		$category_id	分类 ID

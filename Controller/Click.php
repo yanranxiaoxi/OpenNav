@@ -26,16 +26,16 @@ if (empty($link)) {
 // 判断访客是否未登录（已登录就不存在私有链接，无需查询父分类）且是否查询不到上级分类（链接都拥有上级分类）
 $is_login = $helper->isLogin();
 if (!$is_login) {
-	$category = $helper->getCategoryByCategoryId($link['fid']);
-	if (empty($category)) {
+	$category = $helper->getCategoryFidPropertyByCategoryId_AuthRequired($link['fid']);
+	if ($category['property'] === 1) {
 		// 未登录且查询不到上级分类（代表上级分类为私有分类）
 		exit('非法访问请求！可能是登录状态已过期。');
 	}
 	// 查询上级分类是否还有父分类，如有（上级分类的 fid 不为 0），则查询父分类的信息
 	if ($category['fid'] !== 0) {
-		$category_parent = $helper->getCategoryByCategoryId($category['fid']);
+		$category_parent = $helper->getCategoryFidPropertyByCategoryId_AuthRequired($category['fid']);
 		// 如果存在父分类却查询不到父分类，则表示父分类为私有分类
-		if (empty($category_parent)) {
+		if ($category_parent['property'] === 1) {
 			exit('非法访问请求！可能是登录状态已过期。');
 		}
 	}
