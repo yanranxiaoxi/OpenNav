@@ -87,6 +87,7 @@
 						<button class="layui-btn" lay-submit lay-filter="edit_link">更新</button>
 						<button class="layui-btn" lay-submit lay-filter="get_link_info">识别</button>
 						<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						<button class="layui-btn layui-btn-primary" lay-submit lay-filter="go_back">返回</button>
 					</div>
 				</div>
 
@@ -138,6 +139,11 @@
 			});
 			// console.log(data.field); // 当前容器的全部表单字段，名值对形式：{name: value}
 			return false; // 阻止表单跳转
+		});
+
+		layui.form.on('submit(go_back)', function(data) {
+			window.location.href = './index.php?c=Admin&page=Links';
+			return false;
 		});
 	})
 </script>
