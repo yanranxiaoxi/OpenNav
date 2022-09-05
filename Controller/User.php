@@ -51,17 +51,57 @@ if ($page === 'SetOptions') {
 			$error_message = '电子邮箱格式不正确！';
 		} elseif ($login_authentication_mode !== 3 && $login_authentication_mode !== 4 && $login_authentication_mode !== 5 && $login_authentication_mode !== 7) {
 			$error_message = '验证方式的组合不合法！';
+		} else {
+			$helper->setGlobalConfig_AuthRequired('USERNAME', USERNAME, $_POST['username']);
+			$helper->setGlobalConfig_AuthRequired('EMAIL', EMAIL, $email);
+			$helper->setGlobalConfig_AuthRequired('LOGIN_AUTHENTICATION_MODE', LOGIN_AUTHENTICATION_MODE, $login_authentication_mode);
 		}
-		$helper->setGlobalConfig_AuthRequired('USERNAME', USERNAME, $_POST['username']);
-		$helper->setGlobalConfig_AuthRequired('EMAIL', EMAIL, $email);
-		$helper->setGlobalConfig_AuthRequired('LOGIN_AUTHENTICATION_MODE', LOGIN_AUTHENTICATION_MODE, $login_authentication_mode);
 	} else {
 		$error_message = '设置失败！';
 	}
 	if (empty($error_message)) {
 		$data = [
 			'code' => 200,
-			'message' => '设置成功！'
+			'message' => 'success'
+		];
+	} else {
+		$data = [
+			'code' => 403,
+			'message' => $error_message
+		];
+	}
+	header('Content-Type: application/json; charset=utf-8');
+	exit(json_encode($data));
+}
+
+
+/**
+ * 进入密码设置流程
+ */
+if ($page === 'Password') {
+	require_once('../Template/Admin/User/Password.php');
+}
+
+
+/**
+ * 设置密码
+ */
+if ($page === 'SetPassword') {
+	$error_message = '';
+	if (!empty($_POST['password'])) {
+		$password_regex = '/^[0-9a-zA-Z!@#$%^&*()-_\[\]\{\}<>~`\+=,.;:\/?|]{6,128}$/';
+		if (!preg_match($password_regex, $_POST['password'])) {
+			$error_message = '密码格式不正确！';
+		} else {
+			$helper->setGlobalConfig_AuthRequired('PASSWORD', PASSWORD, password_hash($_POST['password'], PASSWORD_DEFAULT));
+		}
+	} else {
+		$error_message = '密码不能为空！';
+	}
+	if (empty($error_message)) {
+		$data = [
+			'code' => 200,
+			'message' => 'success'
 		];
 	} else {
 		$data = [

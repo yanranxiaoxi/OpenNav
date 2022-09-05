@@ -45,7 +45,7 @@
 
 				<div class="layui-form-item">
 					<button class="layui-btn" lay-submit lay-filter="set_options">保存设置</button>
-					<a class="layui-btn layui-btn-primary layui-border-green" target="_self" title="修改密码" href="#"><i class="fa fa-key"></i> 修改密码</a>
+					<a class="layui-btn layui-btn-primary layui-border-green" target="_self" title="修改密码" href="./index.php?c=User&page=Password"><i class="fa fa-key"></i> 修改密码</a>
 					<a class="layui-btn layui-btn-primary layui-border-green" target="_self" title="配置时基验证" href="./index.php?c=TimeBaseValidator&page=Setup"><i class="fa fa-clock-o"></i> 配置时基验证（TOTP）</a>
 				</div>
 

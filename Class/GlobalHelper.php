@@ -79,20 +79,12 @@ class GlobalHelper {
 	public function isLogin() {
 		$visitor_ip = $this->getVisitorIP();
 		$visitor_infomation = ($visitor_ip === null) ? $_SERVER['HTTP_USER_AGENT'] : $visitor_ip;
-		$local_key = USERNAME . COOKIE_SECRET_KEY . 'opennav' . $visitor_infomation;
+		$local_key = USERNAME . PASSWORD . COOKIE_SECRET_KEY . 'opennav' . $visitor_infomation;
 		$local_key_hash = hash('sha256', $local_key);
 		// 获取 Session Cookie
 		$cookie_session_key = !empty($_COOKIE['opennav_session_key']) ? $_COOKIE['opennav_session_key'] : '';
 		// 如果已经成功登录
 		if ($cookie_session_key === $local_key_hash) {
-			// 延长 Cookie 时间为 30 天
-			if (ONLY_SECURE_CONNECTION === true) {
-				// 仅 HTTPS 设置 Session Cookie
-				setcookie('opennav_session_key', $local_key_hash, time() + 60 * 60 * 24 * 30, '/', null, true, true);
-			} else {
-				// 设置 Session Cookie
-				setcookie('opennav_session_key', $local_key_hash, time() + 60 * 60 * 24 * 30, '/', null, false, true);
-			}
 			return true;
 		} else {
 			return false;
@@ -107,7 +99,7 @@ class GlobalHelper {
 	public function setLogin_AuthRequired() {
 		$visitor_ip = $this->getVisitorIP();
 		$visitor_infomation = ($visitor_ip === null) ? $_SERVER['HTTP_USER_AGENT'] : $visitor_ip;
-		$local_key = USERNAME . COOKIE_SECRET_KEY . 'opennav' . $visitor_infomation;
+		$local_key = USERNAME . PASSWORD . COOKIE_SECRET_KEY . 'opennav' . $visitor_infomation;
 		$local_key_hash = hash('sha256', $local_key);
 		if (ONLY_SECURE_CONNECTION === true) {
 			// 仅 HTTPS 设置 Session Cookie
@@ -115,6 +107,25 @@ class GlobalHelper {
 		} else {
 			// 设置 Session Cookie
 			return setcookie('opennav_session_key', $local_key_hash, time() + 60 * 60 * 24 * 30, '/', null, false, true);
+		}
+	}
+
+	/**
+	 * 仅时基登录时设置短时登录状态「Auth Required」
+	 * 
+	 * @return bool 设置状态
+	 */
+	public function setLoginByOnlyTimeBaseValidator_AuthRequired() {
+		$visitor_ip = $this->getVisitorIP();
+		$visitor_infomation = ($visitor_ip === null) ? $_SERVER['HTTP_USER_AGENT'] : $visitor_ip;
+		$local_key = USERNAME . PASSWORD . COOKIE_SECRET_KEY . 'opennav' . $visitor_infomation;
+		$local_key_hash = hash('sha256', $local_key);
+		if (ONLY_SECURE_CONNECTION === true) {
+			// 仅 HTTPS 设置 Session Cookie
+			return setcookie('opennav_session_key', $local_key_hash, time() + 60 * 30, '/', null, true, true);
+		} else {
+			// 设置 Session Cookie
+			return setcookie('opennav_session_key', $local_key_hash, time() + 60 * 30, '/', null, false, true);
 		}
 	}
 

@@ -86,8 +86,8 @@ if ($page === 'Check') {
 	} elseif (LOGIN_AUTHENTICATION_MODE === 4) {
 		if (!empty($_POST['totp_code'])) {
 			if ($authenticator->verifyCode(TOTP_SECRET_KEY, $_POST['totp_code'])) {
-				$code = 200;
-				$message = 'success';
+				$code = 201;
+				$message = 'totp success';
 			} else {
 				$code = 403;
 				$message = 'TOTP Code 不正确！';
@@ -107,6 +107,8 @@ if ($page === 'Check') {
 	}
 	if ($code === 200) {
 		$helper->setLogin_AuthRequired();
+	} elseif ($code === 201) {
+		$helper->setLoginByOnlyTimeBaseValidator_AuthRequired();
 	}
 	$data = [
 		'code' => $code,

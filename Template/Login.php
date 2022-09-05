@@ -356,6 +356,8 @@
 						// 如果验证成功
 						if (data.code === 200) {
 							window.location.href = './index.php?c=Admin';
+						} else if (data.code === 201) {
+							window.location.href = './';
 						} else {
 							layer.msg(data.message, {icon: 5});
 						}
@@ -398,6 +400,8 @@
 						// 如果验证成功
 						if (data.code === 200) {
 							window.location.href = './index.php?c=Admin';
+						} else if (data.code === 201) {
+							window.location.href = './';
 						} else {
 							layer.msg(data.message, {icon: 5});
 						}
