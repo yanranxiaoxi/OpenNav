@@ -1,3 +1,9 @@
+<?php
+if (!$helper->isLogin()) {
+	exit('鉴权失败！');
+}
+?>
+
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
 	<head>
