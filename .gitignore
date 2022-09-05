@@ -1,8 +1,9 @@
 /.vscode/
 /Cache/*
 !/Cache/.gitkeep
-/Data/config.php
-/Data/database.db3
+/Data/*
+!/Data/config.sample.php
+!/Data/database.sample.db3
 /node_modules/
 /Public/node_modules/
 /Public/themes/*

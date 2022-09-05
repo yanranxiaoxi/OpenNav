@@ -52,8 +52,8 @@
 
 				<div class="layui-form-item">
 					<button class="layui-btn" lay-submit lay-filter="set_subscribe">保存设置</button>
-					<button class="layui-btn layui-btn-danger" lay-submit lay-filter="delete_subscribe">删除授权</button>
-					<a class="layui-btn" rel="nofollow" target="_blank" title="订阅授权" href="https://opennav.soraharu.com/license/"><i class="fa fa-shopping-cart"></i> 订阅授权</a>
+					<button class="layui-btn layui-btn-primary layui-border-red" lay-submit lay-filter="delete_subscribe">删除授权</button>
+					<a class="layui-btn layui-btn-primary layui-border-green" rel="nofollow" target="_blank" title="订阅授权" href="https://opennav.soraharu.com/license/"><i class="fa fa-shopping-cart"></i> 订阅授权</a>
 				</div>
 
 			</form>

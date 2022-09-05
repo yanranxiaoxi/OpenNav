@@ -23,35 +23,38 @@ $qrcode_options = new QROptions([
 $qrcode_generator = new QRCode($qrcode_options);
 
 // 获取分页参数
-$page = empty($_GET['page']) ? '' : htmlspecialchars(trim($_GET['page']));
+$page = empty($_GET['page']) ? 'Setup' : htmlspecialchars(trim($_GET['page']));
 
 
 /**
- * 获取 TOTP SecretKey
+ * 全局鉴权「Auth Safety」
  */
-if ($page === 'GetSecretKey') {
-	if (!defined('TOTP_SECRET_KEY')) {
-		$totp_secret_key = $authenticator->createSecret();
+if (!$helper->isLogin()) {
+	$data = [
+		'code' => 403,
+		'message' => '鉴权失败！',
+		'data' => ''
+	];
+	header('Content-Type: application/json; charset=utf-8');
+	exit(json_encode($data));
+}
+
+
+/**
+ * 重置 TOTP SecretKey
+ */
+if ($page === 'ResetSecretKey') {
+	$totp_secret_key = $authenticator->createSecret();
+	if ($helper->setGlobalConfig_AuthRequired('TOTP_SECRET_KEY', TOTP_SECRET_KEY, $totp_secret_key)) {
 		$data = [
 			'code' => 200,
-			'message' => '成功获取 TOTP SecretKey',
-			'data' => $totp_secret_key
+			'message' => 'success'
 		];
 	} else {
-		if (empty(TOTP_SECRET_KEY)) {
-			$totp_secret_key = $authenticator->createSecret();
-			$data = [
-				'code' => 200,
-				'message' => '成功获取 TOTP SecretKey',
-				'data' => $totp_secret_key
-			];
-		} else {
-			$data = [
-				'code' => 403,
-				'message' => '当前状态不允许获取 TOTP SecretKey',
-				'data' => ''
-			];
-		}
+		$data = [
+			'code' => 403,
+			'message' => '重置失败！'
+		];
 	}
 	header('Content-Type: application/json; charset=utf-8');
 	exit(json_encode($data));
@@ -62,32 +65,24 @@ if ($page === 'GetSecretKey') {
  * 验证 TOTP Code
  */
 if ($page === 'VerifyCode') {
-	if ($helper->isLogin()) {
-		if (!empty($_POST['totp_code'])) {
-			if ($authenticator->verifyCode(TOTP_SECRET_KEY, $_POST['totp_code'])) {
-				$data = [
-					'code' => 200,
-					'message' => '验证成功！',
-					'data' => true
-				];
-			} else {
-				$data = [
-					'code' => 403,
-					'message' => '验证失败！',
-					'data' => false
-				];
-			}
+	if (!empty($_POST['totp_code'])) {
+		if ($authenticator->verifyCode(TOTP_SECRET_KEY, $_POST['totp_code'])) {
+			$data = [
+				'code' => 200,
+				'message' => '验证成功！',
+				'data' => true
+			];
 		} else {
 			$data = [
-				'code' => 404,
-				'message' => '必要参数 totp_code 不存在！',
+				'code' => 403,
+				'message' => '验证失败！',
 				'data' => false
 			];
 		}
 	} else {
 		$data = [
-			'code' => 403,
-			'message' => '鉴权失败！',
+			'code' => 404,
+			'message' => '必要参数 totp_code 不存在！',
 			'data' => false
 		];
 	}
@@ -97,29 +92,10 @@ if ($page === 'VerifyCode') {
 
 
 /**
- * 获取 TOTP QRCode
- * 此处将会返回 Base64 编码的 SVG 图像
- */
-if ($page === 'GetQRCode') {
-	if ($helper->isLogin()) {
-		$totp_data = 'otpauth://totp/OpenNav?secret=' . TOTP_SECRET_KEY;
-		header('Content-Type: text/plain; charset=utf-8');
-		exit($qrcode_generator->render($totp_data));
-	} else {
-		exit('鉴权失败！');
-	}
-}
-
-
-/**
  * 进入配置 TOTP 流程
  */
 if ($page === 'Setup') {
-	if ($helper->isLogin()) {
-		$totp_data = 'otpauth://totp/OpenNav?secret=' . TOTP_SECRET_KEY;
-		$totp_qrcode = $qrcode_generator->render($totp_data);
-		require_once('../Template/Admin/Secure/TimeBaseValidator.php');
-	} else {
-		exit('鉴权失败！');
-	}
+	$totp_data = 'otpauth://totp/OpenNav?secret=' . TOTP_SECRET_KEY;
+	$totp_qrcode = $qrcode_generator->render($totp_data);
+	require_once('../Template/Admin/Secure/TimeBaseValidator.php');
 }

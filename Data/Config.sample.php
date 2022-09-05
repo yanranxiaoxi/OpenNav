@@ -1,6 +1,6 @@
 <?php
 /**
- * OpenNav 全局用户配置文件
+ * OpenNav 全局配置文件
  * 
  * @author		XiaoXi <admin@soraharu.com>
  * @copyright	All rights reserved by XiaoXi

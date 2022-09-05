@@ -50,6 +50,7 @@ upload:
     - ${nodeModulesDirArray} =
         "blueimp-md5\js",
         "bootstrap\dist",
+        "clipboard\dist",
         "font-awesome\css",
         "font-awesome\fonts",
         "font-awesome\less",

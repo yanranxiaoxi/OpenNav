@@ -919,6 +919,45 @@ class GlobalHelper {
 	}
 
 	/**
+	 * 修改全局配置「Auth Required」
+	 * 
+	 * @param string $key 全局变量名
+	 * @param string|int|bool $old_value 全局变量原值
+	 * @param string|int|bool $value 全局变量将要修改为的值
+	 * 
+	 * @return bool 修改状态
+	 */
+	public function setGlobalConfig_AuthRequired($key, $old_value, $value) {
+		if (!empty($key) && !empty($old_value) && !empty($value)) {
+			$global_config = file_get_contents('../Data/Config.php');
+
+			if (is_string($old_value)) {
+				$str_search = 'define(\''. $key . '\', \'' . $old_value . '\');';
+			} elseif (is_int($old_value) || is_bool($old_value)) {
+				$str_search = 'define(\''. $key . '\', ' . $old_value . ');';
+			} else {
+				return false;
+			}
+			if (is_string($value)) {
+				$str_replace = 'define(\''. $key . '\', \'' . $value . '\');';
+			} elseif (is_int($value) || is_bool($value)) {
+				$str_replace = 'define(\''. $key . '\', ' . $value . ');';
+			} else {
+				return false;
+			}
+
+			$global_config = str_replace($str_search, $str_replace, $global_config);
+			if (!file_put_contents('../Data/Config.php', $global_config)) {
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * HSV 转 RGB「Logic Safety」
 	 * 
 	 * @param int $h 色调
