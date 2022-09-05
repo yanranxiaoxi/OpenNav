@@ -24,6 +24,10 @@ define('EMAIL', '{email}');
 /**
  * 安全设置
  */
+// 登录验证方式
+// 3 = 用户名 + 密码；7 = 用户名 + 密码 + TOTP Code；
+// 5 = (用户名 + TOTP Code) || (用户名 + 密码)；4 = TOTP Code || (用户名 + 密码)
+define('LOGIN_AUTHENTICATION_MODE', 3);
 // 强制 HTTPS 连接验证
 // 启用此功能可以在进行高危操作（如登录）时强制 HTTPS 连接验证
 define('ONLY_SECURE_CONNECTION', false);

@@ -34,15 +34,9 @@ if ($page === 'Login') {
  * 进入登录验证流程
  */
 if ($page === 'Check') {
-	// #TODO# 登录检查模式
-	// 0 = 用户名 + 密码；
-	// 1 = 用户名 + 密码 + TOTP Code；
-	// 2 = (用户名 + TOTP Code) || (用户名 + 密码)；
-	// 3 = TOTP Code || (用户名 + 密码)
-	$login_check_mode = 0;
 	$code = 0;
 	$message = '';
-	if ($login_check_mode === 0) {
+	if (LOGIN_AUTHENTICATION_MODE === 3) {
 		if (!empty($_POST['username']) && !empty($_POST['password'])) {
 			if (USERNAME == $_POST['username'] && password_verify($_POST['password'], PASSWORD)) {
 				$code = 200;
@@ -55,7 +49,7 @@ if ($page === 'Check') {
 			$code = 403;
 			$message = '用户名或密码不能为空！';
 		}
-	} elseif ($login_check_mode === 1) {
+	} elseif (LOGIN_AUTHENTICATION_MODE === 7) {
 		if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['totp_code'])) {
 			if (USERNAME == $_POST['username'] && password_verify($_POST['password'], PASSWORD) && $authenticator->verifyCode(TOTP_SECRET_KEY, $_POST['totp_code'])) {
 				$code = 200;
@@ -68,7 +62,7 @@ if ($page === 'Check') {
 			$code = 403;
 			$message = '用户名、密码和 TOTP Code 不能为空！';
 		}
-	} elseif ($login_check_mode === 2) {
+	} elseif (LOGIN_AUTHENTICATION_MODE === 5) {
 		if (!empty($_POST['username']) && !empty($_POST['totp_code'])) {
 			if (USERNAME == $_POST['username'] && $authenticator->verifyCode(TOTP_SECRET_KEY, $_POST['totp_code'])) {
 				$code = 200;
@@ -89,7 +83,7 @@ if ($page === 'Check') {
 			$code = 403;
 			$message = '请使用 (用户名 + TOTP Code) 或 (用户名 + 密码) 进行登录！';
 		}
-	} elseif ($login_check_mode === 3) {
+	} elseif (LOGIN_AUTHENTICATION_MODE === 4) {
 		if (!empty($_POST['totp_code'])) {
 			if ($authenticator->verifyCode(TOTP_SECRET_KEY, $_POST['totp_code'])) {
 				$code = 200;

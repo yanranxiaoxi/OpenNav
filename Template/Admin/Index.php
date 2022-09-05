@@ -9,7 +9,7 @@
 			<div class="layui-row layui-col-space18">
 				<div class="layui-col-lg4">
 					<div class="admin-msg">当前版本：<span id="current_version"><?php echo VERSION; ?></span>
-					<span id="update_message" style="display: none;">（<a style="color: #FF5722;" href="https://github.com/yanranxiaoxi/OpenNav/releases" title="下载最新版 OpenNav" rel="nofollow" target="_blank" id="current_version">有可用更新</a>）</span>
+					<span id="update_message" style="display: none;">（<a style="color: #ff5722;" href="https://github.com/yanranxiaoxi/OpenNav/releases" title="下载最新版 OpenNav" rel="nofollow" target="_blank" id="current_version">有可用更新</a>）</span>
 				</div>
 			</div>
 			<div class="layui-col-lg4">
@@ -18,11 +18,6 @@
 					<!-- #TODO#（<a href="./index.php?c=Admin&page=Subscribe" title="订阅后可一键更新" target="_self">一键更新</a>） -->
 				</div>
 			</div>
-			<!-- #TODO#
-			<div class="layui-col-lg4">
-				<div class="admin-msg">时基验证：<a href="./index.php?c=Admin&page=TwoFactorAuth" title="前往 TOTP 配置页" target="_self">前往 TOTP 配置页</a></div>
-			</div>
-			-->
 			<div class="layui-col-lg4">
 				<div class="admin-msg">项目仓库：<a href="https://github.com/yanranxiaoxi/OpenNav" title="前往 OpenNav 项目 GitHub 仓库" rel="nofollow" target="_blank">yanranxiaoxi/OpenNav</a></div>
 			</div>

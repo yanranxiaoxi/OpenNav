@@ -77,7 +77,7 @@
 
 <script type="text/javascript">
 	layui.use(['form'], function() {
-		// 设置网站选项
+		// 设置网站设置选项
 		layui.form.on('submit(set_site)', function(data) {
 			const loading_msg = layer.load(2, {time: 10 * 1000});
 			if (data.field.custom_footer !== '') {

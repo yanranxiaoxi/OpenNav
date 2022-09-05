@@ -39,7 +39,7 @@
 			<li class="layui-nav-item layui-nav-itemed">
 				<a href="javascript:;">安全设置</a>
 				<dl class="layui-nav-child">
-					<!-- #TODO# --><!-- <dd><a href="./index.php?c=User&page=Options">用户设置</a></dd> -->
+					<dd><a href="./index.php?c=User&page=Options">用户设置</a></dd>
 					<dd><a href="./index.php?c=TimeBaseValidator&page=Setup">时基验证</a></dd>
 				</dl>
 			</li>

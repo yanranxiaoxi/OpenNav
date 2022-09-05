@@ -33,7 +33,7 @@ if (!$helper->isLogin()) {
 							<?php echo USERNAME; ?>
 						</a>
 						<dl class="layui-nav-child">
-							<!-- #TODO# --><!-- <dd><a href="./index.php?c=User&page=Options">用户设置</a></dd> -->
+							<dd><a href="./index.php?c=User&page=Options">用户设置</a></dd>
 							<dd><a href="./index.php?c=Login&page=Logout">退出登录</a></dd>
 						</dl>
 					</li>

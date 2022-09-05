@@ -928,20 +928,32 @@ class GlobalHelper {
 	 * @return bool 修改状态
 	 */
 	public function setGlobalConfig_AuthRequired($key, $old_value, $value) {
-		if (!empty($key) && !empty($old_value) && !empty($value)) {
+		if (!empty($key)) {
 			$global_config = file_get_contents('../Data/Config.php');
 
-			if (is_string($old_value)) {
+			if (is_string($old_value) && !empty($old_value)) {
 				$str_search = 'define(\''. $key . '\', \'' . $old_value . '\');';
-			} elseif (is_int($old_value) || is_bool($old_value)) {
+			} elseif ((is_int($old_value) || is_bool($old_value)) && !empty($old_value)) {
 				$str_search = 'define(\''. $key . '\', ' . $old_value . ');';
+			} elseif ($old_value === '') {
+				$str_search = 'define(\''. $key . '\', \'\');';
+			} elseif ($old_value === 0) {
+				$str_search = 'define(\''. $key . '\', 0);';
+			} elseif ($old_value === false) {
+				$str_search = 'define(\''. $key . '\', false);';
 			} else {
 				return false;
 			}
-			if (is_string($value)) {
+			if (is_string($value) && !empty($value)) {
 				$str_replace = 'define(\''. $key . '\', \'' . $value . '\');';
-			} elseif (is_int($value) || is_bool($value)) {
+			} elseif ((is_int($value) || is_bool($value)) && !empty($value)) {
 				$str_replace = 'define(\''. $key . '\', ' . $value . ');';
+			} elseif ($value === '') {
+				$str_replace = 'define(\''. $key . '\', \'\');';
+			} elseif ($value === 0) {
+				$str_replace = 'define(\''. $key . '\', 0);';
+			} elseif ($value === false) {
+				$str_replace = 'define(\''. $key . '\', false);';
 			} else {
 				return false;
 			}
