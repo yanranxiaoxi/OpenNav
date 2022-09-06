@@ -13,7 +13,8 @@
 				<p>1. 用户名 + 密码（默认）</p>
 				<p>2. 用户名 + 密码 + TOTP Code（安全性最高，需要 <a href="./index.php?c=TimeBaseValidator&page=Setup" target="_self" title="用户设置文档">配置时基验证设备</a> ）</p>
 				<p>3. 用户名 + TOTP Code（安全性较低，选用此方式仍然允许使用 用户名 + 密码 方式登录）</p>
-				<p>4. TOTP Code（安全性极低，选用此方式仍然允许使用 用户名 + 密码 方式登录）</p>
+				<p>4. TOTP Code（安全性极低，此方式登录后有效期仅为 30 分钟，选用此方式仍然允许使用 用户名 + 密码 方式登录）</p>
+				<p>注意：如预使用 TOTP Code 登录，请确保你已配置时基验证（TOTP）设备，如未配置设备将导致您无法登录后台！</p>
 			</div>
 		</div>
 		<!-- 说明提示框 END -->
@@ -47,6 +48,7 @@
 					<button class="layui-btn" lay-submit lay-filter="set_options">保存设置</button>
 					<a class="layui-btn layui-btn-primary layui-border-green" target="_self" title="修改密码" href="./index.php?c=User&page=Password"><i class="fa fa-key"></i> 修改密码</a>
 					<a class="layui-btn layui-btn-primary layui-border-green" target="_self" title="配置时基验证" href="./index.php?c=TimeBaseValidator&page=Setup"><i class="fa fa-clock-o"></i> 配置时基验证（TOTP）</a>
+					<a class="layui-btn layui-btn-primary" target="_blank" rel="nofollow" title="前往 Gravatar 修改头像" href="https://gravatar.com/"><i class="fa fa-user-circle-o"></i> 修改头像</a>
 				</div>
 
 			</form>

@@ -78,8 +78,8 @@
 
 			</form>
 		</div>
-		<!-- 内容主体区域 END -->
 	</div>
+	<!-- 内容主体区域 END -->
 </div>
 
 <?php require_once('../Template/Admin/Footer.php'); ?>

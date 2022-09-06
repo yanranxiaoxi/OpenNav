@@ -27,6 +27,7 @@
 		</div>
 		-->
 		<!-- 表单上方按钮 END -->
+		<a class="layui-btn layui-btn-primary layui-border-green" target="_self" title="添加链接" href="./index.php?c=Admin&page=AddLink"><i class="fa fa-plus-circle"></i> 添加链接</a>
 		<div class="layui-col-lg12">
 			<table id="links" lay-filter="links" lay-data="{id: 'mylink_reload'}"></table>
 			<!-- 表格头部工具栏 -->

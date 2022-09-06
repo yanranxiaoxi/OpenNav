@@ -22,9 +22,7 @@ if (!$helper->isLogin()) {
 				<ul class="layui-nav layui-layout-left">
 					<li class="layui-nav-item"><a href="./"><i class="layui-icon layui-icon-home"></i> 前台首页</a></li>
 					<li class="layui-nav-item"><a href="./index.php?c=Admin&page=Categorys"><i class="layui-icon layui-icon-list"></i> 分类列表</a></li>
-					<li class="layui-nav-item"><a href="./index.php?c=Admin&page=AddCategory"><i class="layui-icon layui-icon-add-circle-fine"></i> 添加分类</a></li>
 					<li class="layui-nav-item"><a href="./index.php?c=Admin&page=Links"><i class="layui-icon layui-icon-link"></i> 链接列表</a></li>
-					<li class="layui-nav-item"><a href="./index.php?c=Admin&page=AddLink"><i class="layui-icon layui-icon-add-circle-fine"></i> 添加链接</a></li>
 					<li class="layui-nav-item"><a href="./index.php?c=Login&page=Logout"><i class="layui-icon layui-icon-logout"></i> 退出登录</a></li>
 				</ul>
 				<ul class="layui-nav layui-layout-right">

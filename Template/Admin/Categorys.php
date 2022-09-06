@@ -4,6 +4,7 @@
 <div class="layui-body">
 	<!-- 内容主体区域 -->
 	<div class="layui-row content-body place-holder">
+		<a class="layui-btn layui-btn-primary layui-border-green" target="_self" title="添加分类" href="./index.php?c=Admin&page=AddCategory"><i class="fa fa-plus-circle"></i> 添加分类</a>
 		<div class="layui-col-lg12">
 			<table id="categorys" lay-filter="categorys"></table>
 		</div>
