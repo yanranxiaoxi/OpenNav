@@ -32,6 +32,7 @@ if (!$helper->isLogin()) {
  */
 if ($page === 'Options') {
 	require_once('../Template/Admin/User/Options.php');
+	exit();
 }
 
 
@@ -80,6 +81,7 @@ if ($page === 'SetOptions') {
  */
 if ($page === 'Password') {
 	require_once('../Template/Admin/User/Password.php');
+	exit();
 }
 
 

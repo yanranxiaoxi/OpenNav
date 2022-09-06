@@ -17,6 +17,7 @@
 				<dl class="layui-nav-child">
 					<dd><a href="./index.php?c=Admin&page=Links">链接列表</a></dd>
 					<dd><a href="./index.php?c=Admin&page=AddLink">添加链接</a></dd>
+					<dd><a href="./index.php?c=Admin&page=ImportLinks">书签导入</a></dd>
 				</dl>
 			</li>
 		</ul>
@@ -29,7 +30,6 @@
 					<!-- #TODO# --><!-- <dd><a href="./index.php?c=Admin&page=Theme">主题设置</a></dd> -->
 					<dd><a href="./index.php?c=Admin&page=TransitionPage">过渡页面</a></dd>
 					<dd><a href="./index.php?c=Admin&page=Subscribe">订阅设置</a></dd>
-					<!-- #TODO# --><!-- <dd><a href="./index.php?c=Admin&page=ImportLinks">书签导入</a></dd> -->
 					<!-- #TODO# --><!-- <dd><a href="./index.php?c=Admin&page=GetAPI">获取 API</a></dd> -->
 				</dl>
 			</li>

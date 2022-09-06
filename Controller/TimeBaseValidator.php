@@ -98,4 +98,5 @@ if ($page === 'Setup') {
 	$totp_data = 'otpauth://totp/OpenNav?secret=' . TOTP_SECRET_KEY;
 	$totp_qrcode = $qrcode_generator->render($totp_data);
 	require_once('../Template/Admin/Secure/TimeBaseValidator.php');
+	exit();
 }

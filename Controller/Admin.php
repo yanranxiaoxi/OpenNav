@@ -134,3 +134,12 @@ if ($page === 'Subscribe') {
 	require_once('../Template/Admin/Option/Subscribe.php');
 	exit();
 }
+
+
+/**
+ * 进入导入链接流程
+ */
+if ($page === 'ImportLinks') {
+	require_once('../Template/Admin/ImportLinks.php');
+	exit();
+}
