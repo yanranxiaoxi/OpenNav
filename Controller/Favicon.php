@@ -30,7 +30,7 @@ if ($page === 'Online') {
 	$http_referer = $_SERVER['HTTP_REFERER'];
 	// 如果 Referer 和主机名不匹配，则仅返回默认图标
 	if ((!empty($referer)) && (!strstr($http_host, $http_referer))) {
-		$icon = file_get_contents('./assets/images/default-favicon.ico', 'rb');
+		$icon = file_get_contents('./assets/images/default-favicon.ico');
 		header('Content-Type: image/x-icon; charset=utf-8');
 		exit($icon);
 	}
@@ -41,7 +41,7 @@ if ($page === 'Online') {
 	// 使用正则检测 URL 是否合法
 	$url_regex = '/^(https?:\/\/)[\S]+$/';
 	if (!preg_match($url_regex, $_GET['url'])) {
-		$icon = file_get_contents('./assets/images/default-favicon.ico', 'rb');
+		$icon = file_get_contents('./assets/images/default-favicon.ico');
 		header('Cache-Control: max-age=604800');
 		header('Content-Type: image/x-icon; charset=utf-8');
 		exit($icon);
@@ -49,7 +49,7 @@ if ($page === 'Online') {
 
 	$settings_favicon = [
 		// 缓存目录
-		'dir' => '../Cache/',
+		'dir' => '../Cache/Favicon/',
 		// 缓存有效期，单位：秒
 		'timeout' => 2592000,
 		// 默认图片
@@ -59,16 +59,16 @@ if ($page === 'Online') {
 	$image_file_name = $favicon->get($_GET['url'], FaviconDLType::DL_FILE_PATH);
 	// 未获取到 Favicon 图像
 	if ($image_file_name === false) {
-		$icon = file_get_contents('./assets/images/default-favicon.ico', 'rb');
+		$icon = file_get_contents('./assets/images/default-favicon.ico');
 		header('Cache-Control: max-age=604800');
 		header('Content-Type: image/x-icon; charset=utf-8');
 		exit($icon);
 	}
 	$url_file_name = 'url' . substr($image_file_name, 3);
-	$image_url = file_exists('../Cache/' . $url_file_name) ? file_get_contents('../Cache/' . $url_file_name, 'rb') : exit('读取缓存失败！');
+	$image_url = file_exists('../Cache/Favicon/' . $url_file_name) ? file_get_contents('../Cache/' . $url_file_name) : exit('读取缓存失败！');
 	$image_url = explode(".", $image_url);
 	$image_ext = end($image_url);
-	$icon = file_exists('../Cache/' . $image_file_name) ? file_get_contents('../Cache/' . $image_file_name, 'rb') : exit('读取缓存失败！');
+	$icon = file_exists('../Cache/Favicon/' . $image_file_name) ? file_get_contents('../Cache/' . $image_file_name) : exit('读取缓存失败！');
 	switch ($image_ext) {
 		case 'jpg':
 		case 'jpeg':
@@ -110,7 +110,7 @@ if ($page === 'Offline') {
 	$http_referer = $_SERVER['HTTP_REFERER'];
 	// 如果 Referer 和主机名不匹配，则仅返回默认图标
 	if ((!empty($referer)) && (!strstr($http_host, $http_referer))) {
-		$icon = file_get_contents('./assets/images/default-favicon.ico', 'rb');
+		$icon = file_get_contents('./assets/images/default-favicon.ico');
 		header('Content-Type: image/x-icon; charset=utf-8');
 		exit($icon);
 	}

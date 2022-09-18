@@ -129,11 +129,10 @@
 		layui.form.on('submit(get_link_info)', function(data) {
 			$.post('./index.php?c=API&page=GetLinkInfo', data.field, function(data, status) {
 				// 如果识别成功
-				if(data.code === 200) {
+				if (data.code === 200) {
 					$('#description').val(data.data);
 					layer.msg('识别成功！', {icon: 1});
-				}
-				else{
+				} else {
 					layer.msg(data.message, {icon: 5});
 				}
 			});

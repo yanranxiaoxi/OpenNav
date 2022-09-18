@@ -1,6 +1,8 @@
 /.vscode/
-/Cache/*
-!/Cache/.gitkeep
+/Cache/Favicon/*
+!/Cache/Favicon/.gitkeep
+/Cache/Upload/*
+!/Cache/Upload/.gitkeep
 /Data/*
 !/Data/config.sample.php
 !/Data/database.sample.db3
@@ -9,3 +11,4 @@
 /Public/themes/*
 !/Public/themes/.gitkeep
 /vendor/
+*.code-workspace

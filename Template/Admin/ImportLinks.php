@@ -10,27 +10,24 @@
 				仅支持导入 <em>.html</em> 格式书签文件，导入时会自动创建不存在的分类
 			</div>
 		</div>
+
+		<!-- 上传 -->
+		<div class="layui-form-item">
+			<div class="layui-upload-drag" id="upload_html">
+				<i class="layui-icon layui-icon-upload"></i>
+				<p>点击上传，或将书签文件拖拽到此处</p>
+			</div>
+		</div>
+		<!-- 上传 END -->
+
 		<!-- 说明提示框 END -->
 		<div class="layui-col-lg6">
 			<form class="layui-form layui-form-pane">
 
-				<!-- 上传 -->
 				<div class="layui-form-item">
-					<div class="layui-upload-drag" id="upload_html">
-						<i class="layui-icon layui-icon-upload"></i>
-						<p>点击上传，或将书签文件拖拽到此处</p>
-						<div class="layui-hide" id="file">
-							<hr />
-							<img src="" alt="上传成功后渲染" style="max-width: 100%;">
-						</div>
-					</div>
-				</div>
-				<!-- 上传 END -->
-
-				<div class="layui-form-item">
-					<label class="layui-form-label">书签路径</label>
+					<label class="layui-form-label">暂存文件名</label>
 					<div class="layui-input-block">
-						<input type="text" id="file_directory" name="file_directory" required lay-verify="required" placeholder="请输入书签路径" autocomplete="off" class="layui-input" />
+						<input type="text" id="staging_file_name" name="staging_file_name" required lay-verify="required" readonly="readonly" placeholder="请上传书签文件" autocomplete="off" class="layui-input" />
 					</div>
 				</div>
 
@@ -52,3 +49,45 @@
 </div>
 
 <?php require_once('../Template/Admin/Footer.php'); ?>
+
+<script type="text/javascript">
+	layui.use(['form', 'upload'], function() {
+		// 书签导入
+		layui.form.on('submit(import_links)', function(data) {
+			$.post('./index.php?c=API&page=ImportLinks', data.field, function(data, status) {
+				// 如果导入成功
+				if (data.code === 200) {
+					layer.msg('书签导入成功！', {icon: 1});
+				} else {
+					layer.msg(data.message, {icon: 5});
+				}
+			});
+			// console.log(data.field); // 当前容器的全部表单字段，名值对形式：{name: value}
+			return false; // 阻止表单跳转
+		});
+
+		layui.upload.render({
+			elem: '#upload_html',
+			url: 'index.php?c=API&page=UploadLinksFile',
+			accept:'file',
+			exts: 'html',
+			auto: true,
+			size: 8192,
+			multiple: false,
+			drag: true,
+			done: function(data) {
+				// 上传完毕回调
+				if(data.code === 200) {
+					$("#staging_file_name").val(data.data);
+					layer.msg('文件上传成功！', {icon: 1});
+				} else {
+					layer.msg(data.message, {icon: 5});
+					layer.close();
+				}
+			},
+			error: function() {
+				// 请求异常回调
+			}
+		});
+	})
+</script>
