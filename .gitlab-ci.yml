@@ -1,6 +1,8 @@
 stages:
     - build
+    - package
     - upload
+    - deploy
     - release
 
 #########################
@@ -15,11 +17,9 @@ npm-install:
   script:
     - npm install
   artifacts:
-    name: "OpenNav-$CI_JOB_NAME-$CI_COMMIT_TAG"
+    name: "OpenNav-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     paths:
       - ./node_modules/
-  rules:
-    - if: $CI_COMMIT_TAG
 
 composer-install:
   stage: build
@@ -29,24 +29,21 @@ composer-install:
   script:
     - composer install
   artifacts:
-    name: "OpenNav-$CI_JOB_NAME-$CI_COMMIT_TAG"
+    name: "OpenNav-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     paths:
       - ./vendor/
-  rules:
-    - if: $CI_COMMIT_TAG
 
 #########################
-#        Upload         #
+#        Package        #
 #########################
 
-upload:
-  stage: upload
+package:
+  stage: package
   tags:
     - windowsserver2022powershell
-  rules:
-    - if: $CI_COMMIT_TAG
+  dependencies:
+    - build
   script:
-    - ${webrootDir} = "D:\wwwroot\downloadserver.soraharu.com\OpenNav\${CI_COMMIT_TAG}\";
     - ${nodeModulesDirArray} =
         "blueimp-md5\js",
         "bootstrap\dist",
@@ -65,18 +62,55 @@ upload:
         Move-Item ".\node_modules\${nodeModulesDir}\*" ".\Public\node_modules\${nodeModulesDir}\";
       }
     - Remove-Item ".\node_modules\" -Recurse;
-    - PowerShell -Command "& {git clone --depth=1 https://gitlab.soraharu.com/XiaoXi/OpenNav-Material-Design .\Public\themes\material-design\}";
+    - PowerShell -Command "& {git clone --depth=1 https://gitlab.soraharu.com/XiaoXi/OpenNav-Material-Design.git .\Public\themes\material-design\}";
     - Set-Location "..\";
     - if (Test-Path -Path ".\OpenNav-compiled.zip" -PathType Leaf) {
         Remove-Item ".\OpenNav-compiled.zip" -Recurse;
       }
     - PowerShell -Command "& {7z a .\OpenNav-compiled.zip .\OpenNav\*}";
-    - if (Test-Path -Path "${webrootDir}") {
-        Remove-Item "${webrootDir}*" -Recurse;
+    - PowerShell -Command "& {7z d .\OpenNav-compiled.zip *.git\ -r}";
+    - Move-Item ".\OpenNav-compiled.zip" ".\OpenNav\";
+  artifacts:
+    name: "OpenNav-compiled-$CI_COMMIT_SHORT_SHA"
+    paths:
+      - ./OpenNav-compiled.zip
+
+#########################
+#        Upload         #
+#########################
+
+upload:
+  stage: upload
+  tags:
+    - windowsserver2022powershell
+  rules:
+    - if: $CI_COMMIT_TAG
+  dependencies:
+    - package
+  script:
+    - ${downloadServerRootDir} = "D:\wwwroot\downloadserver.soraharu.com\OpenNav\${CI_COMMIT_TAG}\";
+    - if (Test-Path -Path "${downloadServerRootDir}") {
+        Remove-Item "${downloadServerRootDir}*" -Recurse;
       } else {
-        New-Item -Path "${webrootDir}" -ItemType Directory;
+        New-Item -Path "${downloadServerRootDir}" -ItemType Directory;
       }
-    - Move-Item ".\OpenNav-compiled.zip" "${webrootDir}";
+    - Move-Item ".\OpenNav-compiled.zip" "${downloadServerRootDir}";
+
+#########################
+#        Deploy         #
+#########################
+
+deploy-xiaoxi:
+  stage: deploy
+  tags:
+    - windowsserver2022powershell
+  rules:
+    - if: $CI_COMMIT_TAG
+  dependencies:
+    - package
+  script:
+    - ${xiaoxiServerRootDir} = "D:\wwwroot\newtab.soraharu.com\";
+    - PowerShell -Command "& {7z x .\OpenNav-compiled.zip -o${xiaoxiServerRootDir} -aoa}";
 
 #########################
 #        Release        #
