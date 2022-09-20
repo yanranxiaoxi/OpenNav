@@ -42,7 +42,8 @@ package:
   tags:
     - windowsserver2022powershell
   dependencies:
-    - build
+    - npm-install
+    - composer-install
   script:
     - ${nodeModulesDirArray} =
         "blueimp-md5\js",
