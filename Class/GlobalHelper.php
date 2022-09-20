@@ -41,6 +41,21 @@ class GlobalHelper {
 	}
 
 	/**
+	 * 以 Json 格式返回错误「Logic Safety」
+	 * 
+	 * @param int $code 错误代码
+	 * @param string $message 错误提示
+	 */
+	public function throwError($code = 403, $message = 'error') {
+		$data = [
+			'code' => $code,
+			'message' => $message
+		];
+		header('Content-Type: application/json; charset=utf-8');
+		exit(json_encode($data));
+	}
+
+	/**
 	 * 使用 PHP cURL 请求获取数据「Logic Safety」
 	 * 
 	 * @param	string	$url		预请求的 URL 地址

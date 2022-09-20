@@ -34,18 +34,23 @@ $php_version = floatval(PHP_VERSION);
 $php_extensions = get_loaded_extensions();
 
 // 检查 PHP 版本是否支持
-if ($php_version <= 5.6) {
-	exit('当前 PHP 版本' . $php_version . '不满足要求，需要 PHP ≥ 5.6');
+if ($php_version <= 7.3) {
+	exit('当前 PHP 版本' . $php_version . '不满足要求，需要 PHP ≥ 7.4');
 }
 
-// 检查 PHP 是否支持 PDO_SQLITE 插件
+// 检查 PHP 是否支持 SQLite (PDO) 插件
 if (!array_search('pdo_sqlite', $php_extensions)) {
-	exit('当前 PHP 未安装 PDO_SQLITE 插件！');
+	exit('当前 PHP 未安装 SQLite (PDO) 插件！');
 }
 
-// 检查 PHP 是否支持 cURL 插件
+// 检查 PHP 是否支持 Client URL 插件
 if (!array_search('curl', $php_extensions)) {
-	exit('当前 PHP 未安装 cURL 插件！');
+	exit('当前 PHP 未安装 Client URL 插件！');
+}
+
+// 检查 PHP 是否支持 Multibyte String 插件
+if (!array_search('mbstring', $php_extensions)) {
+	exit('当前 PHP 未安装 Multibyte String 插件！');
 }
 
 
