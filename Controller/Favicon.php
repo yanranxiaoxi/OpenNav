@@ -65,10 +65,10 @@ if ($page === 'Online') {
 		exit($icon);
 	}
 	$url_file_name = 'url' . substr($image_file_name, 3);
-	$image_url = file_exists('../Cache/Favicon/' . $url_file_name) ? file_get_contents('../Cache/' . $url_file_name) : exit('读取缓存失败！');
+	$image_url = file_exists('../Cache/Favicon/' . $url_file_name) ? file_get_contents('../Cache/Favicon/' . $url_file_name) : exit('读取缓存失败！');
 	$image_url = explode(".", $image_url);
 	$image_ext = end($image_url);
-	$icon = file_exists('../Cache/Favicon/' . $image_file_name) ? file_get_contents('../Cache/' . $image_file_name) : exit('读取缓存失败！');
+	$icon = file_exists('../Cache/Favicon/' . $image_file_name) ? file_get_contents('../Cache/Favicon/' . $image_file_name) : exit('读取缓存失败！');
 	switch ($image_ext) {
 		case 'jpg':
 		case 'jpeg':
