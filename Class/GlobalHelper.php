@@ -56,6 +56,26 @@ class GlobalHelper {
 	}
 
 	/**
+	 * 以 Json 格式返回数据「Logic Safety」
+	 * 
+	 * @param array $data 待返回的数据
+	 */
+	public function returnSuccess($data = []) {
+		if (is_array($data)) {
+			if (empty($data['code'])) {
+				$data['code'] = 200;
+			}
+			if (empty($data['message'])) {
+				$data['message'] = 'success';
+			}
+			header('Content-Type: application/json; charset=utf-8');
+			exit(json_encode($data));
+		} else {
+			$this->throwError(500, '内部错误！');
+		}
+	}
+
+	/**
 	 * 使用 PHP cURL 请求获取数据「Logic Safety」
 	 * 
 	 * @param	string	$url		预请求的 URL 地址

@@ -30,8 +30,6 @@ foreach ($categorys as $category_value) {
 /**
  * 获取选项信息
  */
-// 获取登录状态
-$is_login = $helper->isLogin();
 // 获取主题选项
 $options_theme = $helper->getOptionsTheme();
 // 获取站点设置选项

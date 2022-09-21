@@ -29,14 +29,8 @@ $page = empty($_GET['page']) ? 'Setup' : htmlspecialchars(trim($_GET['page']));
 /**
  * 全局鉴权「Auth Safety」
  */
-if (!$helper->isLogin()) {
-	$data = [
-		'code' => 403,
-		'message' => '鉴权失败！',
-		'data' => ''
-	];
-	header('Content-Type: application/json; charset=utf-8');
-	exit(json_encode($data));
+if (!$is_login) {
+	$helper->throwError(403, '鉴权失败！');
 }
 
 
@@ -46,18 +40,10 @@ if (!$helper->isLogin()) {
 if ($page === 'ResetSecretKey') {
 	$totp_secret_key = $authenticator->createSecret();
 	if ($helper->setGlobalConfig_AuthRequired('TOTP_SECRET_KEY', TOTP_SECRET_KEY, $totp_secret_key)) {
-		$data = [
-			'code' => 200,
-			'message' => 'success'
-		];
+		$helper->returnSuccess();
 	} else {
-		$data = [
-			'code' => 403,
-			'message' => '重置失败！'
-		];
+		$helper->throwError(403, '重置失败！');
 	}
-	header('Content-Type: application/json; charset=utf-8');
-	exit(json_encode($data));
 }
 
 
@@ -67,27 +53,13 @@ if ($page === 'ResetSecretKey') {
 if ($page === 'VerifyCode') {
 	if (!empty($_POST['totp_code'])) {
 		if ($authenticator->verifyCode(TOTP_SECRET_KEY, $_POST['totp_code'])) {
-			$data = [
-				'code' => 200,
-				'message' => '验证成功！',
-				'data' => true
-			];
+			$helper->returnSuccess();
 		} else {
-			$data = [
-				'code' => 403,
-				'message' => '验证失败！',
-				'data' => false
-			];
+			$helper->throwError(403, '验证失败！');
 		}
 	} else {
-		$data = [
-			'code' => 404,
-			'message' => '必要参数 totp_code 不存在！',
-			'data' => false
-		];
+		$helper->throwError(403, '必要参数 totp_code 不存在！');
 	}
-	header('Content-Type: application/json; charset=utf-8');
-	exit(json_encode($data));
 }
 
 

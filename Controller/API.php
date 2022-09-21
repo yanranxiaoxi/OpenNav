@@ -13,20 +13,12 @@
 // 获取分页参数
 $page = empty($_GET['page']) ? '' : htmlspecialchars(trim($_GET['page']));
 
-// 设置返回格式为 Json
-header('Content-Type: application/json; charset=utf-8');
-
 
 /**
  * 全局鉴权「Auth Safety」
  */
-if (!$helper->isLogin()) {
-	$data = [
-		'code' => 403,
-		'message' => '鉴权失败！',
-		'data' => ''
-	];
-	exit(json_encode($data));
+if (!$is_login) {
+	$helper->throwError(403, '鉴权失败！');
 }
 
 
@@ -41,19 +33,13 @@ if ($page === 'Categorys') {
 	if (!empty($pages) && !empty($limit)) {
 		$categorys = $helper->getCategorysPagination_AuthRequired($pages, $limit);
 		$data = [
-			'code' => 200,
-			'message' => 'success',
 			'count' => count($categorys),
 			'data' => $categorys
 		];
+		$helper->returnSuccess($data);
 	} else {
-		$data = [
-			'code' => 403,
-			'message' => '参数错误！',
-			'data' => ''
-		];
+		$helper->throwError(403, '参数错误！');
 	}
-	exit(json_encode($data));
 }
 
 
@@ -65,26 +51,13 @@ if ($page === 'DeleteCategory') {
 		$category_id = intval($_POST['id']);
 		$state = $helper->deleteCategory_AuthRequired($category_id);
 		if ($state) {
-			$data = [
-				'code' => 200,
-				'message' => 'success',
-				'data' => true
-			];
+			$helper->returnSuccess();
 		} else {
-			$data = [
-				'code' => 403,
-				'message' => '无法删除该分类，可能是该分类下拥有子分类或链接。',
-				'data' => false
-			];
+			$helper->throwError(403, '无法删除该分类，可能是该分类下拥有子分类或链接。');
 		}
 	} else {
-		$data = [
-			'code' => 403,
-			'message' => '参数错误！',
-			'data' => false
-		];
+		$helper->throwError(403, '参数错误！');
 	}
-	exit(json_encode($data));
 }
 
 
@@ -108,23 +81,13 @@ if ($page === 'EditCategory') {
 		];
 		$state = $helper->updateCategory_AuthRequired($category_id, $category_data);
 		if ($state === true) {
-			$data = [
-				'code' => 200,
-				'message' => 'success'
-			];
+			$helper->returnSuccess();
 		} else {
-			$data = [
-				'code' => 403,
-				'message' => $state
-			];
+			$helper->throwError(403, '分类修改失败！');
 		}
 	} else {
-		$data = [
-			'code' => 403,
-			'message' => '参数错误！'
-		];
+		$helper->throwError(403, '参数错误！');
 	}
-	exit(json_encode($data));
 }
 
 
@@ -147,23 +110,13 @@ if ($page === 'AddCategory') {
 		];
 		$state = $helper->addCategory_AuthRequired($category_data);
 		if ($state === true) {
-			$data = [
-				'code' => 200,
-				'message' => 'success'
-			];
+			$helper->returnSuccess();
 		} else {
-			$data = [
-				'code' => 403,
-				'message' => $state
-			];
+			$helper->throwError(403, '分类添加失败！');
 		}
 	} else {
-		$data = [
-			'code' => 403,
-			'message' => '参数错误！'
-		];
+		$helper->throwError(403, '参数错误！');
 	}
-	exit(json_encode($data));
 }
 
 
@@ -178,19 +131,13 @@ if ($page === 'Links') {
 	if (!empty($pages) && !empty($limit)) {
 		$links = $helper->getLinksPagination_AuthRequired($pages, $limit);
 		$data = [
-			'code' => 200,
-			'message' => 'success',
 			'count' => count($links),
 			'data' => $links
 		];
+		$helper->returnSuccess($data);
 	} else {
-		$data = [
-			'code' => 403,
-			'message' => '参数错误！',
-			'data' => ''
-		];
+		$helper->throwError(403, '参数错误！');
 	}
-	exit(json_encode($data));
 }
 
 
@@ -201,19 +148,10 @@ if ($page === 'DeleteLink') {
 	if (!empty($_POST['id'])) {
 		$link_id = intval($_POST['id']);
 		$helper->deleteLink_AuthRequired($link_id);
-		$data = [
-			'code' => 200,
-			'message' => 'success',
-			'data' => true
-		];
+		$helper->returnSuccess();
 	} else {
-		$data = [
-			'code' => 403,
-			'message' => '参数错误！',
-			'data' => false
-		];
+		$helper->throwError(403, '参数错误！');
 	}
-	exit(json_encode($data));
 }
 
 
@@ -239,23 +177,13 @@ if ($page === 'EditLink') {
 		];
 		$state = $helper->updateLink_AuthRequired($link_id, $link_data);
 		if ($state === true) {
-			$data = [
-				'code' => 200,
-				'message' => 'success'
-			];
+			$helper->returnSuccess();
 		} else {
-			$data = [
-				'code' => 403,
-				'message' => $state
-			];
+			$helper->throwError(403, '链接修改失败！');
 		}
 	} else {
-		$data = [
-			'code' => 403,
-			'message' => '参数错误！'
-		];
+		$helper->throwError(403, '参数错误！');
 	}
-	exit(json_encode($data));
 }
 
 
@@ -280,23 +208,13 @@ if ($page === 'AddLink') {
 		];
 		$state = $helper->addLink_AuthRequired($link_data);
 		if ($state === true) {
-			$data = [
-				'code' => 200,
-				'message' => 'success'
-			];
+			$helper->returnSuccess();
 		} else {
-			$data = [
-				'code' => 403,
-				'message' => $state
-			];
+			$helper->throwError(403, '链接添加失败！');
 		}
 	} else {
-		$data = [
-			'code' => 403,
-			'message' => '参数错误！'
-		];
+		$helper->throwError(403, '参数错误！');
 	}
-	exit(json_encode($data));
 }
 
 
@@ -306,36 +224,75 @@ if ($page === 'AddLink') {
 if ($page === 'GetLinkInfo') {
 	// URL 为空
 	if (empty($_POST['url'])) {
-		$data = [
-			'code' => 403,
-			'message' => 'URL 不能为空！',
-			'data' => ''
-		];
-		exit(json_encode($data));
+		$helper->throwError(403, 'URL 不能为空！');
 	}
 	// 使用正则检测 URL 是否合法
 	$url_regex = '/^(https?:\/\/)[\S]+$/';
 	if (!preg_match($url_regex, $_POST['url'])) {
-		$data = [
-			'code' => 403,
-			'message' => 'URL 格式不正确！',
-			'data' => ''
-		];
-		exit(json_encode($data));
+		$helper->throwError(403, 'URL 格式不正确！');
 	}
 	$meta_tags = get_meta_tags($_POST['url']);
 	if ($meta_tags !== false) {
 		$data = [
-			'code' => 200,
-			'message' => 'success',
 			'data' => empty($meta_tags['description']) ? '' : $meta_tags['description']
 		];
+		$helper->returnSuccess($data);
 	} else {
-		$data = [
-			'code' => 404,
-			'message' => '描述信息获取失败！',
-			'data' => ''
-		];
+		$helper->throwError(404, '描述信息获取失败！');
 	}
-	exit(json_encode($data));
+}
+
+
+/**
+ * 上传书签文件
+ */
+if ($page === 'UploadLinksFile') {
+	if ($_FILES['file']['error'] !== 0) {
+		$helper->throwError(403, '文件上传失败！');
+	} else {
+		$file_name = $_FILES['file']['name'];
+		// 获取文件后缀
+		$file_suffix = explode('.', $file_name);
+		$file_suffix = strtolower(end($file_suffix));
+		// 临时文件位置
+		$temp_file_directory = $_FILES['file']['tmp_name'];
+		// 暂存文件位置
+		$staging_file_name = $helper->getRandomKey(16) . '.' . $file_suffix;
+		if ($file_suffix !== 'html' || filesize($temp_file_directory) > 1024 * 1024 * 8) {
+			// 删除临时文件
+			unlink($temp_file_directory);
+			$helper->throwError(403, '不支持的文件类型或文件大小超过限制！');
+		} elseif (copy($temp_file_directory, '../Cache/Upload/' . $staging_file_name)) {
+			$data = [
+				'data' => $staging_file_name
+			];
+			$helper->returnSuccess($data);
+		} else {
+			$helper->throwError(403, '文件暂存失败，可能是 /Cache/ 目录没有写入权限！');
+		}
+	}
+}
+
+
+/**
+ * 导入书签文件
+ */
+if ($page === 'ImportLinks') {
+	if (empty($_POST['property'])) {
+		$_POST['property'] = 0;
+	}
+	if (empty($staging_file_name)) {
+		$helper->throwError(403, '参数不完整！');
+	}
+	$staging_file_name = htmlspecialchars(trim($_POST['staging_file_name']));
+	$property = intval($_POST['property']);
+	if (!file_exists('../Cache/Upload/' . $staging_file_name)) {
+		$helper->throwError(403, '文件不存在！');
+	}
+	// 解析 HTML 数据
+	$staging_file_content = file_get_contents('../Cache/Upload/' . $staging_file_name);
+	$staging_file_content_array = explode('\n', $staging_file_content); // 分割文本
+	$links = []; // 链接组
+	$categorys = []; // 分类组
+	
 }

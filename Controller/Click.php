@@ -24,7 +24,6 @@ if (empty($link)) {
 	exit('非法访问请求！可能是链接不存在或登录状态已过期。');
 }
 // 判断访客是否未登录（已登录就不存在私有链接，无需查询父分类）且是否查询不到上级分类（链接都拥有上级分类）
-$is_login = $helper->isLogin();
 if (!$is_login) {
 	$category = $helper->getCategoryFidPropertyByCategoryId_AuthRequired($link['fid']);
 	if ($category['property'] === 1) {

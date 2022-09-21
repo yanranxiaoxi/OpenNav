@@ -17,7 +17,7 @@ $page = empty($_GET['page']) ? 'Index' : htmlspecialchars(trim($_GET['page']));
 /**
  * 全局鉴权「Auth Safety」
  */
-if (!$helper->isLogin()) {
+if (!$is_login) {
 	header('Location: ./index.php?c=Login');
 	exit();
 }

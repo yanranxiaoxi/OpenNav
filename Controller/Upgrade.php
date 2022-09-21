@@ -17,7 +17,7 @@ $page = empty($_GET['page']) ? '' : htmlspecialchars(trim($_GET['page']));
 /**
  * 全局鉴权
  */
-if (!$helper->isLogin()) {
+if (!$is_login) {
 	header('Location: ./index.php?c=Login');
 	exit();
 }
@@ -32,17 +32,10 @@ if ($page === 'CheckLatestVersion') {
 		$curl_get_content = json_decode($curl_get_content, true);
 		$version = substr($curl_get_content[0]['tag_name'], 1);
 		$data = [
-			'code' => 200,
-			'message' => 'success',
 			'data' => $version
 		];
+		$helper->returnSuccess($data);
 	} else {
-		$data = [
-			'code' => 404,
-			'message' => '无法获取最新版本',
-			'data' => '0.0.0'
-		];
+		$helper->throwError(404, '无法获取最新版本！');
 	}
-	header('Content-Type: application/json; charset=utf-8');
-	exit(json_encode($data));
 }

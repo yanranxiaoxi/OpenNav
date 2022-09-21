@@ -48,7 +48,7 @@ require_once('../Data/Config.php');
  * 初始参数
  */
 // 程序版本
-define('VERSION', '0.1.3');
+define('VERSION', '0.1.4');
 // 关闭 PHP 警告提示
 if (DEBUG_MODE === false) {
 	error_reporting(E_ALL^E_NOTICE^E_WARNING^E_DEPRECATED);
@@ -59,6 +59,8 @@ ini_set('max_execution_time', 60);
 header('Content-Type: text/html; charset=utf-8');
 // 获取控制器，并使用二进制安全的方式剥去字符串左右的空白与其中的 HTML 标签
 $controller = empty($_GET['c']) ? 'Index' : htmlspecialchars(trim($_GET['c']));
+// 获取登录状态
+$is_login = $helper->isLogin();
 
 
 /**

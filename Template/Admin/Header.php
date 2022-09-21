@@ -1,5 +1,5 @@
 <?php
-if (!$helper->isLogin()) {
+if (!$is_login) {
 	exit('鉴权失败！');
 }
 ?>

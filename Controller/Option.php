@@ -13,20 +13,12 @@
 // 获取分页参数
 $page = empty($_GET['page']) ? '' : htmlspecialchars(trim($_GET['page']));
 
-// 设置返回格式为 Json
-header('Content-Type: application/json; charset=utf-8');
-
 
 /**
  * 全局鉴权「Auth Safety」
  */
-if (!$helper->isLogin()) {
-	$data = [
-		'code' => 403,
-		'message' => '鉴权失败！',
-		'data' => ''
-	];
-	exit(json_encode($data));
+if (!$is_login) {
+	$helper->throwError(403, '鉴权失败！');
 }
 
 
@@ -43,11 +35,7 @@ if ($page === 'SetSite') {
 		// 验证订阅状态
 		if ($custom_footer !== '') {
 			if (!$helper->isSubscribe()) {
-				$data = [
-					'code' => 403,
-					'message' => '未查询到授权信息，可能是与验证服务器之间的网络连接遇到问题，请稍后重试！'
-				];
-				exit(json_encode($data));
+				$helper->throwError(403, '未查询到授权信息，可能是与验证服务器之间的网络连接遇到问题，请稍后重试！');
 			}
 		}
 		$options_settings_site = [
@@ -60,17 +48,10 @@ if ($page === 'SetSite') {
 			'custom_footer' => $custom_footer
 		];
 		$helper->setOptionsSettingsSite_AuthRequired($options_settings_site);
-		$data = [
-			'code' => 200,
-			'message' => 'success'
-		];
+		$helper->returnSuccess();
 	} else {
-		$data = [
-			'code' => 403,
-			'message' => '参数错误！'
-		];
+		$helper->throwError(403, '参数错误！');
 	}
-	exit(json_encode($data));
 }
 
 
@@ -88,11 +69,7 @@ if ($page === 'SetTransitionPage') {
 		// 验证订阅状态
 		if ($menu !== '' || $ad_top !== '' || $ad_bottom !== '') {
 			if (!$helper->isSubscribe()) {
-				$data = [
-					'code' => 403,
-					'message' => '未查询到授权信息，可能是与验证服务器之间的网络连接遇到问题，请稍后重试！'
-				];
-				exit(json_encode($data));
+				$helper->throwError(403, '未查询到授权信息，可能是与验证服务器之间的网络连接遇到问题，请稍后重试！');
 			}
 		}
 		$options_settings_transition_page = [
@@ -104,17 +81,10 @@ if ($page === 'SetTransitionPage') {
 			'ad_bottom' => $ad_bottom
 		];
 		$helper->setOptionsSettingsTransitionPage_AuthRequired($options_settings_transition_page);
-		$data = [
-			'code' => 200,
-			'message' => 'success'
-		];
+		$helper->returnSuccess();
 	} else {
-		$data = [
-			'code' => 403,
-			'message' => '参数错误！'
-		];
+		$helper->throwError(403, '参数错误！');
 	}
-	exit(json_encode($data));
 }
 
 
@@ -146,32 +116,18 @@ if ($page === 'SetSubscribe') {
 				$curl_subscribe_data['data']['end_time'] = date('Y-m-d', $curl_subscribe_data['data']['end_time']);
 				// 将格式化后的时间返回给前端
 				$data = [
-					'code' => 200,
-					'message' => 'success',
 					'data' => $curl_subscribe_data['data']
 				];
+				$helper->returnSuccess($data);
 			} else {
-				$data = [
-					'code' => 403,
-					'message' => '订阅验证失败！',
-					'data' => ''
-				];
+				$helper->throwError(403, '订阅验证失败！');
 			}
 		} else {
-			$data = [
-				'code' => 404,
-				'message' => '接口请求失败，请重试！',
-				'data' => ''
-			];
+			$helper->throwError(404, '接口请求失败，请重试！');
 		}
 	} else {
-		$data = [
-			'code' => 403,
-			'message' => '参数错误！',
-			'data' => ''
-		];
+		$helper->throwError(403, '参数错误！');
 	}
-	exit(json_encode($data));
 }
 
 
@@ -186,9 +142,5 @@ if ($page === 'DeleteSubscribe') {
 		'end_time' => 0
 	];
 	$helper->setOptionsSettingsSubscribe_AuthRequired($options_settings_subscribe);
-	$data = [
-		'code' => 200,
-		'message' => 'success'
-	];
-	exit(json_encode($data));
+	$helper->returnSuccess();
 }
