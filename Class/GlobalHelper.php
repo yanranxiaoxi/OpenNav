@@ -76,7 +76,7 @@ class GlobalHelper {
 	}
 
 	/**
-	 * 使用 PHP cURL 请求获取数据「Logic Safety」
+	 * 使用 PHP Client URL 请求获取数据「Logic Safety」
 	 * 
 	 * @param	string	$url		预请求的 URL 地址
 	 * @param	array	$post_array	需要 POST 发送的数据
@@ -120,6 +120,16 @@ class GlobalHelper {
 		$cookie_session_key = !empty($_COOKIE['opennav_session_key']) ? $_COOKIE['opennav_session_key'] : '';
 		// 如果已经成功登录
 		if ($cookie_session_key === $local_key_hash) {
+			// 判断 Session 模式，如为 normal 则延长 Cookie 有效期
+			$cookie_session_mode = !empty($_COOKIE['opennav_session_mode']) ? $_COOKIE['opennav_session_mode'] : '';
+			if ($cookie_session_mode === 'normal') {
+				setcookie('opennav_session_mode', 'normal', time() + 60 * 60 * 24 * 30, '/', null, false, true);
+				if (ONLY_SECURE_CONNECTION === true) {
+					setcookie('opennav_session_key', $local_key_hash, time() + 60 * 60 * 24 * 30, '/', null, true, true);
+				} else {
+					setcookie('opennav_session_key', $local_key_hash, time() + 60 * 60 * 24 * 30, '/', null, false, true);
+				}
+			}
 			return true;
 		} else {
 			return false;
@@ -136,6 +146,7 @@ class GlobalHelper {
 		$visitor_infomation = ($visitor_ip === null) ? $_SERVER['HTTP_USER_AGENT'] : $visitor_ip;
 		$local_key = USERNAME . PASSWORD . COOKIE_SECRET_KEY . 'opennav' . $visitor_infomation;
 		$local_key_hash = hash('sha256', $local_key);
+		setcookie('opennav_session_mode', 'normal', time() + 60 * 60 * 24 * 30, '/', null, false, true);
 		if (ONLY_SECURE_CONNECTION === true) {
 			// 仅 HTTPS 设置 Session Cookie
 			return setcookie('opennav_session_key', $local_key_hash, time() + 60 * 60 * 24 * 30, '/', null, true, true);
@@ -155,6 +166,7 @@ class GlobalHelper {
 		$visitor_infomation = ($visitor_ip === null) ? $_SERVER['HTTP_USER_AGENT'] : $visitor_ip;
 		$local_key = USERNAME . PASSWORD . COOKIE_SECRET_KEY . 'opennav' . $visitor_infomation;
 		$local_key_hash = hash('sha256', $local_key);
+		setcookie('opennav_session_mode', 'timebase', time() + 60 * 30, '/', null, false, true);
 		if (ONLY_SECURE_CONNECTION === true) {
 			// 仅 HTTPS 设置 Session Cookie
 			return setcookie('opennav_session_key', $local_key_hash, time() + 60 * 30, '/', null, true, true);
@@ -170,6 +182,7 @@ class GlobalHelper {
 	 * @return bool 设置状态
 	 */
 	public function removeLogin() {
+		setcookie('opennav_session_mode', '', time() - 3600, '/', null, false, true);
 		// 设置 Session Cookie
 		return setcookie('opennav_session_key', '', time() - 3600, '/', null, false, true);
 	}
