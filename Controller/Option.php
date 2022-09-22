@@ -9,7 +9,6 @@
  * @link		https://opennav.soraharu.com/
  */
 
-
 // 获取分页参数
 $page = empty($_GET['page']) ? '' : htmlspecialchars(trim($_GET['page']));
 

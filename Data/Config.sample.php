@@ -22,6 +22,25 @@ define('EMAIL', '{email}');
 
 
 /**
+ * 数据库设置
+ */
+// 数据库类型，当前支持 SQLite、MySQL、MariaDB
+define('DATABASE_TYPE', '{database_type}');
+// 数据库主机名
+define('DATABASE_HOST', '{database_host}');
+// 数据库端口
+define('DATABASE_PORT', '{database_port}');
+// 数据库名
+define('DATABASE_NAME', '{database_name}');
+// 数据库用户名
+define('DATABASE_USERNAME', '{database_username}');
+// 数据库密码
+define('DATABASE_PASSWORD', '{database_password}');
+// 数据库前缀，在数据库类型为 SQLite 时无效
+define('DATABASE_PREFIX', '{database_prefix}');
+
+
+/**
  * 安全设置
  */
 // 登录验证方式
@@ -48,3 +67,5 @@ define('API_URL', 'https://opennav.soraharu.com/API/v1/');
 define('CHECK_UPDATE_API_URL', 'https://gitlab.soraharu.com/api/v4/projects/90/releases');
 // DEBUG 模式
 define('DEBUG_MODE', false);
+// 当前配置版本
+define('CONFIG_VERSION', '0.1.4');
