@@ -11,8 +11,6 @@
 
 use RobThree\Auth\TwoFactorAuth;
 
-$authenticator = new TwoFactorAuth();
-
 // 获取分页参数
 $page = empty($_GET['page']) ? 'Init' : htmlspecialchars(trim($_GET['page']));
 
@@ -84,6 +82,7 @@ if ($page === 'Install') {
 		} elseif (!empty($_POST['email']) && !preg_match($email_regex, $_POST['email'])) {
 			$error_message = '电子邮箱格式不正确！';
 		} else {
+			$authenticator = new TwoFactorAuth();
 			$totp_secret_key = $authenticator->createSecret();
 			$cookie_secret_key = $helper->getRandomKey();
 			$config_file_content = file_get_contents('../Data/Config.sample.php');

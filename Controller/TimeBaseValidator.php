@@ -15,12 +15,6 @@ use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
 
 $authenticator = new TwoFactorAuth();
-$qrcode_options = new QROptions([
-	'version'    => 5,
-	'outputType' => QRCode::OUTPUT_MARKUP_SVG,
-	'eccLevel'   => QRCode::ECC_L
-]);
-$qrcode_generator = new QRCode($qrcode_options);
 
 // 获取分页参数
 $page = empty($_GET['page']) ? 'Setup' : htmlspecialchars(trim($_GET['page']));
@@ -67,6 +61,12 @@ if ($page === 'VerifyCode') {
  * 进入配置 TOTP 流程
  */
 if ($page === 'Setup') {
+	$qrcode_options = new QROptions([
+		'version'    => 5,
+		'outputType' => QRCode::OUTPUT_MARKUP_SVG,
+		'eccLevel'   => QRCode::ECC_L
+	]);
+	$qrcode_generator = new QRCode($qrcode_options);
 	$totp_data = 'otpauth://totp/OpenNav?secret=' . TOTP_SECRET_KEY;
 	$totp_qrcode = $qrcode_generator->render($totp_data);
 	require_once('../Template/Admin/Secure/TimeBaseValidator.php');

@@ -14,8 +14,6 @@
 use Favicon\Favicon;
 use Favicon\FaviconDLType;
 
-$favicon = new Favicon();
-
 // 获取分页参数
 $page = empty($_GET['page']) ? '' : htmlspecialchars(trim($_GET['page']));
 
@@ -47,6 +45,7 @@ if ($page === 'Online') {
 		exit($icon);
 	}
 
+	$favicon = new Favicon();
 	$settings_favicon = [
 		// 缓存目录
 		'dir' => '../Cache/Favicon/',

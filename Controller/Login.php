@@ -11,8 +11,6 @@
 
 use RobThree\Auth\TwoFactorAuth;
 
-$authenticator = new TwoFactorAuth();
-
 // 获取分页参数
 $page = empty($_GET['page']) ? 'Login' : htmlspecialchars(trim($_GET['page']));
 
@@ -34,6 +32,7 @@ if ($page === 'Login') {
  * 进入登录验证流程
  */
 if ($page === 'Check') {
+	$authenticator = new TwoFactorAuth();
 	if (LOGIN_AUTHENTICATION_MODE === 3) {
 		if (!empty($_POST['username']) && !empty($_POST['password'])) {
 			if (USERNAME == $_POST['username'] && password_verify($_POST['password'], PASSWORD)) {
