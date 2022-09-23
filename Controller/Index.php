@@ -43,6 +43,10 @@ foreach ($categorys as $category_value) {
  */
 // 获取站点设置选项
 $options_settings_site = $helper->getOptionsSettingsSite();
+// 离线获取订阅状态
+$options_settings_subscribe = $helper->getOptionsSettingsSubscribe_AuthRequired(); // unsafe
+$status_subscribe = $options_settings_subscribe['end_time'] - time() > 0 ? true : false;
+unset($options_settings_subscribe); // 保护订阅设置选项
 // 获取主题信息
 $theme_info = $helper->getThemeInfo($options_theme);
 if (is_null($theme_info)) {
@@ -53,8 +57,8 @@ $theme_config = $helper->getThemeConfig($options_theme);
 if (is_null($theme_config)) {
 	exit('无法获取主题信息，可能是安装的主题存在问题。');
 }
-// 设置暗色模式
-$theme_layout = $helper->isDarkMode() ? 'mdui-theme-layout-dark' : '';
+// 获取暗色模式状态
+$status_dark_mode = $helper->isDarkMode();
 
 
 /**
