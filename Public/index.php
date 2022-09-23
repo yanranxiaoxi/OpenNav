@@ -78,8 +78,9 @@ if (preg_match_all($pattern, $controller)) {
 $controller_file = '../Controller/' . $controller . '.php';
 if (file_exists($controller_file)) {
 	require_once($controller_file);
+	exit();
 } else {
 	// 找不到指定控制器
-	// exit('请求的控制器不存在！');
 	require_once('../Controller/Index.php');
+	exit();
 }

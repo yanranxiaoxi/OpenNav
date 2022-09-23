@@ -50,6 +50,8 @@ define('LOGIN_AUTHENTICATION_MODE', 3);
 // 强制 HTTPS 连接验证
 // 启用此功能可以在进行高危操作（如登录）时强制 HTTPS 连接验证
 define('ONLY_SECURE_CONNECTION', false);
+// 允许通过 HTTP 执行周期任务
+define('ALLOW_HTTP_CORN', true);
 
 
 /**

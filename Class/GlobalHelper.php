@@ -450,11 +450,20 @@ class GlobalHelper {
 	}
 
 	/**
+	 * 获取链接 url「Auth Required」
+	 * 
+	 * @return array 链接数组 url
+	 */
+	public function getLinksUrl() {
+		return $this->database->select('on_links', 'url');
+	}
+
+	/**
 	 * 获取指定链接 ID 的链接「With Auth」
 	 * 
 	 * @param	int		$link_id	链接 ID
 	 * 
-	 * @return	array	链接数组
+	 * @return	array	链接数组 url
 	 */
 	public function getLinkByLinkId($link_id) {
 		$link_value = [];
