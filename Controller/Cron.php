@@ -13,8 +13,8 @@
 /**
  * 访问权限判定
  */
-if (ALLOW_HTTP_CORN === true) {
-	require_once('../Corn/Corn.php');
+if (ALLOW_HTTP_CRON === true) {
+	require_once('../Cron/Cron.php');
 	exit();
 } else {
 	exit('非法访问请求！');

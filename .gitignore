@@ -2,7 +2,7 @@
 /Cache/Favicon/*
 !/Cache/Favicon/.gitkeep
 /Cache/Log/*
-!/Cache/Log/.gitkeep
+!/Cache/Log/.cron.timestamp
 /Cache/Upload/*
 !/Cache/Upload/.gitkeep
 /Data/*
