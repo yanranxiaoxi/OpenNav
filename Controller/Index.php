@@ -11,6 +11,17 @@
 
 
 /**
+ * 检查主题
+ */
+// 获取主题选项
+$options_theme = $helper->getOptionsTheme();
+// 检查主题文件是否存在
+if (!file_exists('./themes/' . $options_theme . '/index.php') || !file_exists('./themes/' . $options_theme . '/info.json') || !file_exists('./themes/' . $options_theme . '/config.json')) {
+	exit('主题 ' . $options_theme . ' 文件不完整，请尝试重新安装主题！');
+}
+
+
+/**
  * 获取分类与链接
  */
 $parent_categorys = $helper->getParentCategorys();
@@ -30,19 +41,17 @@ foreach ($categorys as $category_value) {
 /**
  * 获取选项信息
  */
-// 获取主题选项
-$options_theme = $helper->getOptionsTheme();
 // 获取站点设置选项
 $options_settings_site = $helper->getOptionsSettingsSite();
 // 获取主题信息
 $theme_info = $helper->getThemeInfo($options_theme);
 if (is_null($theme_info)) {
-	exit('无法获取主题信息，可能是主题文件夹内的 info.json 没有读取权限或安装的主题存在问题。');
+	exit('无法获取主题信息，可能是安装的主题存在问题。');
 }
 // 获取主题配置
 $theme_config = $helper->getThemeConfig($options_theme);
 if (is_null($theme_config)) {
-	exit('无法获取主题信息，可能是主题文件夹内的 config.json 没有读取权限或安装的主题存在问题。');
+	exit('无法获取主题信息，可能是安装的主题存在问题。');
 }
 // 设置暗色模式
 $theme_layout = $helper->isDarkMode() ? 'mdui-theme-layout-dark' : '';
