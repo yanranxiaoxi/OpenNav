@@ -40,17 +40,22 @@ if ($php_version <= 7.3) {
 
 // 检查 PHP 是否支持 SQLite (PDO) 插件
 if (!array_search('pdo_sqlite', $php_extensions)) {
-	exit('当前 PHP 未安装 SQLite (PDO) 插件！');
+	exit('当前 PHP 未安装 pdo_sqlite 插件！');
 }
 
 // 检查 PHP 是否支持 Client URL 插件
 if (!array_search('curl', $php_extensions)) {
-	exit('当前 PHP 未安装 Client URL 插件！');
+	exit('当前 PHP 未安装 curl 插件！');
 }
 
 // 检查 PHP 是否支持 Multibyte String 插件
 if (!array_search('mbstring', $php_extensions)) {
-	exit('当前 PHP 未安装 Multibyte String 插件！');
+	exit('当前 PHP 未安装 mbstring 插件！');
+}
+
+// 检查 PHP 是否支持 Internationalization 插件
+if (!array_search('intl', $php_extensions)) {
+	exit('当前 PHP 未安装 intl 插件！');
 }
 
 
