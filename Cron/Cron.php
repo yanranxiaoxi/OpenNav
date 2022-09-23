@@ -17,7 +17,7 @@ use Favicon\FaviconDLType;
  * 重复执行检查
  */
 $timestamp = time();
-$last_timestamp = intval(file_get_contents('../Cache/Log/.cron.timestamp'));
+$last_timestamp = file_exists('../Cache/Log/.cron.timestamp') ? intval(file_get_contents('../Cache/Log/.cron.timestamp')) : 0;
 if ($timestamp - $last_timestamp < 7150) { // 2 hour - 50 second 防止计时误差
 	exit('周期任务间隔时间最短为 2 小时！');
 }
