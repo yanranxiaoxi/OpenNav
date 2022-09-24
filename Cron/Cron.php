@@ -32,8 +32,14 @@ ini_set('max_execution_time', 7000); // 2 hours - 200 seconds
 file_put_contents('../Cache/Log/.cron.timestamp', strval($timestamp));
 // 新建日志文件
 $log_file = fopen('../Cache/Log/' . $timestamp . '.cron.log', 'a');
-// 初始 Error 参数
-$log_status_error = false;
+// 移除前次 Error 信息文件
+if (file_exists('../Cache/Log/.cron.error')) {
+	unlink('../Cache/Log/.cron.error');
+}
+// 创建 Error 信息文件
+function cronError() {
+	file_put_contents('../Cache/Log/.cron.error', '');
+}
 
 
 /**
@@ -57,14 +63,14 @@ foreach ($caches as $directory_name => $cache_info) {
 						$log_status_string = 'INFO';
 						$cache_lore_string = 'has expired. Automatic deletion succeeded.';
 					} else {
-						$log_status_error = true;
+						cronError();
 						$log_status_string = 'ERROR';
 						$cache_lore_string = 'has expired. However, an error occurred while deleting the file.';
 					}
-					$log_string = '[' . date('Y-m-d H:i', time()) . '] ' . $log_status_string . ': Check expired status => (/Cache/' . $directory_name . '/' . $file_name . ') ' . $cache_lore_string . "\n";
+					$log_string = '[' . date('Y-m-d H:i') . '] ' . $log_status_string . ': Check expired status => (/Cache/' . $directory_name . '/' . $file_name . ') ' . $cache_lore_string . "\n";
 					fwrite($log_file, $log_string);
 				} else {
-					$log_string = '[' . date('Y-m-d H:i', time()) . '] INFO: Check expired status => (/Cache/' . $directory_name . '/' . $file_name . ') has not expired and all files of the same type have been skipped after that.' . "\n";
+					$log_string = '[' . date('Y-m-d H:i') . '] INFO: Check expired status => (/Cache/' . $directory_name . '/' . $file_name . ') has not expired and all files of the same type have been skipped after that.' . "\n";
 					fwrite($log_file, $log_string);
 					break 1;
 				}
@@ -109,7 +115,7 @@ if (isset($theme_config['online_favicon'])) {
 				$log_status_string = 'INFO';
 				$favion_lore_string = 'skipped, not a valid website url.';
 			}
-			$log_string = '[' . date('Y-m-d H:i', time()) . '] ' . $log_status_string . ': Get favicon => (' . $link_value_url . ') ' . $favion_lore_string . "\n";
+			$log_string = '[' . date('Y-m-d H:i') . '] ' . $log_status_string . ': Get favicon => (' . $link_value_url . ') ' . $favion_lore_string . "\n";
 			fwrite($log_file, $log_string);
 		}
 	}

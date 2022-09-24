@@ -7,7 +7,7 @@
 		<!-- 说明提示框 -->
 		<div class="layui-col-lg12">
 			<div class="setting-msg">
-				仅支持导入 <em>.html</em> 格式书签文件，导入时会自动创建不存在的分类
+				仅支持导入现代浏览器导出的 <em>.html</em> 格式书签文件，导入时会自动创建不存在的分类
 			</div>
 		</div>
 
