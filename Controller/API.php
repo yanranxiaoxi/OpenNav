@@ -257,7 +257,7 @@ if ($page === 'UploadLinksFile') {
 		// 临时文件位置
 		$temp_file_directory = $_FILES['file']['tmp_name'];
 		// 暂存文件位置
-		$staging_file_name = $helper->getRandomKey(16) . '.' . $file_suffix;
+		$staging_file_name = time() . '.links.html';
 		if ($file_suffix !== 'html' || filesize($temp_file_directory) > 1024 * 1024 * 8) {
 			// 删除临时文件
 			unlink($temp_file_directory);
@@ -291,7 +291,7 @@ if ($page === 'ImportLinks') {
 	}
 	// 解析 HTML 数据
 	$staging_file_content = file_get_contents('../Cache/Upload/' . $staging_file_name);
-	$staging_file_content_array = explode('\n', $staging_file_content); // 分割文本
+	$staging_file_content_array = explode("\n", $staging_file_content); // 分割文本
 	$links = []; // 链接组
 	$categorys = []; // 分类组
 	

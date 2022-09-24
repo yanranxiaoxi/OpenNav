@@ -18,7 +18,7 @@ use Favicon\FaviconDLType;
  */
 $timestamp = time();
 $last_timestamp = file_exists('../Cache/Log/.cron.timestamp') ? intval(file_get_contents('../Cache/Log/.cron.timestamp')) : 0;
-if ($timestamp - $last_timestamp < 7150) { // 2 hour - 50 second 防止计时误差
+if ($timestamp - $last_timestamp < 7150) { // 2 hours - 50 seconds 防止计时误差
 	exit('周期任务间隔时间最短为 2 小时！');
 }
 
@@ -27,13 +27,51 @@ if ($timestamp - $last_timestamp < 7150) { // 2 hour - 50 second 防止计时误
  * 任务初始化
  */
 // 设置周期任务运行时限
-ini_set('max_execution_time', 7000); // 2 hour - 200 second
-
+ini_set('max_execution_time', 7000); // 2 hours - 200 seconds
 // 保存执行时间戳
 file_put_contents('../Cache/Log/.cron.timestamp', strval($timestamp));
-
 // 新建日志文件
 $log_file = fopen('../Cache/Log/' . $timestamp . '.cron.log', 'a');
+// 初始 Error 参数
+$log_status_error = false;
+
+
+/**
+ * 清理 Cache 目录
+ */
+$caches = [
+	'Log' => [
+		'/^[0-9]+.cron.log$/' => 604800 // 7 days
+	],
+	'Upload' => [
+		'/^[0-9]+.links.html$/' => 7200 // 2 hours
+	]
+];
+foreach ($caches as $directory_name => $cache_info) {
+	foreach ($cache_info as $file_name_regex => $file_expiration_time) {
+		$file_names = scandir('../Cache/' . $directory_name . '/');
+		foreach ($file_names as $file_name) {
+			if (preg_match($file_name_regex, $file_name)) {
+				if ($timestamp - filectime('../Cache/' . $directory_name . '/' . $file_name) >= $file_expiration_time) {
+					if (unlink('../Cache/' . $directory_name . '/' . $file_name)) {
+						$log_status_string = 'INFO';
+						$cache_lore_string = 'has expired. Automatic deletion succeeded.';
+					} else {
+						$log_status_error = true;
+						$log_status_string = 'ERROR';
+						$cache_lore_string = 'has expired. However, an error occurred while deleting the file.';
+					}
+					$log_string = '[' . date('Y-m-d H:i', time()) . '] ' . $log_status_string . ': Check expired status => (/Cache/' . $directory_name . '/' . $file_name . ') ' . $cache_lore_string . "\n";
+					fwrite($log_file, $log_string);
+				} else {
+					$log_string = '[' . date('Y-m-d H:i', time()) . '] INFO: Check expired status => (/Cache/' . $directory_name . '/' . $file_name . ') has not expired and all files of the same type have been skipped after that.' . "\n";
+					fwrite($log_file, $log_string);
+					break 1;
+				}
+			}
+		}
+	}
+}
 
 
 /**
@@ -52,7 +90,7 @@ if (isset($theme_config['online_favicon'])) {
 			// 缓存目录
 			'dir' => '../Cache/Favicon/',
 			// 缓存有效期，单位：秒
-			'timeout' => 2592000
+			'timeout' => 2592000 // 30 days
 		];
 		$favicon->cache($settings_favicon);
 		$links_url = $helper->getLinksUrl();
@@ -83,3 +121,5 @@ if (isset($theme_config['online_favicon'])) {
  */
 // 关闭日志文件
 fclose($log_file);
+// 修改日志文件为只读
+// chmod('../Cache/Log/' . $timestamp . '.cron.log', 0444);
