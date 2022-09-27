@@ -54,9 +54,13 @@
 	layui.use(['form', 'upload'], function() {
 		// 书签导入
 		layui.form.on('submit(import_links)', function(data) {
+			const loading_msg = layer.load(2, {time: 300 * 1000});
+			layer.msg('正在导入书签，最多等待 300 秒 ...', {icon: 0});
 			$.post('./index.php?c=API&page=ImportLinks', data.field, function(data, status) {
+				layer.close(loading_msg);
 				// 如果导入成功
 				if (data.code === 200) {
+					$('#staging_file_name').val('');
 					layer.msg('书签导入成功！', {icon: 1});
 				} else {
 					layer.msg(data.message, {icon: 5});

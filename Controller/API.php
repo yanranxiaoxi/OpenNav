@@ -1,6 +1,7 @@
 <?php
 /**
  * 管理员 API 控制器
+ * 进入 ImportLinks 流程需要 mbstring 支持
  * 
  * @author		XiaoXi <admin@soraharu.com>
  * @copyright	All rights reserved by XiaoXi
@@ -304,16 +305,34 @@ if ($page === 'ImportLinks') {
 			if ($latest_addition === 1) {
 				array_pop($categorys);
 			}
-			array_push($categorys, [
-				'title' => $category_match[1]
-			]);
+			if (strlen($category_match[1]) <= 64) {
+				array_push($categorys, [
+					'title' => $category_match[1],
+					'description' => ''
+				]);
+			} else {
+				array_push($categorys, [
+					'title' => mb_substr($category_match[1], 0, 16),
+					'description' => $category_match[1]
+				]);
+			}
 			$latest_addition = 1;
 		} elseif (preg_match('/<DT><A HREF="(.+)" ADD_DATE.+>(.+)<\/A>/i', $staging_file_content_line, $link_match)) {
-			array_push($links, [
-				'category' => count($categorys) - 1,
-				'title' => $link_match[2],
-				'url' => $link_match[1]
-			]);
+			if (strlen($link_match[2]) <= 64) {
+				array_push($links, [
+					'category' => count($categorys) - 1,
+					'title' => $link_match[2],
+					'url' => $link_match[1],
+					'description' => ''
+				]);
+			} else {
+				array_push($links, [
+					'category' => count($categorys) - 1,
+					'title' => mb_substr($link_match[2], 0, 16),
+					'url' => $link_match[1],
+					'description' => $link_match[2]
+				]);
+			}
 			$latest_addition = 0;
 		}
 	}
@@ -341,7 +360,7 @@ if ($page === 'ImportLinks') {
 			'weight' => 0,
 			'title' => $category['title'],
 			'font_icon' => 'fa-bookmark-o',
-			'description' => '',
+			'description' => $category['description'],
 			'property' => $property
 		];
 		$state = $helper->addCategory_AuthRequired($category_data, true);
@@ -362,7 +381,7 @@ if ($page === 'ImportLinks') {
 			'title' => $link['title'],
 			'url' => $link['url'],
 			'url_standby' => '',
-			'description' => '',
+			'description' => $link['description'],
 			'property' => $property
 		];
 		$state = $helper->addLink_AuthRequired($link_data);
