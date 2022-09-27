@@ -29,6 +29,7 @@ if ($page === 'Online') {
 	// 如果 Referer 和主机名不匹配，则仅返回默认图标
 	if ((!empty($referer)) && (!strstr($http_host, $http_referer))) {
 		$icon = file_get_contents('./assets/images/default-favicon.ico');
+		header('Cache-Control: max-age=604800');
 		header('Content-Type: image/x-icon; charset=utf-8');
 		exit($icon);
 	}
@@ -110,11 +111,20 @@ if ($page === 'Offline') {
 	// 如果 Referer 和主机名不匹配，则仅返回默认图标
 	if ((!empty($referer)) && (!strstr($http_host, $http_referer))) {
 		$icon = file_get_contents('./assets/images/default-favicon.ico');
+		header('Cache-Control: max-age=604800');
 		header('Content-Type: image/x-icon; charset=utf-8');
 		exit($icon);
 	}
 
 	$title = empty($_GET['title']) ? '空' : htmlspecialchars(trim($_GET['title']));
+	$title_hash = hash('md4', $title);
+	if (file_exists('../Cache/Favicon/' . $title_hash . '.offline.svg')) {
+		$icon = file_get_contents('../Cache/Favicon/' . $title_hash . '.offline.svg');
+		header('Cache-Control: max-age=604800');
+		header('Content-Type: image/svg+xml; charset=utf-8');
+		exit($icon);
+	}
+
 	$total = unpack('L', hash('adler32', $title, true))[1];
 	$hue = $total % 360;
 	list($r, $g, $b) = $helper->hsvToRgb($hue / 360, 0.3, 0.9);
@@ -123,6 +133,7 @@ if ($page === 'Offline') {
 	$color = '#ffffff';
 	$first = mb_strtoupper(mb_substr($title, 0, 1));
 	$icon = '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="100" width="100"><rect fill="' . $bg . '" x="0" y="0" width="100" height="100"></rect><text x="50" y="50" font-size="50" text-copy="fast" fill="' . $color . '" text-anchor="middle" text-rights="admin" alignment-baseline="central">' . $first . '</text></svg>';
+	file_put_contents('../Cache/Favicon/' . $title_hash . '.offline.svg', $icon);
 	header('Cache-Control: max-age=604800');
 	header('Content-Type: image/svg+xml; charset=utf-8');
 	exit($icon);

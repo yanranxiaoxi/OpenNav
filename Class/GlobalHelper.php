@@ -554,10 +554,11 @@ class GlobalHelper {
 	 * 添加分类「Auth Required」
 	 * 
 	 * @param	array	$category_data	分类数据：[fid, weight, title, font_icon, description, property]
+	 * @param	bool	$return_id		是否返回分类 ID
 	 * 
-	 * @return	true|string				修改状态，失败时返回 string
+	 * @return	int|true|string			修改状态，失败时返回 string
 	 */
-	public function addCategory_AuthRequired($category_data) {
+	public function addCategory_AuthRequired($category_data, $return_id = false) {
 		if ($category_data['weight'] < 0 || $category_data['weight'] > 999) {
 			return '权重范围为 0-999';
 		}
@@ -595,7 +596,11 @@ class GlobalHelper {
 			// 否则数据合法，写入数据库
 			$category_data['add_time'] = time();
 			$this->database->insert('on_categorys', $category_data);
-			return true;
+			if ($return_id === true) {
+				return intval($this->database->id());
+			} else {
+				return true;
+			}
 		}
 	}
 
@@ -603,10 +608,11 @@ class GlobalHelper {
 	 * 添加链接「Auth Required」
 	 * 
 	 * @param	array	$link_data	链接数据：[fid, weight, title, url, url_standby, description, property]
+	 * @param	bool	$return_id	是否返回链接 ID
 	 * 
-	 * @return	true|string			添加状态，失败时返回 string
+	 * @return	int|true|string		添加状态，失败时返回 string
 	 */
-	public function addLink_AuthRequired($link_data) {
+	public function addLink_AuthRequired($link_data, $return_id = false) {
 		if ($link_data['weight'] < 0 || $link_data['weight'] > 999) {
 			return '权重范围为 0-999';
 		}
@@ -629,6 +635,16 @@ class GlobalHelper {
 		if (strlen($link_data['description']) > 256) {
 			return '描述长度不能超过 256 位（中文字符占 3 位）';
 		}
+		// 判断数据合法性
+		$url_regex = '/^(https?:\/\/)[\S]+$/';
+		if (!preg_match($url_regex, $link_data['url'])) {
+			return '链接不合法！';
+		}
+		if (!empty($link_data['url_standby'])) {
+			if (!preg_match($url_regex, $link_data['url_standby'])) {
+				return '外部等待页链接不合法！';
+			}
+		}
 		$category = $this->database->get('on_categorys', 'id', [
 			'id' => $link_data['fid']
 		]);
@@ -638,7 +654,11 @@ class GlobalHelper {
 		// 数据合法，写入数据库
 		$link_data['add_time'] = time();
 		$this->database->insert('on_links', $link_data);
-		return true;
+		if ($return_id === true) {
+			return intval($this->database->id());
+		} else {
+			return true;
+		}
 	}
 
 	/**

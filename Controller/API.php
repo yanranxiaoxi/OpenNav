@@ -281,7 +281,7 @@ if ($page === 'ImportLinks') {
 	if (empty($_POST['property'])) {
 		$_POST['property'] = 0;
 	}
-	if (empty($staging_file_name)) {
+	if (empty($_POST['staging_file_name'])) {
 		$helper->throwError(403, '参数不完整！');
 	}
 	$staging_file_name = htmlspecialchars(trim($_POST['staging_file_name']));
@@ -289,10 +289,84 @@ if ($page === 'ImportLinks') {
 	if (!file_exists('../Cache/Upload/' . $staging_file_name)) {
 		$helper->throwError(403, '文件不存在！');
 	}
+
+	// 设置导入任务运行时限
+	ini_set('max_execution_time', 300); // 5 minutes
 	// 解析 HTML 数据
 	$staging_file_content = file_get_contents('../Cache/Upload/' . $staging_file_name);
 	$staging_file_content_array = explode("\n", $staging_file_content); // 分割文本
 	$links = []; // 链接组
 	$categorys = []; // 分类组
-	
+	$default_category_id = 0; // 默认分类 ID
+	$latest_addition = 0; // 0: link, 1: category
+	foreach ($staging_file_content_array as $staging_file_content_line) {
+		if (preg_match('/<DT><H3.+>(.+)<\/H3>/i', $staging_file_content_line, $category_match)) {
+			if ($latest_addition === 1) {
+				array_pop($categorys);
+			}
+			array_push($categorys, [
+				'title' => $category_match[1]
+			]);
+			$latest_addition = 1;
+		} elseif (preg_match('/<DT><A HREF="(.+)" ADD_DATE.+>(.+)<\/A>/i', $staging_file_content_line, $link_match)) {
+			array_push($links, [
+				'category' => count($categorys) - 1,
+				'title' => $link_match[2],
+				'url' => $link_match[1]
+			]);
+			$latest_addition = 0;
+		}
+	}
+
+	// 导入默认分类
+	$category_data = [
+		'fid' => 0,
+		'weight' => 0,
+		'title' => '导入的无分类链接',
+		'font_icon' => 'fa-bookmark-o',
+		'description' => '',
+		'property' => $property
+	];
+	$state = $helper->addCategory_AuthRequired($category_data, true);
+	if (is_int($state)) {
+		$default_category_id = $state;
+	} else {
+		$helper->throwError(500, '导入失败，内部服务器错误！');
+	}
+
+	// 导入分类
+	foreach ($categorys as $key => $category) {
+		$category_data = [
+			'fid' => 0,
+			'weight' => 0,
+			'title' => $category['title'],
+			'font_icon' => 'fa-bookmark-o',
+			'description' => '',
+			'property' => $property
+		];
+		$state = $helper->addCategory_AuthRequired($category_data, true);
+		if (is_int($state)) {
+			$categorys[$key]['id'] = $state;
+		} else {
+			// 忽视错误并设置为默认分类
+			$categorys[$key]['id'] = $default_category_id;
+		}
+	}
+
+	// 导入链接
+	foreach ($links as $link) {
+		$category = $link['category'];
+		$link_data = [
+			'fid' => $categorys[$category]['id'],
+			'weight' => 0,
+			'title' => $link['title'],
+			'url' => $link['url'],
+			'url_standby' => '',
+			'description' => '',
+			'property' => $property
+		];
+		$state = $helper->addLink_AuthRequired($link_data);
+	}
+
+	$helper->returnSuccess();
 }
