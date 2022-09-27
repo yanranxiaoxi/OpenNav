@@ -38,14 +38,18 @@
 3. 设置站点运行目录为解压出的 `Public` 目录
 4. 访问你的网站，如果一切正常，将会显示 **安装 OpenNav** 页面，在安装时系统会自动进行运行环境检查，如出现错误，请仔细阅读报错提示，如出现无提示的错误，可提交 Issue 寻求帮助
 5. 配置周期任务
-  - 方式一：添加到系统 crontab
-    ```
-    30 2 * * * php /path/to/your/wwwroot/Cron/Cron.php
-    ```
-  - 方式二：使用工具周期性访问以下地址（建议每 24 小时访问一次）
-    ```
-    https://opennav.yourdomain.com/index.php?c=Cron
-    ```
+
+    - 方式一：添加到系统 crontab
+
+      ```
+      30 2 * * * php /path/to/your/wwwroot/Cron/Cron.php
+      ```
+
+    - 方式二：使用工具周期性访问以下地址（建议每 24 小时访问一次）
+
+      ```
+      https://opennav.yourdomain.com/index.php?c=Cron
+      ```
 
 *本项目当前处于开发阶段，可能会出现较多未知错误，请在遇到无法解决的错误时首先尝试查询本程序是否存在更新版本，如确认处在最新版本，可开启 Issue 并附上您的复现过程，开发者将会尽快进行回应
 
