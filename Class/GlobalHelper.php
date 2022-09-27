@@ -454,7 +454,7 @@ class GlobalHelper {
 	 * 
 	 * @return array 链接数组 url
 	 */
-	public function getLinksUrl() {
+	public function getLinksUrl_AuthRequired() {
 		return $this->database->select('on_links', 'url');
 	}
 

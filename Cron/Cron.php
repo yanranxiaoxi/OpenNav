@@ -45,6 +45,7 @@ function cronError() {
 /**
  * 清理 Cache 目录
  */
+// 可排序缓存
 $caches = [
 	'Log' => [
 		'/^[0-9]+\.cron\.log$/' => 604800 // 7 days
@@ -79,6 +80,37 @@ foreach ($caches as $directory_name => $cache_info) {
 	}
 }
 
+// 全随机缓存
+$caches = [
+	'Favicon' => [
+		'/^[0-9a-z]{20}\.offline\.svg$/' => 15552000 // 180 days
+	]
+];
+foreach ($caches as $directory_name => $cache_info) {
+	foreach ($cache_info as $file_name_regex => $file_expiration_time) {
+		$file_names = scandir('../Cache/' . $directory_name . '/');
+		foreach ($file_names as $file_name) {
+			if (preg_match($file_name_regex, $file_name)) {
+				if ($timestamp - filectime('../Cache/' . $directory_name . '/' . $file_name) >= $file_expiration_time) {
+					if (unlink('../Cache/' . $directory_name . '/' . $file_name)) {
+						$log_status_string = 'INFO';
+						$cache_lore_string = 'has expired. Automatic deletion succeeded.';
+					} else {
+						cronError();
+						$log_status_string = 'ERROR';
+						$cache_lore_string = 'has expired. However, an error occurred while deleting the file.';
+					}
+				} else {
+					$log_status_string = 'INFO';
+					$cache_lore_string = 'has not expired.';
+				}
+				$log_string = '[' . date('Y-m-d H:i') . '] ' . $log_status_string . ': Check expired status => (/Cache/' . $directory_name . '/' . $file_name . ') ' . $cache_lore_string . "\n";
+				fwrite($log_file, $log_string);
+			}
+		}
+	}
+}
+
 
 /**
  * 获取链接图标
@@ -89,7 +121,7 @@ $options_theme = $helper->getOptionsTheme();
 // 获取主题配置
 $theme_config = $helper->getThemeConfig($options_theme);
 if (isset($theme_config['online_favicon'])) {
-	if($theme_config['online_favicon'] === true) {
+	if ($theme_config['online_favicon'] === true) {
 		// 初始化 Favicon 类
 		$favicon = new Favicon();
 		$settings_favicon = [
@@ -99,7 +131,7 @@ if (isset($theme_config['online_favicon'])) {
 			'timeout' => 2592000 // 30 days
 		];
 		$favicon->cache($settings_favicon);
-		$links_url = $helper->getLinksUrl();
+		$links_url = $helper->getLinksUrl_AuthRequired(); // 此处不会有任何返回，该数据安全
 		foreach ($links_url as $link_value_url) {
 			$url_regex = '/^(https?:\/\/)[\S]+$/';
 			if (preg_match($url_regex, $link_value_url)) {
