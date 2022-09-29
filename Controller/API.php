@@ -387,5 +387,11 @@ if ($page === 'ImportLinks') {
 		$state = $helper->addLink_AuthRequired($link_data);
 	}
 
+	// 检测默认分类是否存在链接
+	if ($helper->countLinksByCategoryId_AuthRequired($default_category_id) === 0) {
+		// 如不存在，则删除默认分类
+		$helper->deleteLink_AuthRequired($default_category_id);
+	}
+
 	$helper->returnSuccess();
 }

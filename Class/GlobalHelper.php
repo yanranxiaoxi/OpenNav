@@ -426,7 +426,7 @@ class GlobalHelper {
 	}
 
 	/**
-	 * 获取指定分类的链接「With Auth」
+	 * 获取指定分类 ID 的链接「With Auth」
 	 * 
 	 * @param	int		$category_id	分类 ID
 	 * 
@@ -566,6 +566,19 @@ class GlobalHelper {
 	 */
 	public function countLinks_AuthRequired() {
 		return $this->database->count('on_links');
+	}
+
+	/**
+	 * 获取指定分类 ID 的链接总数「Auth Required」
+	 *
+	 * @param int $category_id 分类 ID
+	 *
+	 * @return int 链接总数
+	 */
+	public function countLinksByCategoryId_AuthRequired($category_id) {
+		return $this->database->count('on_links', [
+			'fid' => $category_id
+		]);
 	}
 
 	/**
