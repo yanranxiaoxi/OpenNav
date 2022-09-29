@@ -28,14 +28,14 @@ if (!$is_login) {
  * 
  * @todo #TODO# 增加排序方式参数
  */
-if ($page === 'Categorys') {
+if ($page === 'Categories') {
 	$pages = intval($_GET['pages']);
 	$limit = intval($_GET['limit']);
 	if (!empty($pages) && !empty($limit)) {
-		$categorys = $helper->getCategorysPagination_AuthRequired($pages, $limit);
+		$categories = $helper->getCategoriesPagination_AuthRequired($pages, $limit);
 		// fid 数组
 		$fid_array = [];
-		foreach ($categorys as $category) {
+		foreach ($categories as $category) {
 			if ($category['fid'] !== 0) {
 				array_push($fid_array, $category['fid']);
 			}
@@ -43,24 +43,24 @@ if ($page === 'Categorys') {
 		$fid_array = array_unique($fid_array); // 去重
 		$fid_array = array_values($fid_array); // 排序
 		// ftitle 数组
-		$ftitle_array = $helper->getCategorysTitleByCategorysId_AuthRequired($fid_array);
+		$ftitle_array = $helper->getCategoriesTitleByCategoriesId_AuthRequired($fid_array);
 		// fid 为 key，ftitle 为 value 数组
 		$fidtitle_array = [];
 		for ($i = 0; $i < count($fid_array); $i++) {
 			$fid = strval($fid_array[$i]);
 			$fidtitle_array[$fid] = $ftitle_array[$i];
 		}
-		// 将 ftitle 插入 $categorys 数组中
-		foreach ($categorys as $key => $category) {
-			if ($categorys[$key]['fid'] !== 0) {
+		// 将 ftitle 插入 $categories 数组中
+		foreach ($categories as $key => $category) {
+			if ($categories[$key]['fid'] !== 0) {
 				$fid = strval($category['fid']);
-				$categorys[$key]['ftitle'] = $fidtitle_array[$fid];
+				$categories[$key]['ftitle'] = $fidtitle_array[$fid];
 			}
 		}
 		// 输出
 		$data = [
-			'count' => $helper->countCategorys_AuthRequired(),
-			'data' => $categorys
+			'count' => $helper->countCategories_AuthRequired(),
+			'data' => $categories
 		];
 		$helper->returnSuccess($data);
 	} else {
@@ -164,7 +164,7 @@ if ($page === 'Links') {
 		$fid_array = array_unique($fid_array); // 去重
 		$fid_array = array_values($fid_array); // 排序
 		// ftitle 数组
-		$ftitle_array = $helper->getCategorysTitleByCategorysId_AuthRequired($fid_array);
+		$ftitle_array = $helper->getCategoriesTitleByCategoriesId_AuthRequired($fid_array);
 		// fid 为 key，ftitle 为 value 数组
 		$fidtitle_array = [];
 		for ($i = 0; $i < count($fid_array); $i++) {
@@ -343,21 +343,21 @@ if ($page === 'ImportLinks') {
 	$staging_file_content = file_get_contents('../Cache/Upload/' . $staging_file_name);
 	$staging_file_content_array = explode("\n", $staging_file_content); // 分割文本
 	$links = []; // 链接组
-	$categorys = []; // 分类组
+	$categories = []; // 分类组
 	$default_category_id = 0; // 默认分类 ID
 	$latest_addition = 0; // 0: link, 1: category
 	foreach ($staging_file_content_array as $staging_file_content_line) {
 		if (preg_match('/<DT><H3.+>(.+)<\/H3>/i', $staging_file_content_line, $category_match)) {
 			if ($latest_addition === 1) {
-				array_pop($categorys);
+				array_pop($categories);
 			}
 			if (strlen($category_match[1]) <= 64) {
-				array_push($categorys, [
+				array_push($categories, [
 					'title' => $category_match[1],
 					'description' => ''
 				]);
 			} else {
-				array_push($categorys, [
+				array_push($categories, [
 					'title' => mb_substr($category_match[1], 0, 16),
 					'description' => $category_match[1]
 				]);
@@ -366,14 +366,14 @@ if ($page === 'ImportLinks') {
 		} elseif (preg_match('/<DT><A HREF="(.+)" ADD_DATE.+>(.+)<\/A>/i', $staging_file_content_line, $link_match)) {
 			if (strlen($link_match[2]) <= 64) {
 				array_push($links, [
-					'category' => count($categorys) - 1,
+					'category' => count($categories) - 1,
 					'title' => $link_match[2],
 					'url' => $link_match[1],
 					'description' => ''
 				]);
 			} else {
 				array_push($links, [
-					'category' => count($categorys) - 1,
+					'category' => count($categories) - 1,
 					'title' => mb_substr($link_match[2], 0, 16),
 					'url' => $link_match[1],
 					'description' => $link_match[2]
@@ -400,7 +400,7 @@ if ($page === 'ImportLinks') {
 	}
 
 	// 导入分类
-	foreach ($categorys as $key => $category) {
+	foreach ($categories as $key => $category) {
 		$category_data = [
 			'fid' => 0,
 			'weight' => 0,
@@ -411,10 +411,10 @@ if ($page === 'ImportLinks') {
 		];
 		$state = $helper->addCategory_AuthRequired($category_data, true);
 		if (is_int($state)) {
-			$categorys[$key]['id'] = $state;
+			$categories[$key]['id'] = $state;
 		} else {
 			// 忽视错误并设置为默认分类
-			$categorys[$key]['id'] = $default_category_id;
+			$categories[$key]['id'] = $default_category_id;
 		}
 	}
 
@@ -422,7 +422,7 @@ if ($page === 'ImportLinks') {
 	foreach ($links as $link) {
 		$category = $link['category'];
 		$link_data = [
-			'fid' => $categorys[$category]['id'],
+			'fid' => $categories[$category]['id'],
 			'weight' => 0,
 			'title' => $link['title'],
 			'url' => $link['url'],

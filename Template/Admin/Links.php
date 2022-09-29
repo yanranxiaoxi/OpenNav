@@ -13,7 +13,7 @@
 						<div class="layui-input-inline">
 							<select name="fid" lay-search id="fid">
 								<option value="">请选择一个分类</option>
-								<?php foreach ($categorys as $category) { ?>
+								<?php foreach ($categories as $category) { ?>
 								<option value="<?php echo $category['id'] ?>">[<?php echo $category['id'] ?>] <?php echo $category['title']; ?></option>
 								<?php } ?>
 							</select>

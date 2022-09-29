@@ -46,7 +46,7 @@
 							<!-- 遍历所有一级分类 -->
 							<?php
 							// 分类的父分类不能为自己，也不能为上面已出现的上级分类
-							foreach ($parent_categorys as $parent_category) {
+							foreach ($parent_categories as $parent_category) {
 								if ($parent_category['id'] === $category_value['id'] || $parent_category['id'] === $category_value['fid']) {
 									continue;
 								}
@@ -143,7 +143,7 @@
 		});
 
 		layui.form.on('submit(go_back)', function(data) {
-			window.location.href = './index.php?c=Admin&page=Categorys';
+			window.location.href = './index.php?c=Admin&page=Categories';
 			return false;
 		});
 	})

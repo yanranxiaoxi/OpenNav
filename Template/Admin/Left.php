@@ -5,7 +5,7 @@
 			<li class="layui-nav-item layui-nav-itemed">
 				<a href="javascript:;">分类管理</a>
 				<dl class="layui-nav-child">
-					<dd><a href="./index.php?c=Admin&page=Categorys">分类列表</a></dd>
+					<dd><a href="./index.php?c=Admin&page=Categories">分类列表</a></dd>
 					<dd><a href="./index.php?c=Admin&page=AddCategory">添加分类</a></dd>
 				</dl>
 			</li>

@@ -28,7 +28,7 @@
 					<div class="layui-input-block">
 						<select name="fid" lay-verify="required" lay-search>
 							<option value=""></option>
-							<?php foreach ($categorys as $category) { ?>
+							<?php foreach ($categories as $category) { ?>
 							<option value="<?php echo $category['id'] ?>"><?php echo $category['title']; ?></option>
 							<?php } ?>
 						</select>

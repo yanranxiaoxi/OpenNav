@@ -36,7 +36,7 @@
 						<select name="fid" lay-verify="required" lay-search>
 							<option value="<?php echo $link_value['fid'] ?>"><?php echo $link_value['ftitle']; ?></option>
 							<?php
-							foreach ($categorys as $category) {
+							foreach ($categories as $category) {
 								if ($category['id'] === $link_value['fid']) {
 									continue;
 								}

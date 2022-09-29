@@ -6,7 +6,7 @@
 	<div class="layui-row content-body place-holder">
 		<a class="layui-btn layui-btn-primary layui-border-green" target="_self" title="添加分类" href="./index.php?c=Admin&page=AddCategory"><i class="fa fa-plus-circle"></i> 添加分类</a>
 		<div class="layui-col-lg12">
-			<table id="categorys" lay-filter="categorys"></table>
+			<table id="categories" lay-filter="categories"></table>
 		</div>
 		<script type="text/html" id="navbar_operate">
 			<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
@@ -32,9 +32,9 @@
 	layui.use(['table'], function() {
 		// 参考：https://www.layuiweb.com/doc/modules/table.html
 		layui.table.render({
-			elem: '#categorys', // 指定原始 table 容器的选择器或 DOM
+			elem: '#categories', // 指定原始 table 容器的选择器或 DOM
 			title: 'OpenNav 分类列表', // 大标题（在文件导出等地方会用到）
-			url: 'index.php?c=API&page=Categorys', // 数据接口
+			url: 'index.php?c=API&page=Categories', // 数据接口
 			toolbar: true, // 开启工具栏
 			defaultToolbar: ['filter', 'print', 'exports'], // 工具栏右侧图标
 			page: true, // 开启分页
@@ -91,7 +91,7 @@
 			]]
 		});
 
-		layui.table.on('tool(categorys)', function(obj) {
+		layui.table.on('tool(categories)', function(obj) {
 			if (obj.event === 'delete') {
 			layer.confirm('确认要删除该分类吗？', {icon: 3, title:'提示'}, function(index) {
 				$.post('./index.php?c=API&page=DeleteCategory', {'id': obj.data.id}, function(data, status) {

@@ -24,15 +24,15 @@ if (!file_exists('./themes/' . $options_theme . '/index.php') || !file_exists('.
 /**
  * 获取分类与链接
  */
-$parent_categorys = $helper->getParentCategorys();
-$child_categorys = [];
-foreach ($parent_categorys as $parent_category_value) {
+$parent_categories = $helper->getParentCategories();
+$child_categories = [];
+foreach ($parent_categories as $parent_category_value) {
 	$parent_category_value_id = $parent_category_value['id'];
-	$child_categorys[$parent_category_value_id] = $helper->getChildCategorysByParentCategoryId($parent_category_value_id);
+	$child_categories[$parent_category_value_id] = $helper->getChildCategoriesByParentCategoryId($parent_category_value_id);
 }
-$categorys = $helper->getCategorys();
+$categories = $helper->getCategories();
 $links = [];
-foreach ($categorys as $category_value) {
+foreach ($categories as $category_value) {
 	$category_value_id = $category_value['id'];
 	$links[$category_value_id] = $helper->getLinksByCategoryId($category_value_id);
 }

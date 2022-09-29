@@ -223,23 +223,23 @@ class GlobalHelper {
 	 * 
 	 * @return array 一级分类二维数组
 	 */
-	public function getParentCategorys() {
-		$parent_categorys = [];
+	public function getParentCategories() {
+		$parent_categories = [];
 		if ($this->isLogin()) {
 			// 查询一级分类
-			$parent_categorys = $this->database->select('on_categorys', '*', [
+			$parent_categories = $this->database->select('on_categories', '*', [
 				'fid' => 0,
 				'ORDER' => ['weight' => 'DESC']
 			]);
 		} else {
 			// 查询一级分类
-			$parent_categorys = $this->database->select('on_categorys', '*', [
+			$parent_categories = $this->database->select('on_categories', '*', [
 				'fid' => 0,
 				'property' => 0,
 				'ORDER' => ['weight' => 'DESC']
 			]);
 		}
-		return $parent_categorys;
+		return $parent_categories;
 	}
 
 	/**
@@ -247,12 +247,12 @@ class GlobalHelper {
 	 * 
 	 * @return array 一级分类二维数组
 	 */
-	public function getParentCategorys_AuthRequired() {
-		$parent_categorys = $this->database->select('on_categorys', '*', [
+	public function getParentCategories_AuthRequired() {
+		$parent_categories = $this->database->select('on_categories', '*', [
 			'fid' => 0,
 			'ORDER' => ['id' => 'ASC']
 		]);
-		return $parent_categorys;
+		return $parent_categories;
 	}
 
 	/**
@@ -260,12 +260,12 @@ class GlobalHelper {
 	 * 
 	 * @return array 一级分类二维数组 [id, title]
 	 */
-	public function getParentCategorysIdTitle_AuthRequired() {
-		$parent_categorys = $this->database->select('on_categorys', ['id', 'title'], [
+	public function getParentCategoriesIdTitle_AuthRequired() {
+		$parent_categories = $this->database->select('on_categories', ['id', 'title'], [
 			'fid' => 0,
 			'ORDER' => ['id' => 'ASC']
 		]);
-		return $parent_categorys;
+		return $parent_categories;
 	}
 
 	/**
@@ -275,23 +275,23 @@ class GlobalHelper {
 	 * 
 	 * @return	array	二级分类二维数组
 	 */
-	public function getChildCategorysByParentCategoryId($parent_category_id) {
-		$child_categorys = [];
+	public function getChildCategoriesByParentCategoryId($parent_category_id) {
+		$child_categories = [];
 		if ($this->isLogin()) {
 			// 查询二级分类
-			$child_categorys = $this->database->select('on_categorys', '*', [
+			$child_categories = $this->database->select('on_categories', '*', [
 				'fid' => $parent_category_id,
 				'ORDER' => ['weight' => 'DESC']
 			]);
 		} else {
 			// 查询二级分类
-			$child_categorys = $this->database->select('on_categorys', '*', [
+			$child_categories = $this->database->select('on_categories', '*', [
 				'fid' => $parent_category_id,
 				'property' => 0,
 				'ORDER' => ['weight' => 'DESC']
 			]);
 		}
-		return $child_categorys;
+		return $child_categories;
 	}
 
 	/**
@@ -299,54 +299,54 @@ class GlobalHelper {
 	 * 
 	 * @return array 分类二维数组
 	 */
-	public function getCategorys() {
-		$categorys = [];
+	public function getCategories() {
+		$categories = [];
 		if ($this->isLogin()) {
 			// 查询一级分类
-			$category_parent_array = $this->database->select('on_categorys', '*', [
+			$category_parent_array = $this->database->select('on_categories', '*', [
 				'fid' => 0,
 				'ORDER' => ['weight' => 'DESC']
 			]);
 			// 遍历一级分类
 			foreach ($category_parent_array as $category_parent_value) {
-				// 将一级分类追加到 $categorys 数组
-				array_push($categorys, $category_parent_value);
+				// 将一级分类追加到 $categories 数组
+				array_push($categories, $category_parent_value);
 				// 查询二级分类
-				$category_child_array = $this->database->select('on_categorys', '*', [
+				$category_child_array = $this->database->select('on_categories', '*', [
 					'fid' => $category_parent_value['id'],
 					'ORDER' => ['weight' => 'DESC']
 				]);
 				// 遍历该一级分类下的所有子分类
 				foreach ($category_child_array as $category_child_value) {
-					// 将所有子分类追加到 $categorys 数组
-					array_push($categorys, $category_child_value);
+					// 将所有子分类追加到 $categories 数组
+					array_push($categories, $category_child_value);
 				}
 			}
 		} else {
 			// 查询一级分类
-			$category_parent_array = $this->database->select('on_categorys', '*', [
+			$category_parent_array = $this->database->select('on_categories', '*', [
 				'fid' => 0,
 				'property' => 0,
 				'ORDER' => ['weight' => 'DESC']
 			]);
 			// 遍历一级分类
 			foreach ($category_parent_array as $category_parent_value) {
-				// 将一级分类追加到 $categorys 数组
-				array_push($categorys, $category_parent_value);
+				// 将一级分类追加到 $categories 数组
+				array_push($categories, $category_parent_value);
 				// 查询二级分类
-				$category_child_array = $this->database->select('on_categorys', '*', [
+				$category_child_array = $this->database->select('on_categories', '*', [
 					'fid' => $category_parent_value['id'],
 					'property' => 0,
 					'ORDER' => ['weight' => 'DESC']
 				]);
 				// 遍历该一级分类下的所有子分类
 				foreach ($category_child_array as $category_child_value) {
-					// 将所有子分类追加到 $categorys 数组
-					array_push($categorys, $category_child_value);
+					// 将所有子分类追加到 $categories 数组
+					array_push($categories, $category_child_value);
 				}
 			}
 		}
-		return $categorys;
+		return $categories;
 	}
 
 	/**
@@ -354,11 +354,11 @@ class GlobalHelper {
 	 * 
 	 * @return array 分类二维数组 [id, title]
 	 */
-	public function getCategorysIdTitle_AuthRequired() {
-		$categorys = $this->database->select('on_categorys', ['id', 'title'], [
+	public function getCategoriesIdTitle_AuthRequired() {
+		$categories = $this->database->select('on_categories', ['id', 'title'], [
 			'ORDER' => ['id' => 'ASC']
 		]);
-		return $categorys;
+		return $categories;
 	}
 
 	/**
@@ -371,11 +371,11 @@ class GlobalHelper {
 	public function getCategoryByCategoryId($category_id) {
 		$category_value = [];
 		if ($this->isLogin()) {
-			$category_value = $this->database->get('on_categorys', '*', [
+			$category_value = $this->database->get('on_categories', '*', [
 				'id' => $category_id
 			]);
 		} else {
-			$category_value = $this->database->get('on_categorys', '*', [
+			$category_value = $this->database->get('on_categories', '*', [
 				'id' => $category_id,
 				'property' => 0
 			]);
@@ -391,7 +391,7 @@ class GlobalHelper {
 	 * @return	array	分类数组
 	 */
 	public function getCategoryByCategoryId_AuthRequired($category_id) {
-		$category_value = $this->database->get('on_categorys', '*', [
+		$category_value = $this->database->get('on_categories', '*', [
 			'id' => $category_id
 		]);
 		return $category_value;
@@ -407,7 +407,7 @@ class GlobalHelper {
 	 * @return	string	分类 title
 	 */
 	public function getCategoryTitleByCategoryId_AuthRequired($category_id) {
-		$category_value_title = $this->database->get('on_categorys', 'title', [
+		$category_value_title = $this->database->get('on_categories', 'title', [
 			'id' => $category_id
 		]);
 		return $category_value_title;
@@ -416,18 +416,18 @@ class GlobalHelper {
 	/**
 	 * 获取指定分类 ID 的分类 title「Auth Required」
 	 * 
-	 * @param	int|array		$categorys_id	分类 ID，可为整型或整型数组
+	 * @param	int|array		$categories_id	分类 ID，可为整型或整型数组
 	 * 
 	 * @return	string|array	分类 title，如输入的分类 ID 为数组，则返回值为数组
 	 */
-	public function getCategorysTitleByCategorysId_AuthRequired($categorys_id) {
-		$categorys_title = $this->database->select('on_categorys', 'title', [
-			'id' => $categorys_id
+	public function getCategoriesTitleByCategoriesId_AuthRequired($categories_id) {
+		$categories_title = $this->database->select('on_categories', 'title', [
+			'id' => $categories_id
 		]);
-		if (is_array($categorys_id)) {
-			return $categorys_title;
+		if (is_array($categories_id)) {
+			return $categories_title;
 		} else {
-			return $categorys_title[0];
+			return $categories_title[0];
 		}
 	}
 
@@ -439,7 +439,7 @@ class GlobalHelper {
 	 * @return	array	分类数组 [fid, property]
 	 */
 	public function getCategoryFidPropertyByCategoryId_AuthRequired($category_id) {
-		$category_value = $this->database->get('on_categorys', ['fid', 'property'], [
+		$category_value = $this->database->get('on_categories', ['fid', 'property'], [
 			'id' => $category_id
 		]);
 		return $category_value;
@@ -524,22 +524,22 @@ class GlobalHelper {
 	 * 
 	 * @return	array	分类二维数组
 	 */
-	public function getCategorysPagination_AuthRequired($pages = 0, $limit = 0) {
-		$categorys = [];
+	public function getCategoriesPagination_AuthRequired($pages = 0, $limit = 0) {
+		$categories = [];
 		// 查询分类
 		if ($pages > 0 && $limit > 0) {
 			// 首行数据偏移量
 			$offset = ($pages - 1) * $limit;
-			$categorys = $this->database->select('on_categorys', '*', [
+			$categories = $this->database->select('on_categories', '*', [
 				'ORDER' => ['id' => 'ASC'],
 				'LIMIT' => [$offset, $limit]
 			]);
 		} else {
-			$categorys = $this->database->select('on_categorys', '*', [
+			$categories = $this->database->select('on_categories', '*', [
 				'ORDER' => ['id' => 'ASC']
 			]);
 		}
-		return $categorys;
+		return $categories;
 	}
 
 	/**
@@ -575,8 +575,8 @@ class GlobalHelper {
 	 *
 	 * @return int 分类总数
 	 */
-	public function countCategorys_AuthRequired() {
-		return $this->database->count('on_categorys');
+	public function countCategories_AuthRequired() {
+		return $this->database->count('on_categories');
 	}
 
 	/**
@@ -631,22 +631,22 @@ class GlobalHelper {
 		}
 		// 当分类 fid 不为 0 时，查询分类 fid 是否为一级分类的 id
 		if ($category_data['fid'] !== 0) {
-			$parent_categorys = $this->database->select('on_categorys', 'id', [
+			$parent_categories = $this->database->select('on_categories', 'id', [
 				'fid' => 0
 			]);
 			// 如果不是一级分类的 id，则数据不合法
-			if (!in_array($category_data['fid'], $parent_categorys)) {
+			if (!in_array($category_data['fid'], $parent_categories)) {
 				return '父级分类必须为一级分类！';
 			} else {
 				// 否则数据合法，写入数据库
 				$category_data['add_time'] = time();
-				$this->database->insert('on_categorys', $category_data);
+				$this->database->insert('on_categories', $category_data);
 				return true;
 			}
 		} else {
 			// 否则数据合法，写入数据库
 			$category_data['add_time'] = time();
-			$this->database->insert('on_categorys', $category_data);
+			$this->database->insert('on_categories', $category_data);
 			if ($return_id === true) {
 				return intval($this->database->id());
 			} else {
@@ -696,7 +696,7 @@ class GlobalHelper {
 				return '外部等待页链接不合法！';
 			}
 		}
-		$category = $this->database->get('on_categorys', 'id', [
+		$category = $this->database->get('on_categories', 'id', [
 			'id' => $link_data['fid']
 		]);
 		if (empty($category)) {
@@ -745,16 +745,16 @@ class GlobalHelper {
 		}
 		// 当分类 fid 不为 0 时，查询分类 fid 是否为一级分类的 id
 		if ($category_data['fid'] !== 0) {
-			$parent_categorys = $this->database->select('on_categorys', 'id', [
+			$parent_categories = $this->database->select('on_categories', 'id', [
 				'fid' => 0
 			]);
 			// 如果不是一级分类的 id，则数据不合法
-			if (!in_array($category_data['fid'], $parent_categorys)) {
+			if (!in_array($category_data['fid'], $parent_categories)) {
 				return '父级分类必须为一级分类！';
 			} else {
 				// 否则数据合法，写入数据库
 				$category_data['update_time'] = time();
-				$this->database->update('on_categorys', $category_data, [
+				$this->database->update('on_categories', $category_data, [
 					'id' => $category_id
 				]);
 				return true;
@@ -762,7 +762,7 @@ class GlobalHelper {
 		} else {
 			// 否则数据合法，写入数据库
 			$category_data['update_time'] = time();
-			$this->database->update('on_categorys', $category_data, [
+			$this->database->update('on_categories', $category_data, [
 				'id' => $category_id
 			]);
 			return true;
@@ -800,7 +800,7 @@ class GlobalHelper {
 		if (strlen($link_data['description']) > 256) {
 			return '描述长度不能超过 256 位（中文字符占 3 位）';
 		}
-		$category = $this->database->get('on_categorys', 'id', [
+		$category = $this->database->get('on_categories', 'id', [
 			'id' => $link_data['fid']
 		]);
 		if (empty($category)) {
@@ -822,20 +822,20 @@ class GlobalHelper {
 	 * @return	bool	删除状态
 	 */
 	public function deleteCategory_AuthRequired($category_id) {
-		$category_value = $this->database->get('on_categorys', 'fid', [
+		$category_value = $this->database->get('on_categories', 'fid', [
 			'id' => $category_id
 		]);
-		$child_categorys = null;
+		$child_categories = null;
 		if ($category_value['fid'] === 0) {
-			$child_categorys = $this->database->select('on_categorys', 'id', [
+			$child_categories = $this->database->select('on_categories', 'id', [
 				'fid' => $category_id
 			]);
 		}
 		$links = $this->database->select('on_links', 'id', [
 			'fid' => $category_id
 		]);
-		if (empty($child_categorys) && empty($links)) {
-			$this->database->delete('on_categorys', [
+		if (empty($child_categories) && empty($links)) {
+			$this->database->delete('on_categories', [
 				'id' => $category_id
 			]);
 			return true;

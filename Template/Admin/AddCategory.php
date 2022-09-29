@@ -27,7 +27,7 @@
 					<div class="layui-input-block">
 						<select name="fid" lay-verify="required" lay-search>
 							<option value="0">无</option>
-							<?php foreach ($parent_categorys as $parent_category) { ?>
+							<?php foreach ($parent_categories as $parent_category) { ?>
 								<option value="<?php echo $parent_category['id']; ?>"><?php echo '[' . $parent_category['id'] . '] ' . htmlspecialchars_decode($parent_category['title']); ?></option>
 							<?php } ?>
 						</select> 

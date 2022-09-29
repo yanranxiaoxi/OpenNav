@@ -35,8 +35,8 @@ if ($page === 'Index') {
 /**
  * 进入分类列表流程
  */
-if ($page === 'Categorys') {
-	require_once('../Template/Admin/Categorys.php');
+if ($page === 'Categories') {
+	require_once('../Template/Admin/Categories.php');
 	exit();
 }
 
@@ -50,7 +50,7 @@ if ($page === 'EditCategory') {
 	if ($category_value['fid'] !== 0) {
 		$category_value['ftitle'] = $helper->getCategoryTitleByCategoryId_AuthRequired($category_value['fid']);
 	}
-	$parent_categorys = $helper->getParentCategorysIdTitle_AuthRequired();
+	$parent_categories = $helper->getParentCategoriesIdTitle_AuthRequired();
 	require_once('../Template/Admin/EditCategory.php');
 	exit();
 }
@@ -60,7 +60,7 @@ if ($page === 'EditCategory') {
  * 进入添加分类流程
  */
 if ($page === 'AddCategory') {
-	$parent_categorys = $helper->getParentCategorysIdTitle_AuthRequired();
+	$parent_categories = $helper->getParentCategoriesIdTitle_AuthRequired();
 	require_once('../Template/Admin/AddCategory.php');
 	exit();
 }
@@ -70,7 +70,7 @@ if ($page === 'AddCategory') {
  * 进入链接列表流程
  */
 if ($page === 'Links') {
-	$categorys = $helper->getCategorysIdTitle_AuthRequired();
+	$categories = $helper->getCategoriesIdTitle_AuthRequired();
 	require_once('../Template/Admin/Links.php');
 	exit();
 }
@@ -83,7 +83,7 @@ if ($page === 'EditLink') {
 	$link_id = intval($_GET['id']);
 	$link_value = $helper->getLinkByLinkId_AuthRequired($link_id);
 	$link_value['ftitle'] = $helper->getCategoryTitleByCategoryId_AuthRequired($link_value['fid']);
-	$categorys = $helper->getCategorysIdTitle_AuthRequired();
+	$categories = $helper->getCategoriesIdTitle_AuthRequired();
 	require_once('../Template/Admin/EditLink.php');
 	exit();
 }
@@ -93,7 +93,7 @@ if ($page === 'EditLink') {
  * 进入添加链接流程
  */
 if ($page === 'AddLink') {
-	$categorys = $helper->getCategorysIdTitle_AuthRequired();
+	$categories = $helper->getCategoriesIdTitle_AuthRequired();
 	require_once('../Template/Admin/AddLink.php');
 	exit();
 }
