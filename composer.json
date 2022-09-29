@@ -6,7 +6,8 @@
 		"catfan/medoo": "^2.1",
 		"chillerlan/php-qrcode": "^4.3",
 		"jeremykendall/php-domain-parser": "^6.1",
-		"robthree/twofactorauth": "^1.8"
+		"robthree/twofactorauth": "^1.8",
+		"spatie/simple-excel": "^2.2"
 	},
 	"license": "Mozilla Public License Version 2.0",
 	"autoload": {

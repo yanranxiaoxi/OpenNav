@@ -20,7 +20,7 @@
 
 ## ✔️ 要求
 
-- PHP 7.4 或更高版本
+- PHP 8.0 或更高版本
 - PHP 插件
   - PHP [pdo_sqlite](https://www.php.net/manual/ref.pdo-sqlite.php) 以使用 SQLite 数据库
   - PHP [curl](https://www.php.net/manual/book.curl.php) 以获取在线内容（如自动更新、主题）
