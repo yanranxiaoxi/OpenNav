@@ -131,6 +131,21 @@ if ($page === 'Links') {
 	$limit = intval($_GET['limit']);
 	if (!empty($pages) && !empty($limit)) {
 		$links = $helper->getLinksPagination_AuthRequired($pages, $limit);
+		$fid_array = [];
+		foreach ($links as $link) {
+			array_push($fid_array, $link['fid']);
+		}
+		$fid_array = array_unique($fid_array);
+		$ftitle_array = $helper->getCategorysTitleByCategorysId_AuthRequired($fid_array);
+		$fidtitle_array = [];
+		for ($i = 0; $i < count($fid_array); $i++) {
+			$fid = $fid_array[$i];
+			$fidtitle_array[$fid] = $ftitle_array[$i];
+		}
+		foreach ($links as $key => $link) {
+			$fid = $link['fid'];
+			$links[$key]['ftitle'] = $fidtitle_array[$id];
+		}
 		$data = [
 			'count' => $helper->countLinks_AuthRequired(),
 			'data' => $links

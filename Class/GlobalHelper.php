@@ -269,7 +269,7 @@ class GlobalHelper {
 	}
 
 	/**
-	 * 获取指定一级分类的二级分类「With Auth」
+	 * 获取指定一级分类 ID 的二级分类「With Auth」
 	 * 
 	 * @param	int		$parent_category_id	一级分类 ID
 	 * 
@@ -399,6 +399,8 @@ class GlobalHelper {
 
 	/**
 	 * 获取指定分类 ID 的分类 title「Auth Required」
+	 *
+	 * @deprecated
 	 * 
 	 * @param	int		$category_id	分类 ID
 	 * 
@@ -409,6 +411,24 @@ class GlobalHelper {
 			'id' => $category_id
 		]);
 		return $category_value_title;
+	}
+
+	/**
+	 * 获取指定分类 ID 的分类 title「Auth Required」
+	 * 
+	 * @param	int|array		$categorys_id	分类 ID，可为整型或整型数组
+	 * 
+	 * @return	string|array	分类 title，如输入的分类 ID 为数组，则返回值为数组
+	 */
+	public function getCategorysTitleByCategorysId_AuthRequired($categorys_id) {
+		$categorys_title = $this->database->select('on_categorys', 'title', [
+			'id' => $categorys_id
+		]);
+		if (is_array($categorys_id)) {
+			return $categorys_title;
+		} else {
+			return $categorys_title[0];
+		}
 	}
 
 	/**
