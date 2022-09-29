@@ -32,7 +32,7 @@ if (!file_exists('../Data/Config.php')) {
 require_once('../Data/Config.php');
 // 连接数据库
 if (DATABASE_TYPE === 'MariaDB' || DATABASE_TYPE === 'MySQL') {
-	$database = new medoo([
+	$database = new Medoo([
 		'type' => 'mysql',
 		'host' => DATABASE_HOST,
 		'port' => DATABASE_PORT,
@@ -42,7 +42,7 @@ if (DATABASE_TYPE === 'MariaDB' || DATABASE_TYPE === 'MySQL') {
 		'prefix' => DATABASE_PREFIX
 	]);
 } elseif (DATABASE_TYPE === 'MSSQL') {
-	$database = new medoo([
+	$database = new Medoo([
 		'type' => 'mssql',
 		'host' => DATABASE_HOST,
 		'port' => DATABASE_PORT,

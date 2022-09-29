@@ -10,8 +10,9 @@
  */
 
 use RobThree\Auth\TwoFactorAuth;
+use OpenNav\Helper\GlobalHelper;
 
-$helper = new GlobalHelper();
+$helper = new GlobalHelper(null);
 
 // 获取分页参数
 $page = empty($_GET['page']) ? 'Init' : htmlspecialchars(trim($_GET['page']));

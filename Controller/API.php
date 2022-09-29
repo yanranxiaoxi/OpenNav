@@ -33,6 +33,31 @@ if ($page === 'Categorys') {
 	$limit = intval($_GET['limit']);
 	if (!empty($pages) && !empty($limit)) {
 		$categorys = $helper->getCategorysPagination_AuthRequired($pages, $limit);
+		// fid 数组
+		$fid_array = [];
+		foreach ($categorys as $category) {
+			if ($category['fid'] !== 0) {
+				array_push($fid_array, $category['fid']);
+			}
+		}
+		$fid_array = array_unique($fid_array); // 去重
+		$fid_array = array_values($fid_array); // 排序
+		// ftitle 数组
+		$ftitle_array = $helper->getCategorysTitleByCategorysId_AuthRequired($fid_array);
+		// fid 为 key，ftitle 为 value 数组
+		$fidtitle_array = [];
+		for ($i = 0; $i < count($fid_array); $i++) {
+			$fid = strval($fid_array[$i]);
+			$fidtitle_array[$fid] = $ftitle_array[$i];
+		}
+		// 将 ftitle 插入 $categorys 数组中
+		foreach ($categorys as $key => $category) {
+			if ($categorys[$key]['fid'] !== 0) {
+				$fid = strval($category['fid']);
+				$categorys[$key]['ftitle'] = $fidtitle_array[$fid];
+			}
+		}
+		// 输出
 		$data = [
 			'count' => $helper->countCategorys_AuthRequired(),
 			'data' => $categorys
@@ -131,21 +156,27 @@ if ($page === 'Links') {
 	$limit = intval($_GET['limit']);
 	if (!empty($pages) && !empty($limit)) {
 		$links = $helper->getLinksPagination_AuthRequired($pages, $limit);
+		// fid 数组
 		$fid_array = [];
 		foreach ($links as $link) {
 			array_push($fid_array, $link['fid']);
 		}
-		$fid_array = array_unique($fid_array);
+		$fid_array = array_unique($fid_array); // 去重
+		$fid_array = array_values($fid_array); // 排序
+		// ftitle 数组
 		$ftitle_array = $helper->getCategorysTitleByCategorysId_AuthRequired($fid_array);
+		// fid 为 key，ftitle 为 value 数组
 		$fidtitle_array = [];
 		for ($i = 0; $i < count($fid_array); $i++) {
-			$fid = $fid_array[$i];
+			$fid = strval($fid_array[$i]);
 			$fidtitle_array[$fid] = $ftitle_array[$i];
 		}
+		// 将 ftitle 插入 $links 数组中
 		foreach ($links as $key => $link) {
-			$fid = $link['fid'];
-			$links[$key]['ftitle'] = $fidtitle_array[$id];
+			$fid = strval($link['fid']);
+			$links[$key]['ftitle'] = $fidtitle_array[$fid];
 		}
+		// 输出
 		$data = [
 			'count' => $helper->countLinks_AuthRequired(),
 			'data' => $links
@@ -405,7 +436,7 @@ if ($page === 'ImportLinks') {
 	// 检测默认分类是否存在链接
 	if ($helper->countLinksByCategoryId_AuthRequired($default_category_id) === 0) {
 		// 如不存在，则删除默认分类
-		$helper->deleteLink_AuthRequired($default_category_id);
+		$helper->deleteCategory_AuthRequired($default_category_id);
 	}
 
 	$helper->returnSuccess();

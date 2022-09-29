@@ -60,9 +60,12 @@
 			},
 			cols: [[ // 表头
 				{field: 'id', title: 'ID', minWidth: 60, sort: true, fixed: 'left'},
-				{field: 'fid', title: '父级分类 ID', minWidth: 60, sort: true, templet: function(data) {
-					// #TODO# 增加父级分类标题
-					return data.fid;
+				{field: 'fid', title: '父级分类', minWidth: 60, sort: true, templet: function(data) {
+					if (data.fid !== 0) {
+						return '[' + data.fid + '] ' + data.ftitle;
+					} else {
+						return '无';
+					}
 				}},
 				{field: 'title', title: '分类标题', minWidth: 100, sort: true},
 				{field: 'add_time', title: '添加时间', sort: true, templet: function(data) {

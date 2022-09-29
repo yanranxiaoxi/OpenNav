@@ -95,9 +95,8 @@
 			},
 			cols: [[ // 表头
 				{field: 'id', title: 'ID', minWidth: 60, sort: true, fixed: 'left'},
-				{field: 'fid', title: '所属分类 ID', minWidth: 60, sort: true, templet: function(data) {
-					// #TODO# 增加所属分类标题
-					return data.fid;
+				{field: 'fid', title: '所属分类', minWidth: 60, sort: true, templet: function(data) {
+					return '[' + data.fid + '] ' + data.ftitle;
 				}},
 				{field: 'title', title: '链接标题', minWidth: 100, sort: true},
 				{field: 'url', title: 'URL', minWidth: 140, templet: function(data) {
