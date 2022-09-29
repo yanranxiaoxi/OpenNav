@@ -34,7 +34,7 @@ if ($page === 'Categorys') {
 	if (!empty($pages) && !empty($limit)) {
 		$categorys = $helper->getCategorysPagination_AuthRequired($pages, $limit);
 		$data = [
-			'count' => count($categorys),
+			'count' => $helper->countCategorys_AuthRequired(),
 			'data' => $categorys
 		];
 		$helper->returnSuccess($data);
@@ -132,7 +132,7 @@ if ($page === 'Links') {
 	if (!empty($pages) && !empty($limit)) {
 		$links = $helper->getLinksPagination_AuthRequired($pages, $limit);
 		$data = [
-			'count' => count($links),
+			'count' => $helper->countLinks_AuthRequired(),
 			'data' => $links
 		];
 		$helper->returnSuccess($data);

@@ -551,6 +551,24 @@ class GlobalHelper {
 	}
 
 	/**
+	 * 获取分类总数「Auth Required」
+	 *
+	 * @return int 分类总数
+	 */
+	public function countCategorys_AuthRequired() {
+		return $this->database->count('on_categorys');
+	}
+
+	/**
+	 * 获取链接总数「Auth Required」
+	 *
+	 * @return int 链接总数
+	 */
+	public function countLinks_AuthRequired() {
+		return $this->database->count('on_links');
+	}
+
+	/**
 	 * 添加分类「Auth Required」
 	 * 
 	 * @param	array	$category_data	分类数据：[fid, weight, title, font_icon, description, property]
