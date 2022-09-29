@@ -12,19 +12,13 @@
 namespace OpenNav;
 
 /**
- * 载入类库
+ * 载入类库文件
  */
 require_once('../vendor/autoload.php');
 require_once('../Class/GlobalHelper.php');
 
 use Medoo\Medoo;
 use OpenNav\Helper\GlobalHelper;
-
-$database = new Medoo([
-	'type' => 'sqlite',
-	'database' => '../Data/Database.db3'
-]);
-$helper = new GlobalHelper($database);
 
 
 /**
@@ -35,20 +29,48 @@ if (!file_exists('../Data/Config.php')) {
 	require_once('../Controller/Install.php');
 	exit();
 }
-// 检查数据库是否存在，不存在则复制数据库
-if (!file_exists('../Data/Database.db3') || filesize('../Data/Database.db3') === 0) {
-	if (!copy('../Data/Database.sample.db3', '../Data/Database.db3')) {
-		exit('数据库初始化失败，请检查 Data 目录是否拥有写入权限！');
-	}
-}
 require_once('../Data/Config.php');
+// 连接数据库
+if (DATABASE_TYPE === 'MariaDB' || DATABASE_TYPE === 'MySQL') {
+	$database = new medoo([
+		'type' => 'mysql',
+		'host' => DATABASE_HOST,
+		'port' => DATABASE_PORT,
+		'database' => DATABASE_NAME,
+		'username' => DATABASE_USERNAME,
+		'password' => DATABASE_PASSWORD,
+		'prefix' => DATABASE_PREFIX
+	]);
+} elseif (DATABASE_TYPE === 'MSSQL') {
+	$database = new medoo([
+		'type' => 'mssql',
+		'host' => DATABASE_HOST,
+		'port' => DATABASE_PORT,
+		'database' => DATABASE_NAME,
+		'username' => DATABASE_USERNAME,
+		'password' => DATABASE_PASSWORD,
+		'prefix' => DATABASE_PREFIX
+	]);
+} else {
+	// 检查数据库是否存在，不存在则复制数据库
+	if (!file_exists('../Data/Database.db3') || filesize('../Data/Database.db3') === 0) {
+		if (!copy('../Data/Database.sample.db3', '../Data/Database.db3')) {
+			exit('数据库初始化失败，请检查 Data 目录是否拥有写入权限！');
+		}
+	}
+	$database = new Medoo([
+		'type' => 'sqlite',
+		'database' => '../Data/Database.db3'
+	]);
+}
+$helper = new GlobalHelper($database);
 
 
 /**
  * 初始参数
  */
 // 程序版本
-define('VERSION', '0.1.4');
+define('VERSION', '0.1.5');
 // 关闭 PHP 警告提示
 if (DEBUG_MODE === false) {
 	error_reporting(E_ALL^E_NOTICE^E_WARNING^E_DEPRECATED);

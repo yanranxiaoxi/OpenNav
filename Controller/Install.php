@@ -11,6 +11,8 @@
 
 use RobThree\Auth\TwoFactorAuth;
 
+$helper = new GlobalHelper();
+
 // 获取分页参数
 $page = empty($_GET['page']) ? 'Init' : htmlspecialchars(trim($_GET['page']));
 

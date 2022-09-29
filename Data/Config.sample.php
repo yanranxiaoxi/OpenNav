@@ -24,7 +24,7 @@ define('EMAIL', '{email}');
 /**
  * 数据库设置
  */
-// 数据库类型，当前支持 SQLite、MySQL、MariaDB
+// 数据库类型，当前支持 SQLite、MySQL、MariaDB、MSSQL
 define('DATABASE_TYPE', '{database_type}');
 // 数据库主机名
 define('DATABASE_HOST', '{database_host}');
@@ -70,4 +70,4 @@ define('CHECK_UPDATE_API_URL', 'https://gitlab.soraharu.com/api/v4/projects/90/r
 // DEBUG 模式
 define('DEBUG_MODE', false);
 // 当前配置版本
-define('CONFIG_VERSION', '0.1.4');
+define('CONFIG_VERSION', '0.1.5');
