@@ -5,9 +5,8 @@
 !/Cache/Log/.gitkeep
 /Cache/Upload/*
 !/Cache/Upload/.gitkeep
-/Data/*
-!/Data/config.sample.php
-!/Data/database.sample.db3
+/Data/config.php
+/Data/database.db3
 /node_modules/
 /Public/node_modules/
 /Public/themes/*

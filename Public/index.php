@@ -38,8 +38,7 @@ if (DATABASE_TYPE === 'MariaDB' || DATABASE_TYPE === 'MySQL') {
 		'port' => DATABASE_PORT,
 		'database' => DATABASE_NAME,
 		'username' => DATABASE_USERNAME,
-		'password' => DATABASE_PASSWORD,
-		'prefix' => DATABASE_PREFIX
+		'password' => DATABASE_PASSWORD
 	]);
 } elseif (DATABASE_TYPE === 'MSSQL') {
 	$database = new Medoo([
@@ -48,8 +47,7 @@ if (DATABASE_TYPE === 'MariaDB' || DATABASE_TYPE === 'MySQL') {
 		'port' => DATABASE_PORT,
 		'database' => DATABASE_NAME,
 		'username' => DATABASE_USERNAME,
-		'password' => DATABASE_PASSWORD,
-		'prefix' => DATABASE_PREFIX
+		'password' => DATABASE_PASSWORD
 	]);
 } else {
 	// 检查数据库是否存在，不存在则复制数据库
@@ -79,6 +77,8 @@ if (DEBUG_MODE === false) {
 ini_set('max_execution_time', 60);
 // 设置 Contect-Type 请求头为 text/html
 header('Content-Type: text/html; charset=utf-8');
+// 检查更新
+require_once('../Data/Upgrade/Check.php');
 // 获取控制器，并使用二进制安全的方式剥去字符串左右的空白与其中的 HTML 标签
 $controller = empty($_GET['c']) ? 'Index' : htmlspecialchars(trim($_GET['c']));
 // 获取登录状态

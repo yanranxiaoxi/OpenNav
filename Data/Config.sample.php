@@ -24,8 +24,8 @@ define('EMAIL', '{email}');
 /**
  * 数据库设置
  */
-// 数据库类型，当前支持 SQLite、MySQL、MariaDB、MSSQL
-define('DATABASE_TYPE', '{database_type}');
+// 数据库类型，当前支持 SQLite
+define('DATABASE_TYPE', 'SQLite');
 // 数据库主机名
 define('DATABASE_HOST', '{database_host}');
 // 数据库端口
@@ -36,7 +36,7 @@ define('DATABASE_NAME', '{database_name}');
 define('DATABASE_USERNAME', '{database_username}');
 // 数据库密码
 define('DATABASE_PASSWORD', '{database_password}');
-// 数据库前缀，在数据库类型为 SQLite 时无效
+// 数据库前缀，此功能未启用
 define('DATABASE_PREFIX', '{database_prefix}');
 
 
