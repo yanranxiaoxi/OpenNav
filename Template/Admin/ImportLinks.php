@@ -56,7 +56,7 @@
 		layui.form.on('submit(import_links)', function(data) {
 			const loading_msg = layer.load(2, {time: 300 * 1000});
 			layer.msg('正在导入书签，最多等待 300 秒 ...', {icon: 0});
-			$.post('./index.php?c=API&page=ImportLinks', data.field, function(data, status) {
+			$.post('./index.php?c=ImportLinks&page=ImportLinks', data.field, function(data, status) {
 				layer.close(loading_msg);
 				// 如果导入成功
 				if (data.code === 200) {
@@ -72,7 +72,7 @@
 
 		layui.upload.render({
 			elem: '#upload_html',
-			url: 'index.php?c=API&page=UploadLinksFile',
+			url: 'index.php?c=ImportLinks&page=UploadLinksFile',
 			accept:'file',
 			exts: 'html',
 			auto: true,
