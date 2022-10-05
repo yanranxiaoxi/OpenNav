@@ -82,3 +82,14 @@ if ($page === 'SetPassword') {
 		$helper->throwError(403, '密码不能为空！');
 	}
 }
+
+
+/**
+ * 登出所有设备
+ */
+if ($page === 'LogoutAll') {
+	$cookie_secret_key = $helper->getRandomKey();
+	$helper->setGlobalConfig_AuthRequired('COOKIE_SECRET_KEY', COOKIE_SECRET_KEY, $cookie_secret_key);
+	header('Location: ./index.php?c=Login');
+	exit();
+}

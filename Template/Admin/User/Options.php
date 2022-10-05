@@ -49,6 +49,7 @@
 					<a class="layui-btn layui-btn-primary layui-border-green" target="_self" title="修改密码" href="./index.php?c=User&page=Password"><i class="fa fa-key"></i> 修改密码</a>
 					<a class="layui-btn layui-btn-primary layui-border-green" target="_self" title="配置时基验证" href="./index.php?c=TimeBaseValidator&page=Setup"><i class="fa fa-clock-o"></i> 配置时基验证（TOTP）</a>
 					<a class="layui-btn layui-btn-primary" target="_blank" rel="nofollow" title="前往 Gravatar 修改头像" href="https://gravatar.com/"><i class="fa fa-user-circle-o"></i> 修改头像</a>
+					<a class="layui-btn layui-btn-primary layui-border-red" target="_self" title="登出所有设备" href="./index.php?c=User&page=LogoutAll"><i class="fa fa-sign-out"></i> 登出所有设备</a>
 				</div>
 
 			</form>
