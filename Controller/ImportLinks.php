@@ -10,6 +10,7 @@
  * @link		https://opennav.soraharu.com/
  */
 
+use Spatie\SimpleExcel\SimpleExcelReader;
 
 // 获取分页参数
 $page = empty($_GET['page']) ? '' : htmlspecialchars(trim($_GET['page']));
@@ -64,56 +65,71 @@ if ($page === 'ImportLinks') {
 	if (empty($_POST['staging_file_name'])) {
 		$helper->throwError(403, '参数不完整！');
 	}
+	// 获取文件名
 	$staging_file_name = htmlspecialchars(trim($_POST['staging_file_name']));
+	// 获取文件后缀
+	$file_suffix = explode('.', $file_name);
+	$file_suffix = strtolower(end($file_suffix));
+	// 获取私有状态 #TODO#
 	$property = intval($_POST['property']);
+	// 判断文件是否存在
 	if (!file_exists('../Cache/Upload/' . $staging_file_name)) {
 		$helper->throwError(403, '文件不存在！');
 	}
-
 	// 设置导入任务运行时限
 	ini_set('max_execution_time', 300); // 5 minutes
-	// 解析 HTML 数据
-	$staging_file_content = file_get_contents('../Cache/Upload/' . $staging_file_name);
-	$staging_file_content_array = explode("\n", $staging_file_content); // 分割文本
+
 	$links = []; // 链接组
 	$categories = []; // 分类组
 	$default_category_id = 0; // 默认分类 ID
-	$latest_addition = 0; // 0: link, 1: category
-	foreach ($staging_file_content_array as $staging_file_content_line) {
-		if (preg_match('/<DT><H3.+>(.+)<\/H3>/i', $staging_file_content_line, $category_match)) {
-			if ($latest_addition === 1) {
-				array_pop($categories);
+	if ($file_suffix === 'html') {
+		// 解析 HTML 数据
+		$staging_file_content = file_get_contents('../Cache/Upload/' . $staging_file_name);
+		$staging_file_content_array = explode("\n", $staging_file_content); // 分割文本
+		$latest_addition = 0; // 0: link, 1: category
+		foreach ($staging_file_content_array as $staging_file_content_line) {
+			if (preg_match('/<DT><H3.+>(.+)<\/H3>/i', $staging_file_content_line, $category_match)) {
+				if ($latest_addition === 1) {
+					array_pop($categories);
+				}
+				if (strlen($category_match[1]) <= 64) {
+					array_push($categories, [
+						'title' => $category_match[1],
+						'description' => ''
+					]);
+				} else {
+					array_push($categories, [
+						'title' => mb_substr($category_match[1], 0, 16),
+						'description' => $category_match[1]
+					]);
+				}
+				$latest_addition = 1;
+			} elseif (preg_match('/<DT><A HREF="(.+)" ADD_DATE.+>(.+)<\/A>/i', $staging_file_content_line, $link_match)) {
+				if (strlen($link_match[2]) <= 64) {
+					array_push($links, [
+						'category' => count($categories) - 1,
+						'title' => $link_match[2],
+						'url' => $link_match[1],
+						'description' => ''
+					]);
+				} else {
+					array_push($links, [
+						'category' => count($categories) - 1,
+						'title' => mb_substr($link_match[2], 0, 16),
+						'url' => $link_match[1],
+						'description' => $link_match[2]
+					]);
+				}
+				$latest_addition = 0;
 			}
-			if (strlen($category_match[1]) <= 64) {
-				array_push($categories, [
-					'title' => $category_match[1],
-					'description' => ''
-				]);
-			} else {
-				array_push($categories, [
-					'title' => mb_substr($category_match[1], 0, 16),
-					'description' => $category_match[1]
-				]);
-			}
-			$latest_addition = 1;
-		} elseif (preg_match('/<DT><A HREF="(.+)" ADD_DATE.+>(.+)<\/A>/i', $staging_file_content_line, $link_match)) {
-			if (strlen($link_match[2]) <= 64) {
-				array_push($links, [
-					'category' => count($categories) - 1,
-					'title' => $link_match[2],
-					'url' => $link_match[1],
-					'description' => ''
-				]);
-			} else {
-				array_push($links, [
-					'category' => count($categories) - 1,
-					'title' => mb_substr($link_match[2], 0, 16),
-					'url' => $link_match[1],
-					'description' => $link_match[2]
-				]);
-			}
-			$latest_addition = 0;
 		}
+	} elseif ($file_suffix === 'xlsx' || $file_suffix === 'csv') {
+		// #TODO#
+		$excel_reader = new SimpleExcelReader;
+		$excel_reader->create('../Cache/Upload/' . $staging_file_name);
+		$links = $excel_reader->getRows();
+	} else {
+		$helper->throwError(403, '文件类型不正确！');
 	}
 
 	// 导入默认分类
