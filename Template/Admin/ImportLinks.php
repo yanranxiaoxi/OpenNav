@@ -6,8 +6,8 @@
 	<div class="layui-row content-body place-holder">
 		<!-- 说明提示框 -->
 		<div class="layui-col-lg12">
-			<div class="setting-msg">
-				仅支持导入现代浏览器导出的 <em>.html</em> 格式书签文件，导入时会自动创建不存在的分类
+			<div class="setting-msg"><!-- #TODO# -->
+				支持导入现代浏览器导出的 <em>.html</em> 格式书签文件以及 <a href="#" target="_blank">预置格式</a> 的 <em>.xlsx</em> 文件，导入时会自动创建不存在的分类
 			</div>
 		</div>
 

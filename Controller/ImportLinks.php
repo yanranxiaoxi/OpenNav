@@ -37,8 +37,8 @@ if ($page === 'UploadLinksFile') {
 		// 临时文件位置
 		$temp_file_directory = $_FILES['file']['tmp_name'];
 		// 暂存文件位置
-		$staging_file_name = time() . '.links.html';
-		if ($file_suffix !== 'html' || filesize($temp_file_directory) > 1024 * 1024 * 8) {
+		$staging_file_name = time() . '.links.' . $file_suffix;
+		if (($file_suffix !== 'html' && $file_suffix !== 'xlsx' && $file_suffix !== 'csv') || filesize($temp_file_directory) > 1024 * 1024 * 8) {
 			// 删除临时文件
 			unlink($temp_file_directory);
 			$helper->throwError(403, '不支持的文件类型或文件大小超过限制！');

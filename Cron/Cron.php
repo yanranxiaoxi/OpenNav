@@ -51,7 +51,7 @@ $caches = [
 		'/^[0-9]+\.cron\.log$/' => 604800 // 7 days
 	],
 	'Upload' => [
-		'/^[0-9]+\.links\.html$/' => 7200 // 2 hours
+		'/^[0-9]+\.links\.(html|xlsx|csv)$/' => 7200 // 2 hours
 	]
 ];
 foreach ($caches as $directory_name => $cache_info) {
