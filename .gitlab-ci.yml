@@ -46,18 +46,12 @@ package:
     - composer-install
   script:
     - ${nodeModulesDirArray} =
-        "blueimp-md5\js",
-        "bootstrap\dist",
         "clipboard\dist",
         "font-awesome\css",
         "font-awesome\fonts",
         "font-awesome\less",
-        "holmes.js\js",
         "jquery\dist",
-        "jquery-contextmenu\dist",
-        "layui\dist",
-        "layui-layer-src\dist",
-        "mdui\dist";
+        "layui\dist";
     - foreach (${nodeModulesDir} in ${nodeModulesDirArray}) {
         New-Item -Path ".\Public\node_modules\${nodeModulesDir}\" -ItemType Directory;
         Move-Item ".\node_modules\${nodeModulesDir}\*" ".\Public\node_modules\${nodeModulesDir}\";

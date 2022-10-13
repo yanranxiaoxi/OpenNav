@@ -66,6 +66,8 @@ $status_dark_mode = $helper->isDarkMode();
  */
 $options_settings_site['title'] = empty($options_settings_site['title']) ? 'OpenNav' : $options_settings_site['title'];
 $options_settings_site['subtitle'] = empty($options_settings_site['subtitle']) ? '开放、自由的个人网络收藏夹' : $options_settings_site['subtitle'];
+// 主题根目录
+$theme_directory_root = './theme/' . $options_theme . '/';
 
 
 /**
