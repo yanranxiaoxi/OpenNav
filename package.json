@@ -4,6 +4,6 @@
 		"clipboard": "^2.0.11",
 		"font-awesome": "^4.7.0",
 		"jquery": "^3.6.1",
-		"layui": "^2.7.8"
+		"layui": "^2.7.6"
 	}
 }
