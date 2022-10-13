@@ -1,18 +1,16 @@
 <?php
 /**
  * 管理员 API 控制器
- * 
+ *
  * @author		XiaoXi <admin@soraharu.com>
  * @copyright	All rights reserved by XiaoXi
  * @license		Mozilla Public License 2.0
- * 
+ *
  * @link		https://opennav.soraharu.com/
  */
 
-
 // 获取分页参数
 $page = empty($_GET['page']) ? '' : htmlspecialchars(trim($_GET['page']));
-
 
 /**
  * 全局鉴权「Auth Safety」
@@ -21,10 +19,9 @@ if (!$is_login) {
 	$helper->throwError(403, '鉴权失败！');
 }
 
-
 /**
  * 获取分类列表
- * 
+ *
  * @todo #TODO# 增加排序方式参数
  */
 if ($page === 'Categories') {
@@ -67,7 +64,6 @@ if ($page === 'Categories') {
 	}
 }
 
-
 /**
  * 删除分类
  */
@@ -85,7 +81,6 @@ if ($page === 'DeleteCategory') {
 	}
 }
 
-
 /**
  * 修改分类
  */
@@ -93,9 +88,17 @@ if ($page === 'EditCategory') {
 	if (empty($_POST['property'])) {
 		$_POST['property'] = 0;
 	}
-	if (isset($_POST['id']) && isset($_POST['fid']) && isset($_POST['weight']) && !empty($_POST['title']) && !empty($_POST['font_icon'])) {
+	if (
+		isset($_POST['id']) &&
+		isset($_POST['fid']) &&
+		isset($_POST['weight']) &&
+		!empty($_POST['title']) &&
+		!empty($_POST['font_icon'])
+	) {
 		$category_id = intval($_POST['id']);
-		$description = empty($_POST['description']) ? '' : htmlspecialchars(trim($_POST['description']));
+		$description = empty($_POST['description'])
+			? ''
+			: htmlspecialchars(trim($_POST['description']));
 		$category_data = [
 			'fid' => intval($_POST['fid']),
 			'weight' => intval($_POST['weight']),
@@ -115,7 +118,6 @@ if ($page === 'EditCategory') {
 	}
 }
 
-
 /**
  * 添加分类
  */
@@ -123,8 +125,15 @@ if ($page === 'AddCategory') {
 	if (empty($_POST['property'])) {
 		$_POST['property'] = 0;
 	}
-	if (isset($_POST['fid']) && isset($_POST['weight']) && !empty($_POST['title']) && !empty($_POST['font_icon'])) {
-		$description = empty($_POST['description']) ? '' : htmlspecialchars(trim($_POST['description']));
+	if (
+		isset($_POST['fid']) &&
+		isset($_POST['weight']) &&
+		!empty($_POST['title']) &&
+		!empty($_POST['font_icon'])
+	) {
+		$description = empty($_POST['description'])
+			? ''
+			: htmlspecialchars(trim($_POST['description']));
 		$category_data = [
 			'fid' => intval($_POST['fid']),
 			'weight' => intval($_POST['weight']),
@@ -144,10 +153,9 @@ if ($page === 'AddCategory') {
 	}
 }
 
-
 /**
  * 获取链接列表
- * 
+ *
  * @todo #TODO# 增加排序方式参数
  */
 if ($page === 'Links') {
@@ -186,7 +194,6 @@ if ($page === 'Links') {
 	}
 }
 
-
 /**
  * 删除链接
  */
@@ -200,7 +207,6 @@ if ($page === 'DeleteLink') {
 	}
 }
 
-
 /**
  * 修改链接
  */
@@ -208,10 +214,20 @@ if ($page === 'EditLink') {
 	if (empty($_POST['property'])) {
 		$_POST['property'] = 0;
 	}
-	if (isset($_POST['id']) && isset($_POST['fid']) && isset($_POST['weight']) && !empty($_POST['title']) && !empty($_POST['url'])) {
+	if (
+		isset($_POST['id']) &&
+		isset($_POST['fid']) &&
+		isset($_POST['weight']) &&
+		!empty($_POST['title']) &&
+		!empty($_POST['url'])
+	) {
 		$link_id = intval($_POST['id']);
-		$description = empty($_POST['description']) ? '' : htmlspecialchars(trim($_POST['description']));
-		$url_standby = empty($_POST['url_standby']) ? '' : htmlspecialchars(trim($_POST['url_standby']));
+		$description = empty($_POST['description'])
+			? ''
+			: htmlspecialchars(trim($_POST['description']));
+		$url_standby = empty($_POST['url_standby'])
+			? ''
+			: htmlspecialchars(trim($_POST['url_standby']));
 		$link_data = [
 			'fid' => intval($_POST['fid']),
 			'weight' => intval($_POST['weight']),
@@ -232,7 +248,6 @@ if ($page === 'EditLink') {
 	}
 }
 
-
 /**
  * 添加链接
  */
@@ -240,9 +255,18 @@ if ($page === 'AddLink') {
 	if (empty($_POST['property'])) {
 		$_POST['property'] = 0;
 	}
-	if (isset($_POST['fid']) && isset($_POST['weight']) && !empty($_POST['title']) && !empty($_POST['url'])) {
-		$description = empty($_POST['description']) ? '' : htmlspecialchars(trim($_POST['description']));
-		$url_standby = empty($_POST['url_standby']) ? '' : htmlspecialchars(trim($_POST['url_standby']));
+	if (
+		isset($_POST['fid']) &&
+		isset($_POST['weight']) &&
+		!empty($_POST['title']) &&
+		!empty($_POST['url'])
+	) {
+		$description = empty($_POST['description'])
+			? ''
+			: htmlspecialchars(trim($_POST['description']));
+		$url_standby = empty($_POST['url_standby'])
+			? ''
+			: htmlspecialchars(trim($_POST['url_standby']));
 		$link_data = [
 			'fid' => intval($_POST['fid']),
 			'weight' => intval($_POST['weight']),
@@ -262,7 +286,6 @@ if ($page === 'AddLink') {
 		$helper->throwError(403, '参数错误！');
 	}
 }
-
 
 /**
  * 获取链接描述信息

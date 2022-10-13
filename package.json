@@ -1,9 +1,15 @@
 {
 	"name": "opennav",
-	"dependencies": {
-		"clipboard": "^2.0.11",
-		"font-awesome": "^4.7.0",
-		"jquery": "^3.6.1",
-		"layui": "^2.7.6"
+	"scripts": {
+		"ins": "composer install && cd ./Public/ && npm run ins && cd ./themes/ && git clone --depth=1 https://gitlab.soraharu.com/XiaoXi/OpenNav-Material-Design.git ./themes/material-design/ && cd ./themes/material-design/ && npm run ins",
+		"ins:dev": "npm install && composer install && cd ./Public/ && npm run ins && git clone --depth=1 https://gitlab.soraharu.com/XiaoXi/OpenNav-Material-Design.git ./themes/material-design/ && cd ./themes/material-design/ && npm run ins",
+		"ins:node": "cd ./Public/ && npm run ins",
+		"ins:composer": "composer install",
+		"ins:theme": "cd ./Public/themes/ && git clone --depth=1 https://gitlab.soraharu.com/XiaoXi/OpenNav-Material-Design.git ./themes/material-design/ && cd ./themes/material-design/ && npm run ins",
+		"fix": "prettier --write ."
+	},
+	"devDependencies": {
+		"@prettier/plugin-php": "^0.19.1",
+		"prettier": "^2.7.1"
 	}
 }

@@ -8,28 +8,28 @@
 
 ## ✨ 特性
 
-- 🔎 前端实时全文搜索
-- 📁 两级分类标签设计
-- 🌲 多前端主题一键切换
-- 🖥️ 直观设计的控制台面板
-- ⏱️ 支持高安全性时基验证登录
-- ⭐ 一键导入 Chrome / Edge 收藏夹
-- 🛠 全量操作 API 化，便捷二次开发
-- ☁️ 轻量化开发，全接口注释
-- 🔐 全局完整鉴权流程及渗透防护
+-   🔎 前端实时全文搜索
+-   📁 两级分类标签设计
+-   🌲 多前端主题一键切换
+-   🖥️ 直观设计的控制台面板
+-   ⏱️ 支持高安全性时基验证登录
+-   ⭐ 一键导入 Chrome / Edge 收藏夹
+-   🛠 全量操作 API 化，便捷二次开发
+-   ☁️ 轻量化开发，全接口注释
+-   🔐 全局完整鉴权流程及渗透防护
 
 ## ✔️ 要求
 
-- PHP 8.0 或更高版本
-- PHP 插件
-  - PHP [pdo_sqlite](https://www.php.net/manual/ref.pdo-sqlite.php) 以使用 SQLite 数据库
-  - PHP [curl](https://www.php.net/manual/book.curl.php) 以获取在线内容（如自动更新、主题）
-  - PHP [mbstring](https://www.php.net/manual/book.mbstring.php) 以生成文字网站图标及配置时基验证
-  - PHP [intl](https://www.php.net/manual/book.intl.php) 以验证域名
-  - PHP [fileinfo](https://www.php.net/manual/book.fileinfo.php) 以在线获取网站图标（可选）
-  - PHP file_uploads 启用了上传机制以导入 Chrome /Edge 收藏夹
-  - PHP upload_max_filesize 与最大文件上传大小匹配，建议至少为 8 MiB
-- 支持所有 **现代浏览器**（极为有限的 Internet Explorer 支持）
+-   PHP 8.0 或更高版本
+-   PHP 插件
+    -   PHP [pdo_sqlite](https://www.php.net/manual/ref.pdo-sqlite.php) 以使用 SQLite 数据库
+    -   PHP [curl](https://www.php.net/manual/book.curl.php) 以获取在线内容（如自动更新、主题）
+    -   PHP [mbstring](https://www.php.net/manual/book.mbstring.php) 以生成文字网站图标及配置时基验证
+    -   PHP [intl](https://www.php.net/manual/book.intl.php) 以验证域名
+    -   PHP [fileinfo](https://www.php.net/manual/book.fileinfo.php) 以在线获取网站图标（可选）
+    -   PHP file_uploads 启用了上传机制以导入 Chrome /Edge 收藏夹
+    -   PHP upload_max_filesize 与最大文件上传大小匹配，建议至少为 8 MiB
+-   支持所有 **现代浏览器**（极为有限的 Internet Explorer 支持）
 
 ## ⚙️ 部署
 
@@ -41,17 +41,17 @@
 
     - 方式一：添加到系统 crontab
 
-      ```
-      30 2 * * * php /path/to/your/wwwroot/Cron/Cron.php
-      ```
+        ```
+        30 2 * * * php /path/to/your/wwwroot/Cron/Cron.php
+        ```
 
     - 方式二：使用工具周期性访问以下地址（建议每 24 小时访问一次）
 
-      ```
-      https://opennav.yourdomain.com/index.php?c=Cron
-      ```
+        ```
+        https://opennav.yourdomain.com/index.php?c=Cron
+        ```
 
->本项目当前处于开发阶段，可能会出现较多未知错误，请在遇到无法解决的错误时首先尝试查询本程序是否存在更新版本，如确认处在最新版本，可开启 Issue 并附上您的复现过程，开发者将会尽快进行回应
+> 本项目当前处于开发阶段，可能会出现较多未知错误，请在遇到无法解决的错误时首先尝试查询本程序是否存在更新版本，如确认处在最新版本，可开启 Issue 并附上您的复现过程，开发者将会尽快进行回应
 
 ## 📜 开源许可
 

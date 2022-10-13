@@ -1,11 +1,11 @@
 <?php
 /**
  * 登录控制器
- * 
+ *
  * @author		XiaoXi <admin@soraharu.com>
  * @copyright	All rights reserved by XiaoXi
  * @license		Mozilla Public License 2.0
- * 
+ *
  * @link		https://opennav.soraharu.com/
  */
 
@@ -13,7 +13,6 @@ use RobThree\Auth\TwoFactorAuth;
 
 // 获取分页参数
 $page = empty($_GET['page']) ? 'Login' : htmlspecialchars(trim($_GET['page']));
-
 
 /**
  * 进入登录流程
@@ -23,10 +22,9 @@ if ($page === 'Login') {
 		header('Location: ./index.php?c=Admin');
 		exit();
 	}
-	require_once('../Template/Login.php');
+	require_once '../Template/Login.php';
 	exit();
 }
-
 
 /**
  * 进入登录验证流程
@@ -45,8 +43,16 @@ if ($page === 'Check') {
 			$helper->throwError(403, '用户名或密码不能为空！');
 		}
 	} elseif (LOGIN_AUTHENTICATION_MODE === 7) {
-		if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['totp_code'])) {
-			if (USERNAME == $_POST['username'] && password_verify($_POST['password'], PASSWORD) && $authenticator->verifyCode(TOTP_SECRET_KEY, $_POST['totp_code'])) {
+		if (
+			!empty($_POST['username']) &&
+			!empty($_POST['password']) &&
+			!empty($_POST['totp_code'])
+		) {
+			if (
+				USERNAME == $_POST['username'] &&
+				password_verify($_POST['password'], PASSWORD) &&
+				$authenticator->verifyCode(TOTP_SECRET_KEY, $_POST['totp_code'])
+			) {
 				$helper->setLogin_AuthRequired();
 				$helper->returnSuccess();
 			} else {
@@ -57,7 +63,10 @@ if ($page === 'Check') {
 		}
 	} elseif (LOGIN_AUTHENTICATION_MODE === 5) {
 		if (!empty($_POST['username']) && !empty($_POST['totp_code'])) {
-			if (USERNAME == $_POST['username'] && $authenticator->verifyCode(TOTP_SECRET_KEY, $_POST['totp_code'])) {
+			if (
+				USERNAME == $_POST['username'] &&
+				$authenticator->verifyCode(TOTP_SECRET_KEY, $_POST['totp_code'])
+			) {
 				$helper->setLogin_AuthRequired();
 				$helper->returnSuccess();
 			} else {
@@ -97,7 +106,6 @@ if ($page === 'Check') {
 		}
 	}
 }
-
 
 /**
  * 进入注销流程

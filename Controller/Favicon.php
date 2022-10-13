@@ -3,11 +3,11 @@
  * 网站图标控制器
  * 进入 Online 流程需要 fileinfo 支持
  * 进入 Offline 流程需要 mbstring 支持
- * 
+ *
  * @author		XiaoXi <admin@soraharu.com>
  * @copyright	All rights reserved by XiaoXi
  * @license		Mozilla Public License 2.0
- * 
+ *
  * @link		https://opennav.soraharu.com/
  */
 
@@ -16,7 +16,6 @@ use Favicon\FaviconDLType;
 
 // 获取分页参数
 $page = empty($_GET['page']) ? '' : htmlspecialchars(trim($_GET['page']));
-
 
 /**
  * 在线获取 Favicon
@@ -27,7 +26,7 @@ if ($page === 'Online') {
 	// 获取 Referer
 	$http_referer = $_SERVER['HTTP_REFERER'];
 	// 如果 Referer 和主机名不匹配，则仅返回默认图标
-	if ((!empty($referer)) && (!strstr($http_host, $http_referer))) {
+	if (!empty($referer) && !strstr($http_host, $http_referer)) {
 		$icon = file_get_contents('./assets/images/default-favicon.ico');
 		header('Cache-Control: max-age=604800');
 		header('Content-Type: image/x-icon; charset=utf-8');
@@ -65,10 +64,14 @@ if ($page === 'Online') {
 		exit($icon);
 	}
 	$url_file_name = 'url' . substr($image_file_name, 3);
-	$image_url = file_exists('../Cache/Favicon/' . $url_file_name) ? file_get_contents('../Cache/Favicon/' . $url_file_name) : exit('读取缓存失败！');
-	$image_url = explode(".", $image_url);
+	$image_url = file_exists('../Cache/Favicon/' . $url_file_name)
+		? file_get_contents('../Cache/Favicon/' . $url_file_name)
+		: exit('读取缓存失败！');
+	$image_url = explode('.', $image_url);
 	$image_ext = end($image_url);
-	$icon = file_exists('../Cache/Favicon/' . $image_file_name) ? file_get_contents('../Cache/Favicon/' . $image_file_name) : exit('读取缓存失败！');
+	$icon = file_exists('../Cache/Favicon/' . $image_file_name)
+		? file_get_contents('../Cache/Favicon/' . $image_file_name)
+		: exit('读取缓存失败！');
 	switch ($image_ext) {
 		case 'jpg':
 		case 'jpeg':
@@ -99,7 +102,6 @@ if ($page === 'Online') {
 	exit($icon);
 }
 
-
 /**
  * 离线生成标题 Favicon
  */
@@ -109,7 +111,7 @@ if ($page === 'Offline') {
 	// 获取 Referer
 	$http_referer = $_SERVER['HTTP_REFERER'];
 	// 如果 Referer 和主机名不匹配，则仅返回默认图标
-	if ((!empty($referer)) && (!strstr($http_host, $http_referer))) {
+	if (!empty($referer) && !strstr($http_host, $http_referer)) {
 		$icon = file_get_contents('./assets/images/default-favicon.ico');
 		header('Cache-Control: max-age=604800');
 		header('Content-Type: image/x-icon; charset=utf-8');
@@ -127,12 +129,19 @@ if ($page === 'Offline') {
 
 	$total = unpack('L', hash('adler32', $title, true))[1];
 	$hue = $total % 360;
-	list($r, $g, $b) = $helper->hsvToRgb($hue / 360, 0.3, 0.9);
+	[$r, $g, $b] = $helper->hsvToRgb($hue / 360, 0.3, 0.9);
 
 	$bg = 'rgb({$r}, {$g}, {$b})';
 	$color = '#ffffff';
 	$first = mb_strtoupper(mb_substr($title, 0, 1));
-	$icon = '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="100" width="100"><rect fill="' . $bg . '" x="0" y="0" width="100" height="100"></rect><text x="50" y="50" font-size="50" text-copy="fast" fill="' . $color . '" text-anchor="middle" text-rights="admin" alignment-baseline="central">' . $first . '</text></svg>';
+	$icon =
+		'<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="100" width="100"><rect fill="' .
+		$bg .
+		'" x="0" y="0" width="100" height="100"></rect><text x="50" y="50" font-size="50" text-copy="fast" fill="' .
+		$color .
+		'" text-anchor="middle" text-rights="admin" alignment-baseline="central">' .
+		$first .
+		'</text></svg>';
 	file_put_contents('../Cache/Favicon/' . $title_hash . '.offline.svg', $icon);
 	header('Cache-Control: max-age=604800');
 	header('Content-Type: image/svg+xml; charset=utf-8');

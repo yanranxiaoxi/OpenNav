@@ -1,14 +1,14 @@
 <?php
 /**
  * OpenNav 全局 Helper 类
- * 
+ *
  * 「Logic Safety」和「With Auth」函数可以在任意位置调用
  * 「Auth Required」函数均带有「_AuthRequired」标记，仅允许在鉴权后调用
- * 
+ *
  * @author		XiaoXi <admin@soraharu.com>
  * @copyright	All rights reserved by XiaoXi
  * @license		Mozilla Public License 2.0
- * 
+ *
  * @link		https://opennav.soraharu.com/
  */
 
@@ -24,14 +24,31 @@ class GlobalHelper {
 
 	/**
 	 * 获取访客 IP 地址「Logic Safety」
-	 * 
+	 *
 	 * @return string|null 访客 IP 地址
 	 */
 	private function getVisitorIP() {
-		foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR') as $key) {
+		foreach (
+			[
+				'HTTP_CLIENT_IP',
+				'HTTP_X_FORWARDED_FOR',
+				'HTTP_X_FORWARDED',
+				'HTTP_X_CLUSTER_CLIENT_IP',
+				'HTTP_FORWARDED_FOR',
+				'HTTP_FORWARDED',
+				'REMOTE_ADDR'
+			]
+			as $key
+		) {
 			if (array_key_exists($key, $_SERVER) === true) {
 				foreach (array_map('trim', explode(',', $_SERVER[$key])) as $ip) {
-					if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false) {
+					if (
+						filter_var(
+							$ip,
+							FILTER_VALIDATE_IP,
+							FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+						) !== false
+					) {
 						return $ip;
 					}
 				}
@@ -42,7 +59,7 @@ class GlobalHelper {
 
 	/**
 	 * 以 Json 格式返回错误「Logic Safety」
-	 * 
+	 *
 	 * @param int $code 错误代码
 	 * @param string $message 错误提示
 	 */
@@ -57,7 +74,7 @@ class GlobalHelper {
 
 	/**
 	 * 以 Json 格式返回数据「Logic Safety」
-	 * 
+	 *
 	 * @param array $data 待返回的数据
 	 */
 	public function returnSuccess($data = []) {
@@ -77,17 +94,21 @@ class GlobalHelper {
 
 	/**
 	 * 使用 PHP Client URL 请求获取数据「Logic Safety」
-	 * 
+	 *
 	 * @param	string	$url		预请求的 URL 地址
 	 * @param	array	$post_array	需要 POST 发送的数据
 	 * @param	int		$timeout	请求超时时间，以秒为单位
-	 * 
+	 *
 	 * @return	string|false		获取到的数据，false 代表请求失败
 	 */
 	public function curlGet($url, $post_array = [], $timeout = 10) {
 		$curl = curl_init($url);
 		// 设置 UserAgent
-		curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36');
+		curl_setopt(
+			$curl,
+			CURLOPT_USERAGENT,
+			'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36'
+		);
 		curl_setopt($curl, CURLOPT_FAILONERROR, true);
 		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -108,26 +129,54 @@ class GlobalHelper {
 	/**
 	 * 获取登录状态「Logic Safety」
 	 * 主要鉴权函数，可以在任意位置调用，并返回当前用户的登录状态
-	 * 
+	 *
 	 * @return bool 登录状态
 	 */
 	public function isLogin() {
 		$visitor_ip = $this->getVisitorIP();
-		$visitor_infomation = ($visitor_ip === null) ? $_SERVER['HTTP_USER_AGENT'] : $visitor_ip;
+		$visitor_infomation = $visitor_ip === null ? $_SERVER['HTTP_USER_AGENT'] : $visitor_ip;
 		$local_key = USERNAME . PASSWORD . COOKIE_SECRET_KEY . 'opennav' . $visitor_infomation;
 		$local_key_hash = hash('sha256', $local_key);
 		// 获取 Session Cookie
-		$cookie_session_key = !empty($_COOKIE['opennav_session_key']) ? $_COOKIE['opennav_session_key'] : '';
+		$cookie_session_key = !empty($_COOKIE['opennav_session_key'])
+			? $_COOKIE['opennav_session_key']
+			: '';
 		// 如果已经成功登录
 		if ($cookie_session_key === $local_key_hash) {
 			// 判断 Session 模式，如为 normal 则延长 Cookie 有效期
-			$cookie_session_mode = !empty($_COOKIE['opennav_session_mode']) ? $_COOKIE['opennav_session_mode'] : '';
+			$cookie_session_mode = !empty($_COOKIE['opennav_session_mode'])
+				? $_COOKIE['opennav_session_mode']
+				: '';
 			if ($cookie_session_mode === 'normal') {
-				setcookie('opennav_session_mode', 'normal', time() + 60 * 60 * 24 * 30, '/', null, false, true);
+				setcookie(
+					'opennav_session_mode',
+					'normal',
+					time() + 60 * 60 * 24 * 30,
+					'/',
+					null,
+					false,
+					true
+				);
 				if (ONLY_SECURE_CONNECTION === true) {
-					setcookie('opennav_session_key', $local_key_hash, time() + 60 * 60 * 24 * 30, '/', null, true, true);
+					setcookie(
+						'opennav_session_key',
+						$local_key_hash,
+						time() + 60 * 60 * 24 * 30,
+						'/',
+						null,
+						true,
+						true
+					);
 				} else {
-					setcookie('opennav_session_key', $local_key_hash, time() + 60 * 60 * 24 * 30, '/', null, false, true);
+					setcookie(
+						'opennav_session_key',
+						$local_key_hash,
+						time() + 60 * 60 * 24 * 30,
+						'/',
+						null,
+						false,
+						true
+					);
 				}
 			}
 			return true;
@@ -138,47 +187,87 @@ class GlobalHelper {
 
 	/**
 	 * 设置登录状态「Auth Required」
-	 * 
+	 *
 	 * @return bool 设置状态
 	 */
 	public function setLogin_AuthRequired() {
 		$visitor_ip = $this->getVisitorIP();
-		$visitor_infomation = ($visitor_ip === null) ? $_SERVER['HTTP_USER_AGENT'] : $visitor_ip;
+		$visitor_infomation = $visitor_ip === null ? $_SERVER['HTTP_USER_AGENT'] : $visitor_ip;
 		$local_key = USERNAME . PASSWORD . COOKIE_SECRET_KEY . 'opennav' . $visitor_infomation;
 		$local_key_hash = hash('sha256', $local_key);
-		setcookie('opennav_session_mode', 'normal', time() + 60 * 60 * 24 * 30, '/', null, false, true);
+		setcookie(
+			'opennav_session_mode',
+			'normal',
+			time() + 60 * 60 * 24 * 30,
+			'/',
+			null,
+			false,
+			true
+		);
 		if (ONLY_SECURE_CONNECTION === true) {
 			// 仅 HTTPS 设置 Session Cookie
-			return setcookie('opennav_session_key', $local_key_hash, time() + 60 * 60 * 24 * 30, '/', null, true, true);
+			return setcookie(
+				'opennav_session_key',
+				$local_key_hash,
+				time() + 60 * 60 * 24 * 30,
+				'/',
+				null,
+				true,
+				true
+			);
 		} else {
 			// 设置 Session Cookie
-			return setcookie('opennav_session_key', $local_key_hash, time() + 60 * 60 * 24 * 30, '/', null, false, true);
+			return setcookie(
+				'opennav_session_key',
+				$local_key_hash,
+				time() + 60 * 60 * 24 * 30,
+				'/',
+				null,
+				false,
+				true
+			);
 		}
 	}
 
 	/**
 	 * 仅时基登录时设置短时登录状态「Auth Required」
-	 * 
+	 *
 	 * @return bool 设置状态
 	 */
 	public function setLoginByOnlyTimeBaseValidator_AuthRequired() {
 		$visitor_ip = $this->getVisitorIP();
-		$visitor_infomation = ($visitor_ip === null) ? $_SERVER['HTTP_USER_AGENT'] : $visitor_ip;
+		$visitor_infomation = $visitor_ip === null ? $_SERVER['HTTP_USER_AGENT'] : $visitor_ip;
 		$local_key = USERNAME . PASSWORD . COOKIE_SECRET_KEY . 'opennav' . $visitor_infomation;
 		$local_key_hash = hash('sha256', $local_key);
 		setcookie('opennav_session_mode', 'timebase', time() + 60 * 30, '/', null, false, true);
 		if (ONLY_SECURE_CONNECTION === true) {
 			// 仅 HTTPS 设置 Session Cookie
-			return setcookie('opennav_session_key', $local_key_hash, time() + 60 * 30, '/', null, true, true);
+			return setcookie(
+				'opennav_session_key',
+				$local_key_hash,
+				time() + 60 * 30,
+				'/',
+				null,
+				true,
+				true
+			);
 		} else {
 			// 设置 Session Cookie
-			return setcookie('opennav_session_key', $local_key_hash, time() + 60 * 30, '/', null, false, true);
+			return setcookie(
+				'opennav_session_key',
+				$local_key_hash,
+				time() + 60 * 30,
+				'/',
+				null,
+				false,
+				true
+			);
 		}
 	}
 
 	/**
 	 * 移除登录状态「Logic Safety」
-	 * 
+	 *
 	 * @return bool 设置状态
 	 */
 	public function removeLogin() {
@@ -189,11 +278,13 @@ class GlobalHelper {
 
 	/**
 	 * 获取暗色模式状态「Logic Safety」
-	 * 
+	 *
 	 * @return bool 暗色模式状态
 	 */
 	public function isDarkMode() {
-		$cookie_theme_layout = isset($_COOKIE['opennav_theme_layout']) ? $_COOKIE['opennav_theme_layout'] : '';
+		$cookie_theme_layout = isset($_COOKIE['opennav_theme_layout'])
+			? $_COOKIE['opennav_theme_layout']
+			: '';
 		if ($cookie_theme_layout === 'dark') {
 			return true;
 		} else {
@@ -203,14 +294,16 @@ class GlobalHelper {
 
 	/**
 	 * 获取随机密钥「Logic Safety」
-	 * 
+	 *
 	 * @param	int		$length	随机密钥长度
 	 * @param	bool	$symbol	是否包含特殊字符
-	 * 
+	 *
 	 * @return	string	随机密钥
 	 */
 	public function getRandomKey($length = 64, $symbol = false) {
-		$charset = $symbol ? 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_[]{}<>~`+=,.;:/?|' : 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+		$charset = $symbol
+			? 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_[]{}<>~`+=,.;:/?|'
+			: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 		$random_key = '';
 		for ($i = 0; $i < $length; $i++) {
 			$random_key .= $charset[mt_rand(0, strlen($charset) - 1)];
@@ -220,7 +313,7 @@ class GlobalHelper {
 
 	/**
 	 * 获取一级分类「With Auth」
-	 * 
+	 *
 	 * @return array 一级分类二维数组
 	 */
 	public function getParentCategories() {
@@ -244,7 +337,7 @@ class GlobalHelper {
 
 	/**
 	 * 获取一级分类「Auth Required」
-	 * 
+	 *
 	 * @return array 一级分类二维数组
 	 */
 	public function getParentCategories_AuthRequired() {
@@ -257,22 +350,26 @@ class GlobalHelper {
 
 	/**
 	 * 获取一级分类 [id, title]「Auth Required」
-	 * 
+	 *
 	 * @return array 一级分类二维数组 [id, title]
 	 */
 	public function getParentCategoriesIdTitle_AuthRequired() {
-		$parent_categories = $this->database->select('on_categories', ['id', 'title'], [
-			'fid' => 0,
-			'ORDER' => ['id' => 'ASC']
-		]);
+		$parent_categories = $this->database->select(
+			'on_categories',
+			['id', 'title'],
+			[
+				'fid' => 0,
+				'ORDER' => ['id' => 'ASC']
+			]
+		);
 		return $parent_categories;
 	}
 
 	/**
 	 * 获取指定一级分类 ID 的二级分类「With Auth」
-	 * 
+	 *
 	 * @param	int		$parent_category_id	一级分类 ID
-	 * 
+	 *
 	 * @return	array	二级分类二维数组
 	 */
 	public function getChildCategoriesByParentCategoryId($parent_category_id) {
@@ -296,7 +393,7 @@ class GlobalHelper {
 
 	/**
 	 * 获取分类「With Auth」
-	 * 
+	 *
 	 * @return array 分类二维数组
 	 */
 	public function getCategories() {
@@ -351,21 +448,25 @@ class GlobalHelper {
 
 	/**
 	 * 获取分类 [id, title]「Auth Required」
-	 * 
+	 *
 	 * @return array 分类二维数组 [id, title]
 	 */
 	public function getCategoriesIdTitle_AuthRequired() {
-		$categories = $this->database->select('on_categories', ['id', 'title'], [
-			'ORDER' => ['id' => 'ASC']
-		]);
+		$categories = $this->database->select(
+			'on_categories',
+			['id', 'title'],
+			[
+				'ORDER' => ['id' => 'ASC']
+			]
+		);
 		return $categories;
 	}
 
 	/**
 	 * 获取指定分类 ID 的分类「With Auth」
-	 * 
+	 *
 	 * @param	int		$category_id	分类 ID
-	 * 
+	 *
 	 * @return	array	分类数组
 	 */
 	public function getCategoryByCategoryId($category_id) {
@@ -385,9 +486,9 @@ class GlobalHelper {
 
 	/**
 	 * 获取指定分类 ID 的分类「Auth Required」
-	 * 
+	 *
 	 * @param	int		$category_id	分类 ID
-	 * 
+	 *
 	 * @return	array	分类数组
 	 */
 	public function getCategoryByCategoryId_AuthRequired($category_id) {
@@ -401,9 +502,9 @@ class GlobalHelper {
 	 * 获取指定分类 ID 的分类 title「Auth Required」
 	 *
 	 * @deprecated
-	 * 
+	 *
 	 * @param	int		$category_id	分类 ID
-	 * 
+	 *
 	 * @return	string	分类 title
 	 */
 	public function getCategoryTitleByCategoryId_AuthRequired($category_id) {
@@ -415,9 +516,9 @@ class GlobalHelper {
 
 	/**
 	 * 获取指定分类 ID 的分类 title「Auth Required」
-	 * 
+	 *
 	 * @param	int|array		$categories_id	分类 ID，可为整型或整型数组
-	 * 
+	 *
 	 * @return	string|array	分类 title，如输入的分类 ID 为数组，则返回值为数组
 	 */
 	public function getCategoriesTitleByCategoriesId_AuthRequired($categories_id) {
@@ -433,23 +534,27 @@ class GlobalHelper {
 
 	/**
 	 * 获取指定分类 ID 的分类 [fid, property]「Auth Required」
-	 * 
+	 *
 	 * @param	int		$category_id	分类 ID
-	 * 
+	 *
 	 * @return	array	分类数组 [fid, property]
 	 */
 	public function getCategoryFidPropertyByCategoryId_AuthRequired($category_id) {
-		$category_value = $this->database->get('on_categories', ['fid', 'property'], [
-			'id' => $category_id
-		]);
+		$category_value = $this->database->get(
+			'on_categories',
+			['fid', 'property'],
+			[
+				'id' => $category_id
+			]
+		);
 		return $category_value;
 	}
 
 	/**
 	 * 获取指定分类 ID 的链接「With Auth」
-	 * 
+	 *
 	 * @param	int		$category_id	分类 ID
-	 * 
+	 *
 	 * @return	array	链接二维数组
 	 */
 	public function getLinksByCategoryId($category_id) {
@@ -471,7 +576,7 @@ class GlobalHelper {
 
 	/**
 	 * 获取链接 url「Auth Required」
-	 * 
+	 *
 	 * @return array 链接数组 url
 	 */
 	public function getLinksUrl_AuthRequired() {
@@ -480,9 +585,9 @@ class GlobalHelper {
 
 	/**
 	 * 获取指定链接 ID 的链接「With Auth」
-	 * 
+	 *
 	 * @param	int		$link_id	链接 ID
-	 * 
+	 *
 	 * @return	array	链接数组 url
 	 */
 	public function getLinkByLinkId($link_id) {
@@ -502,9 +607,9 @@ class GlobalHelper {
 
 	/**
 	 * 获取指定链接 ID 的链接「Auth Required」
-	 * 
+	 *
 	 * @param	int		$link_id	链接 ID
-	 * 
+	 *
 	 * @return	array	链接数组
 	 */
 	public function getLinkByLinkId_AuthRequired($link_id) {
@@ -516,12 +621,12 @@ class GlobalHelper {
 
 	/**
 	 * 获取分页分类「Auth Required」
-	 * 
+	 *
 	 * @todo	#TODO#	增加排序方式参数
-	 * 
+	 *
 	 * @param	int		$pages	当前页数
 	 * @param	int		$limit	每页行数
-	 * 
+	 *
 	 * @return	array	分类二维数组
 	 */
 	public function getCategoriesPagination_AuthRequired($pages = 0, $limit = 0) {
@@ -544,12 +649,12 @@ class GlobalHelper {
 
 	/**
 	 * 获取分页链接「Auth Required」
-	 * 
+	 *
 	 * @todo	#TODO#	增加排序方式参数
-	 * 
+	 *
 	 * @param	int		$pages	当前页数
 	 * @param	int		$limit	每页行数
-	 * 
+	 *
 	 * @return	array	链接二维数组
 	 */
 	public function getLinksPagination_AuthRequired($pages = 0, $limit = 0) {
@@ -603,10 +708,10 @@ class GlobalHelper {
 
 	/**
 	 * 添加分类「Auth Required」
-	 * 
+	 *
 	 * @param	array	$category_data	分类数据：[fid, weight, title, font_icon, description, property]
 	 * @param	bool	$return_id		是否返回分类 ID
-	 * 
+	 *
 	 * @return	int|true|string			修改状态，失败时返回 string
 	 */
 	public function addCategory_AuthRequired($category_data, $return_id = false) {
@@ -657,10 +762,10 @@ class GlobalHelper {
 
 	/**
 	 * 添加链接「Auth Required」
-	 * 
+	 *
 	 * @param	array	$link_data	链接数据：[fid, weight, title, url, url_standby, description, property]
 	 * @param	bool	$return_id	是否返回链接 ID
-	 * 
+	 *
 	 * @return	int|true|string		添加状态，失败时返回 string
 	 */
 	public function addLink_AuthRequired($link_data, $return_id = false) {
@@ -714,10 +819,10 @@ class GlobalHelper {
 
 	/**
 	 * 修改分类「Auth Required」
-	 * 
+	 *
 	 * @param	int		$category_id	分类 ID
 	 * @param	array	$category_data	分类数据：[fid, weight, title, font_icon, description, property]
-	 * 
+	 *
 	 * @return	true|string				修改状态，失败时返回 string
 	 */
 	public function updateCategory_AuthRequired($category_id, $category_data) {
@@ -771,10 +876,10 @@ class GlobalHelper {
 
 	/**
 	 * 修改链接「Auth Required」
-	 * 
+	 *
 	 * @param	int		$link_id	链接 ID
 	 * @param	array	$link_data	链接数据：[fid, weight, title, url, url_standby, description, property]
-	 * 
+	 *
 	 * @return	true|string			修改状态，失败时返回 string
 	 */
 	public function updateLink_AuthRequired($link_id, $link_data) {
@@ -816,9 +921,9 @@ class GlobalHelper {
 
 	/**
 	 * 删除分类「Auth Required」
-	 * 
+	 *
 	 * @param	int		$category_id	分类 ID
-	 * 
+	 *
 	 * @return	bool	删除状态
 	 */
 	public function deleteCategory_AuthRequired($category_id) {
@@ -846,7 +951,7 @@ class GlobalHelper {
 
 	/**
 	 * 删除链接「Auth Required」
-	 * 
+	 *
 	 * @param int $link_id 链接 ID
 	 */
 	public function deleteLink_AuthRequired($link_id) {
@@ -857,11 +962,11 @@ class GlobalHelper {
 
 	/**
 	 * 设置指定链接的点击数「Logic Safety」
-	 * 
+	 *
 	 * @param	int		$link_id	链接 ID
 	 * @param	string	$mode		设置模式：add = 增加；subtract = 减少；zero = 归零
 	 * @param	int		$count		增加或减少的数量
-	 * 
+	 *
 	 * @return	bool	设置状态
 	 */
 	public function setLinkValueClick($link_id, $mode = 'add', $count = 1) {
@@ -876,11 +981,15 @@ class GlobalHelper {
 			} else {
 				$link_value_click = 0;
 			}
-			$this->database->update('on_links', [
-				'click' => $link_value_click
-			], [
-				'id' => $link_id
-			]);
+			$this->database->update(
+				'on_links',
+				[
+					'click' => $link_value_click
+				],
+				[
+					'id' => $link_id
+				]
+			);
 			return true;
 		} else {
 			return false;
@@ -889,7 +998,7 @@ class GlobalHelper {
 
 	/**
 	 * 获取主题选项「Logic Safety」
-	 * 
+	 *
 	 * @return string 主题
 	 */
 	public function getOptionsTheme() {
@@ -901,20 +1010,24 @@ class GlobalHelper {
 
 	/**
 	 * 修改主题选项「Auth Required」
-	 * 
+	 *
 	 * @param string $options_theme 主题
 	 */
 	public function setOptionsTheme_AuthRequired($options_theme) {
-		$options_theme = $this->database->update('on_options', [
-			'value' => $options_theme
-		], [
-			'key' => 'theme'
-		]);
+		$options_theme = $this->database->update(
+			'on_options',
+			[
+				'value' => $options_theme
+			],
+			[
+				'key' => 'theme'
+			]
+		);
 	}
 
 	/**
 	 * 获取站点设置选项「Logic Safety」
-	 * 
+	 *
 	 * @return array 站点设置
 	 */
 	public function getOptionsSettingsSite() {
@@ -927,21 +1040,25 @@ class GlobalHelper {
 
 	/**
 	 * 修改站点设置选项「Auth Required」
-	 * 
+	 *
 	 * @param array $options_settings_site 站点设置
 	 */
 	public function setOptionsSettingsSite_AuthRequired($options_settings_site) {
 		$options_settings_site = serialize($options_settings_site);
-		$options_settings_site = $this->database->update('on_options', [
-			'value' => $options_settings_site
-		], [
-			'key' => 'settings_site'
-		]);
+		$options_settings_site = $this->database->update(
+			'on_options',
+			[
+				'value' => $options_settings_site
+			],
+			[
+				'key' => 'settings_site'
+			]
+		);
 	}
 
 	/**
 	 * 获取过渡页设置选项「Logic Safety」
-	 * 
+	 *
 	 * @return array 过渡页设置
 	 */
 	public function getOptionsSettingsTransitionPage() {
@@ -954,21 +1071,27 @@ class GlobalHelper {
 
 	/**
 	 * 修改过渡页设置选项「Auth Required」
-	 * 
+	 *
 	 * @param array $options_settings_transition_page 过渡页设置
 	 */
-	public function setOptionsSettingsTransitionPage_AuthRequired($options_settings_transition_page) {
+	public function setOptionsSettingsTransitionPage_AuthRequired(
+		$options_settings_transition_page
+	) {
 		$options_settings_transition_page = serialize($options_settings_transition_page);
-		$options_settings_transition_page = $this->database->update('on_options', [
-			'value' => $options_settings_transition_page
-		], [
-			'key' => 'settings_transition_page'
-		]);
+		$options_settings_transition_page = $this->database->update(
+			'on_options',
+			[
+				'value' => $options_settings_transition_page
+			],
+			[
+				'key' => 'settings_transition_page'
+			]
+		);
 	}
 
 	/**
 	 * 获取订阅设置选项「Auth Required」
-	 * 
+	 *
 	 * @return array 订阅设置
 	 */
 	public function getOptionsSettingsSubscribe_AuthRequired() {
@@ -981,21 +1104,25 @@ class GlobalHelper {
 
 	/**
 	 * 修改订阅设置选项「Auth Required」
-	 * 
+	 *
 	 * @param array $options_settings_subscribe 订阅设置
 	 */
 	public function setOptionsSettingsSubscribe_AuthRequired($options_settings_subscribe) {
 		$options_settings_subscribe = serialize($options_settings_subscribe);
-		$options_settings_subscribe = $this->database->update('on_options', [
-			'value' => $options_settings_subscribe
-		], [
-			'key' => 'settings_subscribe'
-		]);
+		$options_settings_subscribe = $this->database->update(
+			'on_options',
+			[
+				'value' => $options_settings_subscribe
+			],
+			[
+				'key' => 'settings_subscribe'
+			]
+		);
 	}
 
 	/**
 	 * 获取订阅状态「Logic Safety」
-	 * 
+	 *
 	 * @return bool 订阅状态
 	 */
 	public function isSubscribe() {
@@ -1005,7 +1132,10 @@ class GlobalHelper {
 		$domain_array = explode(':', htmlspecialchars(trim($_SERVER['HTTP_HOST'])));
 		$options_settings_subscribe['domain'] = $domain_array[0];
 		// 请求查询接口返回数据
-		$curl_subscribe_data = $this->curlGet(API_URL . 'CheckSubscribe.php', $options_settings_subscribe);
+		$curl_subscribe_data = $this->curlGet(
+			API_URL . 'CheckSubscribe.php',
+			$options_settings_subscribe
+		);
 		// 如果请求到了数据
 		if ($curl_subscribe_data !== false) {
 			// 解码请求到的数据
@@ -1027,11 +1157,11 @@ class GlobalHelper {
 
 	/**
 	 * 获取主题信息「Logic Safety」
-	 * 
+	 *
 	 * @return array|null 主题信息
 	 */
 	public function getThemeInfo($options_theme) {
-		$theme_info_file = './themes/' . $options_theme . '/info.json';
+		$theme_info_file = './themes/' . $options_theme . '/opennav.info.json';
 		if (file_exists($theme_info_file)) {
 			$theme_info = file_get_contents($theme_info_file);
 			$theme_info = json_decode($theme_info, true);
@@ -1043,11 +1173,11 @@ class GlobalHelper {
 
 	/**
 	 * 获取主题配置「Logic Safety」
-	 * 
+	 *
 	 * @return array|null 主题配置
 	 */
 	public function getThemeConfig($options_theme) {
-		$theme_config_file = './themes/' . $options_theme . '/config.json';
+		$theme_config_file = './themes/' . $options_theme . '/opennav.config.json';
 		if (file_exists($theme_config_file)) {
 			$theme_config = file_get_contents($theme_config_file);
 			$theme_config = json_decode($theme_config, true);
@@ -1059,11 +1189,11 @@ class GlobalHelper {
 
 	/**
 	 * 修改全局配置「Auth Required」
-	 * 
+	 *
 	 * @param string $key 全局变量名
 	 * @param string|int|bool $old_value 全局变量原值
 	 * @param string|int|bool $value 全局变量将要修改为的值
-	 * 
+	 *
 	 * @return bool 修改状态
 	 */
 	public function setGlobalConfig_AuthRequired($key, $old_value, $value) {
@@ -1071,28 +1201,28 @@ class GlobalHelper {
 			$global_config = file_get_contents('../Data/Config.php');
 
 			if (is_string($old_value) && !empty($old_value)) {
-				$str_search = 'define(\''. $key . '\', \'' . $old_value . '\');';
+				$str_search = 'define(\'' . $key . '\', \'' . $old_value . '\');';
 			} elseif ((is_int($old_value) || is_bool($old_value)) && !empty($old_value)) {
-				$str_search = 'define(\''. $key . '\', ' . $old_value . ');';
+				$str_search = 'define(\'' . $key . '\', ' . $old_value . ');';
 			} elseif ($old_value === '') {
-				$str_search = 'define(\''. $key . '\', \'\');';
+				$str_search = 'define(\'' . $key . '\', \'\');';
 			} elseif ($old_value === 0) {
-				$str_search = 'define(\''. $key . '\', 0);';
+				$str_search = 'define(\'' . $key . '\', 0);';
 			} elseif ($old_value === false) {
-				$str_search = 'define(\''. $key . '\', false);';
+				$str_search = 'define(\'' . $key . '\', false);';
 			} else {
 				return false;
 			}
 			if (is_string($value) && !empty($value)) {
-				$str_replace = 'define(\''. $key . '\', \'' . $value . '\');';
+				$str_replace = 'define(\'' . $key . '\', \'' . $value . '\');';
 			} elseif ((is_int($value) || is_bool($value)) && !empty($value)) {
-				$str_replace = 'define(\''. $key . '\', ' . $value . ');';
+				$str_replace = 'define(\'' . $key . '\', ' . $value . ');';
 			} elseif ($value === '') {
-				$str_replace = 'define(\''. $key . '\', \'\');';
+				$str_replace = 'define(\'' . $key . '\', \'\');';
 			} elseif ($value === 0) {
-				$str_replace = 'define(\''. $key . '\', 0);';
+				$str_replace = 'define(\'' . $key . '\', 0);';
 			} elseif ($value === false) {
-				$str_replace = 'define(\''. $key . '\', false);';
+				$str_replace = 'define(\'' . $key . '\', false);';
 			} else {
 				return false;
 			}
@@ -1110,11 +1240,11 @@ class GlobalHelper {
 
 	/**
 	 * HSV 转 RGB「Logic Safety」
-	 * 
+	 *
 	 * @param int $h 色调
 	 * @param int $s 饱和度
 	 * @param int $v 明度
-	 * 
+	 *
 	 * @return array RGB 颜色数组
 	 */
 	public function hsvToRgb($h, $s, $v) {
@@ -1125,7 +1255,7 @@ class GlobalHelper {
 		$p = $v * (1 - $s);
 		$q = $v * (1 - $f * $s);
 		$t = $v * (1 - (1 - $f) * $s);
-	
+
 		switch ($i % 6) {
 			case 0:
 				$r = $v;
@@ -1158,11 +1288,7 @@ class GlobalHelper {
 				$b = $q;
 				break;
 		}
-	
-		return [
-			floor($r * 255),
-			floor($g * 255),
-			floor($b * 255)
-		];
+
+		return [floor($r * 255), floor($g * 255), floor($b * 255)];
 	}
 }

@@ -1,11 +1,11 @@
 <?php
 /**
  * 初始化安装控制器
- * 
+ *
  * @author		XiaoXi <admin@soraharu.com>
  * @copyright	All rights reserved by XiaoXi
  * @license		Mozilla Public License 2.0
- * 
+ *
  * @link		https://opennav.soraharu.com/
  */
 
@@ -17,14 +17,12 @@ $helper = new GlobalHelper(null);
 // 获取分页参数
 $page = empty($_GET['page']) ? 'Init' : htmlspecialchars(trim($_GET['page']));
 
-
 /**
  * 检查实例是否已初始化安装
  */
 if (file_exists('../Data/Config.php')) {
 	exit('该 OpenNav 实例已安装成功，无需再次执行安装操作！');
 }
-
 
 /**
  * 检查运行环境
@@ -59,15 +57,13 @@ if (!array_search('intl', $php_extensions)) {
 	exit('当前 PHP 未安装 intl 插件！');
 }
 
-
 /**
  * 进入初始化配置流程
  */
 if ($page === 'Init') {
-	require_once('../Template/Install.php');
+	require_once '../Template/Install.php';
 	exit();
 }
-
 
 /**
  * 进入安装流程
@@ -89,11 +85,27 @@ if ($page === 'Install') {
 			$totp_secret_key = $authenticator->createSecret();
 			$cookie_secret_key = $helper->getRandomKey();
 			$config_file_content = file_get_contents('../Data/Config.sample.php');
-			$config_file_content = str_replace('{username}', $_POST['username'], $config_file_content);
-			$config_file_content = str_replace('{password}', password_hash($_POST['password'], PASSWORD_DEFAULT), $config_file_content);
+			$config_file_content = str_replace(
+				'{username}',
+				$_POST['username'],
+				$config_file_content
+			);
+			$config_file_content = str_replace(
+				'{password}',
+				password_hash($_POST['password'], PASSWORD_DEFAULT),
+				$config_file_content
+			);
 			$config_file_content = str_replace('{email}', $_POST['email'], $config_file_content);
-			$config_file_content = str_replace('{totp_secret_key}', $totp_secret_key, $config_file_content);
-			$config_file_content = str_replace('{cookie_secret_key}', $cookie_secret_key, $config_file_content);
+			$config_file_content = str_replace(
+				'{totp_secret_key}',
+				$totp_secret_key,
+				$config_file_content
+			);
+			$config_file_content = str_replace(
+				'{cookie_secret_key}',
+				$cookie_secret_key,
+				$config_file_content
+			);
 			if (!file_put_contents('../Data/Config.php', $config_file_content)) {
 				$error_message = '配置文件写入失败，请检查 Data 目录是否拥有写入权限！';
 			}

@@ -1,14 +1,13 @@
 <?php
 /**
  * 链接跳转控制器
- * 
+ *
  * @author		XiaoXi <admin@soraharu.com>
  * @copyright	All rights reserved by XiaoXi
  * @license		Mozilla Public License 2.0
- * 
+ *
  * @link		https://opennav.soraharu.com/
  */
-
 
 /**
  * 访问权限判定
@@ -32,14 +31,15 @@ if (!$is_login) {
 	}
 	// 查询上级分类是否还有父分类，如有（上级分类的 fid 不为 0），则查询父分类的信息
 	if ($category['fid'] !== 0) {
-		$category_parent = $helper->getCategoryFidPropertyByCategoryId_AuthRequired($category['fid']);
+		$category_parent = $helper->getCategoryFidPropertyByCategoryId_AuthRequired(
+			$category['fid']
+		);
 		// 如果存在父分类且父分类为私有分类
 		if ($category_parent['property'] === 1) {
 			exit('非法访问请求！可能是登录状态已过期。');
 		}
 	}
 }
-
 
 /**
  * 进入跳转流程
@@ -52,12 +52,16 @@ if (!$is_login && !empty($link['url_standby'])) {
 	exit();
 }
 // 判断是否开启中转页
-if ($options_settings_transition_page['control'] === 1 && ((!$is_login && $options_settings_transition_page['visitor_stay_time'] > 0) || ($is_login && $options_settings_transition_page['admin_stay_time'] > 0))) {
+if (
+	$options_settings_transition_page['control'] === 1 &&
+	((!$is_login && $options_settings_transition_page['visitor_stay_time'] > 0) ||
+		($is_login && $options_settings_transition_page['admin_stay_time'] > 0))
+) {
 	// 获取站点设置选项
 	$options_settings_site = $helper->getOptionsSettingsSite();
 	// 获取过渡页设置选项
 	$options_settings_transition_page = $helper->getOptionsSettingsTransitionPage();
-	require_once('../Template/TransitionPage.php');
+	require_once '../Template/TransitionPage.php';
 	exit();
 }
 // 直接跳转

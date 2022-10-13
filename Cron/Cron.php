@@ -1,27 +1,28 @@
 <?php
 /**
  * 周期任务组
- * 
+ *
  * @author		XiaoXi <admin@soraharu.com>
  * @copyright	All rights reserved by XiaoXi
  * @license		Mozilla Public License 2.0
- * 
+ *
  * @link		https://opennav.soraharu.com/
  */
 
 use Favicon\Favicon;
 use Favicon\FaviconDLType;
 
-
 /**
  * 重复执行检查
  */
 $timestamp = time();
-$last_timestamp = file_exists('../Cache/Log/.cron.timestamp') ? intval(file_get_contents('../Cache/Log/.cron.timestamp')) : 0;
-if ($timestamp - $last_timestamp < 7150) { // 2 hours - 50 seconds 防止计时误差
+$last_timestamp = file_exists('../Cache/Log/.cron.timestamp')
+	? intval(file_get_contents('../Cache/Log/.cron.timestamp'))
+	: 0;
+if ($timestamp - $last_timestamp < 7150) {
+	// 2 hours - 50 seconds 防止计时误差
 	exit('周期任务间隔时间最短为 2 小时！');
 }
-
 
 /**
  * 任务初始化
@@ -41,7 +42,6 @@ function cronError() {
 	file_put_contents('../Cache/Log/.cron.error', '');
 }
 
-
 /**
  * 清理 Cache 目录
  */
@@ -59,21 +59,44 @@ foreach ($caches as $directory_name => $cache_info) {
 		$file_names = scandir('../Cache/' . $directory_name . '/');
 		foreach ($file_names as $file_name) {
 			if (preg_match($file_name_regex, $file_name)) {
-				if ($timestamp - filectime('../Cache/' . $directory_name . '/' . $file_name) >= $file_expiration_time) {
+				if (
+					$timestamp - filectime('../Cache/' . $directory_name . '/' . $file_name) >=
+					$file_expiration_time
+				) {
 					if (unlink('../Cache/' . $directory_name . '/' . $file_name)) {
 						$log_status_string = 'INFO';
 						$cache_lore_string = 'has expired. Automatic deletion succeeded.';
 					} else {
 						cronError();
 						$log_status_string = 'ERROR';
-						$cache_lore_string = 'has expired. However, an error occurred while deleting the file.';
+						$cache_lore_string =
+							'has expired. However, an error occurred while deleting the file.';
 					}
-					$log_string = '[' . date('Y-m-d H:i') . '] ' . $log_status_string . ': Check expired status => (/Cache/' . $directory_name . '/' . $file_name . ') ' . $cache_lore_string . "\n";
+					$log_string =
+						'[' .
+						date('Y-m-d H:i') .
+						'] ' .
+						$log_status_string .
+						': Check expired status => (/Cache/' .
+						$directory_name .
+						'/' .
+						$file_name .
+						') ' .
+						$cache_lore_string .
+						"\n";
 					fwrite($log_file, $log_string);
 				} else {
-					$log_string = '[' . date('Y-m-d H:i') . '] INFO: Check expired status => (/Cache/' . $directory_name . '/' . $file_name . ') has not expired and all files of the same type have been skipped after that.' . "\n";
+					$log_string =
+						'[' .
+						date('Y-m-d H:i') .
+						'] INFO: Check expired status => (/Cache/' .
+						$directory_name .
+						'/' .
+						$file_name .
+						') has not expired and all files of the same type have been skipped after that.' .
+						"\n";
 					fwrite($log_file, $log_string);
-					break 1;
+					break;
 				}
 			}
 		}
@@ -91,26 +114,40 @@ foreach ($caches as $directory_name => $cache_info) {
 		$file_names = scandir('../Cache/' . $directory_name . '/');
 		foreach ($file_names as $file_name) {
 			if (preg_match($file_name_regex, $file_name)) {
-				if ($timestamp - filectime('../Cache/' . $directory_name . '/' . $file_name) >= $file_expiration_time) {
+				if (
+					$timestamp - filectime('../Cache/' . $directory_name . '/' . $file_name) >=
+					$file_expiration_time
+				) {
 					if (unlink('../Cache/' . $directory_name . '/' . $file_name)) {
 						$log_status_string = 'INFO';
 						$cache_lore_string = 'has expired. Automatic deletion succeeded.';
 					} else {
 						cronError();
 						$log_status_string = 'ERROR';
-						$cache_lore_string = 'has expired. However, an error occurred while deleting the file.';
+						$cache_lore_string =
+							'has expired. However, an error occurred while deleting the file.';
 					}
 				} else {
 					$log_status_string = 'INFO';
 					$cache_lore_string = 'has not expired.';
 				}
-				$log_string = '[' . date('Y-m-d H:i') . '] ' . $log_status_string . ': Check expired status => (/Cache/' . $directory_name . '/' . $file_name . ') ' . $cache_lore_string . "\n";
+				$log_string =
+					'[' .
+					date('Y-m-d H:i') .
+					'] ' .
+					$log_status_string .
+					': Check expired status => (/Cache/' .
+					$directory_name .
+					'/' .
+					$file_name .
+					') ' .
+					$cache_lore_string .
+					"\n";
 				fwrite($log_file, $log_string);
 			}
 		}
 	}
 }
-
 
 /**
  * 获取链接图标
@@ -147,12 +184,20 @@ if (isset($theme_config['online_favicon'])) {
 				$log_status_string = 'INFO';
 				$favion_lore_string = 'skipped, not a valid website url.';
 			}
-			$log_string = '[' . date('Y-m-d H:i') . '] ' . $log_status_string . ': Get favicon => (' . $link_value_url . ') ' . $favion_lore_string . "\n";
+			$log_string =
+				'[' .
+				date('Y-m-d H:i') .
+				'] ' .
+				$log_status_string .
+				': Get favicon => (' .
+				$link_value_url .
+				') ' .
+				$favion_lore_string .
+				"\n";
 			fwrite($log_file, $log_string);
 		}
 	}
 }
-
 
 /**
  * 任务收尾

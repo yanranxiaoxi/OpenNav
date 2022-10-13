@@ -2,11 +2,11 @@
 /**
  * 链接导入控制器
  * 进入 ImportLinks 流程需要 mbstring 支持
- * 
+ *
  * @author		XiaoXi <admin@soraharu.com>
  * @copyright	All rights reserved by XiaoXi
  * @license		Mozilla Public License 2.0
- * 
+ *
  * @link		https://opennav.soraharu.com/
  */
 
@@ -15,14 +15,12 @@ use Spatie\SimpleExcel\SimpleExcelReader;
 // 获取分页参数
 $page = empty($_GET['page']) ? '' : htmlspecialchars(trim($_GET['page']));
 
-
 /**
  * 全局鉴权「Auth Safety」
  */
 if (!$is_login) {
 	$helper->throwError(403, '鉴权失败！');
 }
-
 
 /**
  * 上传书签文件
@@ -39,7 +37,10 @@ if ($page === 'UploadLinksFile') {
 		$temp_file_directory = $_FILES['file']['tmp_name'];
 		// 暂存文件位置
 		$staging_file_name = time() . '.links.' . $file_suffix;
-		if (($file_suffix !== 'html' && $file_suffix !== 'xlsx' && $file_suffix !== 'csv') || filesize($temp_file_directory) > 1024 * 1024 * 8) {
+		if (
+			($file_suffix !== 'html' && $file_suffix !== 'xlsx' && $file_suffix !== 'csv') ||
+			filesize($temp_file_directory) > 1024 * 1024 * 8
+		) {
 			// 删除临时文件
 			unlink($temp_file_directory);
 			$helper->throwError(403, '不支持的文件类型或文件大小超过限制！');
@@ -53,7 +54,6 @@ if ($page === 'UploadLinksFile') {
 		}
 	}
 }
-
 
 /**
  * 导入书签文件
@@ -88,7 +88,9 @@ if ($page === 'ImportLinks') {
 		$staging_file_content_array = explode("\n", $staging_file_content); // 分割文本
 		$latest_addition = 0; // 0: link, 1: category
 		foreach ($staging_file_content_array as $staging_file_content_line) {
-			if (preg_match('/<DT><H3.+>(.+)<\/H3>/i', $staging_file_content_line, $category_match)) {
+			if (
+				preg_match('/<DT><H3.+>(.+)<\/H3>/i', $staging_file_content_line, $category_match)
+			) {
 				if ($latest_addition === 1) {
 					array_pop($categories);
 				}
@@ -104,7 +106,13 @@ if ($page === 'ImportLinks') {
 					]);
 				}
 				$latest_addition = 1;
-			} elseif (preg_match('/<DT><A HREF="(.+)" ADD_DATE.+>(.+)<\/A>/i', $staging_file_content_line, $link_match)) {
+			} elseif (
+				preg_match(
+					'/<DT><A HREF="(.+)" ADD_DATE.+>(.+)<\/A>/i',
+					$staging_file_content_line,
+					$link_match
+				)
+			) {
 				if (strlen($link_match[2]) <= 64) {
 					array_push($links, [
 						'category' => count($categories) - 1,
@@ -125,7 +133,7 @@ if ($page === 'ImportLinks') {
 		}
 	} elseif ($file_suffix === 'xlsx' || $file_suffix === 'csv') {
 		// #TODO#
-		$excel_reader = new SimpleExcelReader;
+		$excel_reader = new SimpleExcelReader();
 		$excel_reader->create('../Cache/Upload/' . $staging_file_name);
 		$links = $excel_reader->getRows();
 	} else {

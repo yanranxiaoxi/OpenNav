@@ -10,116 +10,120 @@ stages:
 #########################
 
 npm-install:
-  stage: build
-  tags:
-    - linuxdocker
-  image: node:latest
-  script:
-    - npm install
-  artifacts:
-    name: "OpenNav-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
-    paths:
-      - ./node_modules/
+    stage: build
+    tags:
+        - linuxdocker
+    image: node:latest
+    script:
+        - npm run ins:node
+    artifacts:
+        name: 'OpenNav-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA'
+        paths:
+            - ./Public/node_modules/
 
 composer-install:
-  stage: build
-  tags:
-    - linuxdocker
-  image: composer:2
-  script:
-    - composer install --ignore-platform-req=ext-intl
-  artifacts:
-    name: "OpenNav-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
-    paths:
-      - ./vendor/
+    stage: build
+    tags:
+        - linuxdocker
+    image: composer:2
+    script:
+        - composer install --ignore-platform-req=ext-intl
+    artifacts:
+        name: 'OpenNav-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA'
+        paths:
+            - ./vendor/
 
 #########################
 #        Package        #
 #########################
 
 package:
-  stage: package
-  tags:
-    - windowsserver2022powershell
-  dependencies:
-    - npm-install
-    - composer-install
-  script:
-    - ${nodeModulesDirArray} =
-        "clipboard\dist",
-        "font-awesome\css",
-        "font-awesome\fonts",
-        "font-awesome\less",
-        "jquery\dist",
-        "layui\dist";
-    - foreach (${nodeModulesDir} in ${nodeModulesDirArray}) {
-        New-Item -Path ".\Public\node_modules\${nodeModulesDir}\" -ItemType Directory;
-        Move-Item ".\node_modules\${nodeModulesDir}\*" ".\Public\node_modules\${nodeModulesDir}\";
-      }
-    - Remove-Item ".\node_modules\" -Recurse;
-    - PowerShell -Command "& {git clone --depth=1 https://gitlab.soraharu.com/XiaoXi/OpenNav-Material-Design.git .\Public\themes\material-design\}";
-    - Set-Location "..\";
-    - if (Test-Path -Path ".\OpenNav-compiled.zip" -PathType Leaf) {
-        Remove-Item ".\OpenNav-compiled.zip" -Recurse;
-      }
-    - PowerShell -Command "& {7z a .\OpenNav-compiled.zip .\OpenNav\*}";
-    - PowerShell -Command "& {7z d .\OpenNav-compiled.zip *.git\ -r}";
-    - Move-Item ".\OpenNav-compiled.zip" ".\OpenNav\";
-  artifacts:
-    name: "OpenNav-compiled-$CI_COMMIT_SHORT_SHA"
-    paths:
-      - ./OpenNav-compiled.zip
+    stage: package
+    tags:
+        - windowsserver2022powershell
+    dependencies:
+        - npm-install
+        - composer-install
+    script:
+        - Set-Location ".\Public\";
+        - Move-Item ".\node_modules\" ".\node_modules_old\";
+        - ${nodeModulesDirArray} =
+          "clipboard\dist",
+          "font-awesome\css",
+          "font-awesome\fonts",
+          "font-awesome\less",
+          "jquery\dist",
+          "layui\dist";
+        - foreach (${nodeModulesDir} in ${nodeModulesDirArray}) {
+          New-Item -Path ".\node_modules\${nodeModulesDir}\" -ItemType Directory;
+          Move-Item ".\node_modules_old\${nodeModulesDir}\*" ".\node_modules\${nodeModulesDir}\";
+          }
+        - Remove-Item ".\node_modules_old\" -Recurse;
+        - PowerShell -Command "& {git clone --depth=1 https://gitlab.soraharu.com/XiaoXi/OpenNav-Material-Design.git .\themes\material-design\}";
+        - Set-Location ".\themes\material-design\";
+        - PowerShell -Command "& {npm run ins}";
+        - Set-Location "..\..\..\..\";
+        - if (Test-Path -Path ".\OpenNav-compiled.zip" -PathType Leaf) {
+          Remove-Item ".\OpenNav-compiled.zip" -Recurse;
+          }
+        - PowerShell -Command "& {7z a .\OpenNav-compiled.zip .\OpenNav\*}";
+        - PowerShell -Command "& {7z d .\OpenNav-compiled.zip *.git\ -r}";
+        - Move-Item ".\OpenNav-compiled.zip" ".\OpenNav\";
+    artifacts:
+        name: 'OpenNav-compiled-$CI_COMMIT_SHORT_SHA'
+        paths:
+            - ./OpenNav-compiled.zip
 
 #########################
 #        Upload         #
 #########################
 
 upload:
-  stage: upload
-  tags:
-    - windowsserver2022powershell
-  rules:
-    - if: $CI_COMMIT_TAG
-  dependencies:
-    - package
-  script:
-    - ${downloadServerRootDir} = "D:\wwwroot\downloadserver.soraharu.com\OpenNav\${CI_COMMIT_TAG}\";
-    - if (Test-Path -Path "${downloadServerRootDir}") {
-        Remove-Item "${downloadServerRootDir}*" -Recurse;
-      } else {
-        New-Item -Path "${downloadServerRootDir}" -ItemType Directory;
-      }
-    - Move-Item ".\OpenNav-compiled.zip" "${downloadServerRootDir}";
+    stage: upload
+    tags:
+        - windowsserver2022powershell
+    rules:
+        - if: $CI_COMMIT_TAG
+    dependencies:
+        - package
+    script:
+        - ${downloadServerRootDir} = "D:\wwwroot\downloadserver.soraharu.com\OpenNav\${CI_COMMIT_TAG}\";
+        - if (Test-Path -Path "${downloadServerRootDir}") {
+          Remove-Item "${downloadServerRootDir}*" -Recurse;
+          } else {
+          New-Item -Path "${downloadServerRootDir}" -ItemType Directory;
+          }
+        - Move-Item ".\OpenNav-compiled.zip" "${downloadServerRootDir}";
 
 #########################
 #        Deploy         #
 #########################
 
 deploy-xiaoxi:
-  stage: deploy
-  tags:
-    - windowsserver2022powershell
-  rules:
-    - if: $CI_COMMIT_TAG
-  dependencies:
-    - package
-  script:
-    - ${xiaoxiServerRootDir} = "D:\wwwroot\newtab.soraharu.com\";
-    - PowerShell -Command "& {7z x .\OpenNav-compiled.zip -o${xiaoxiServerRootDir} -aoa}";
+    stage: deploy
+    tags:
+        - windowsserver2022powershell
+    rules:
+        - if: $CI_COMMIT_TAG
+    dependencies:
+        - package
+    script:
+        - ${xiaoxiServerRootDir} = "D:\wwwroot\newtab.soraharu.com\";
+        - PowerShell -Command "& {7z x .\OpenNav-compiled.zip -o${xiaoxiServerRootDir} -aoa}";
 
 #########################
 #        Release        #
 #########################
 
 release:
-  stage: release
-  tags:
-    - linuxdocker
-  image: registry.gitlab.com/gitlab-org/release-cli:latest
-  rules:
-    - if: $CI_COMMIT_TAG
-  dependencies: []
-  script:
-    - |
-      release-cli create --name "Release $CI_COMMIT_TAG" --tag-name $CI_COMMIT_TAG \
-        --assets-link "{\"name\":\"OpenNav-compiled.zip\",\"url\":\"https://downloadserver.soraharu.com:7000/OpenNav/$CI_COMMIT_TAG/OpenNav-compiled.zip\",\"link_type\":\"package\"}"
+    stage: release
+    tags:
+        - linuxdocker
+    image: registry.gitlab.com/gitlab-org/release-cli:latest
+    rules:
+        - if: $CI_COMMIT_TAG
+    dependencies: []
+    script:
+        - |
+            release-cli create --name "Release $CI_COMMIT_TAG" --tag-name $CI_COMMIT_TAG \
+              --assets-link "{\"name\":\"OpenNav-compiled.zip\",\"url\":\"https://downloadserver.soraharu.com:7000/OpenNav/$CI_COMMIT_TAG/OpenNav-compiled.zip\",\"link_type\":\"package\"}"

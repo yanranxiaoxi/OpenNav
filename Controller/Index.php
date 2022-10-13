@@ -1,14 +1,13 @@
 <?php
 /**
  * 首页控制器
- * 
+ *
  * @author		XiaoXi <admin@soraharu.com>
  * @copyright	All rights reserved by XiaoXi
  * @license		Mozilla Public License 2.0
- * 
+ *
  * @link		https://opennav.soraharu.com/
  */
-
 
 /**
  * 检查主题
@@ -16,10 +15,13 @@
 // 获取主题选项
 $options_theme = $helper->getOptionsTheme();
 // 检查主题文件是否存在
-if (!file_exists('./themes/' . $options_theme . '/index.php') || !file_exists('./themes/' . $options_theme . '/info.json') || !file_exists('./themes/' . $options_theme . '/config.json')) {
+if (
+	!file_exists('./themes/' . $options_theme . '/index.php') ||
+	!file_exists('./themes/' . $options_theme . '/opennav.info.json') ||
+	!file_exists('./themes/' . $options_theme . '/opennav.config.json')
+) {
 	exit('主题 ' . $options_theme . ' 文件不完整，请尝试重新安装主题！');
 }
-
 
 /**
  * 获取分类与链接
@@ -28,7 +30,9 @@ $parent_categories = $helper->getParentCategories();
 $child_categories = [];
 foreach ($parent_categories as $parent_category_value) {
 	$parent_category_value_id = $parent_category_value['id'];
-	$child_categories[$parent_category_value_id] = $helper->getChildCategoriesByParentCategoryId($parent_category_value_id);
+	$child_categories[$parent_category_value_id] = $helper->getChildCategoriesByParentCategoryId(
+		$parent_category_value_id
+	);
 }
 $categories = $helper->getCategories();
 $links = [];
@@ -36,7 +40,6 @@ foreach ($categories as $category_value) {
 	$category_value_id = $category_value['id'];
 	$links[$category_value_id] = $helper->getLinksByCategoryId($category_value_id);
 }
-
 
 /**
  * 获取选项信息
@@ -60,17 +63,19 @@ if (is_null($theme_config)) {
 // 获取暗色模式状态
 $status_dark_mode = $helper->isDarkMode();
 
-
 /**
  * 配置参数默认值
  */
-$options_settings_site['title'] = empty($options_settings_site['title']) ? 'OpenNav' : $options_settings_site['title'];
-$options_settings_site['subtitle'] = empty($options_settings_site['subtitle']) ? '开放、自由的个人网络收藏夹' : $options_settings_site['subtitle'];
+$options_settings_site['title'] = empty($options_settings_site['title'])
+	? 'OpenNav'
+	: $options_settings_site['title'];
+$options_settings_site['subtitle'] = empty($options_settings_site['subtitle'])
+	? '开放、自由的个人网络收藏夹'
+	: $options_settings_site['subtitle'];
 // 主题根目录
 $theme_directory_root = './theme/' . $options_theme . '/';
-
 
 /**
  * 载入主题模板文件
  */
-require_once('./themes/' . $options_theme . '/index.php');
+require_once './themes/' . $options_theme . '/index.php';
