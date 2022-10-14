@@ -71,9 +71,6 @@
     ```shell
     cd ./OpenNav/
     npm run ins
-
-    # 如将要进行开发，可替换执行如下命令以获取额外的开发依赖项
-    npm run ins:dev
     ```
 
 4. 设置站点运行目录为项目文件夹内的 `Public` 目录
@@ -81,7 +78,25 @@
 
 > **Warning**
 >
-> 从源代码部署仅建议用于开发环境，本项目当前处于快速迭代开发阶段，未经过完整验证的源代码可能会出现较多未知错误，请在遇到无法解决的错误时首先尝试使用 `git reset --hard upstream/main && git clean -fdx && git pull` 拉取最新版本源代码，如确认处在最新版本，可开启 Issue 并附上您的复现过程，开发者将会尽快予以回应
+> 从源代码部署仅建议用于开发环境，本项目当前处于快速迭代开发阶段，未经过完整验证的源代码可能会出现较多未知错误，请在遇到无法解决的错误时首先尝试使用 `git reset --hard upstream/main && git clean -fdx && git pull` 拉取最新版本源代码，如确认处在最新版本，可开启 Issue 并附上您的复现过程，开发者将会尽快予以回应。
+
+## 🛠 参与开发
+
+1. 确保您的计算机已安装 [NodeJS](https://nodejs.org/)、[Composer](https://getcomposer.org/)
+2. 执行以下命令拉取源代码
+
+    ```shell
+    git clone --depth=3 https://github.com/yanranxiaoxi/OpenNav.git
+    ```
+
+3. 进入项目目录并编译、安装、获取默认主题
+
+    ```shell
+    cd ./OpenNav/
+    npm run ins:dev
+    ```
+
+4. 使用合适的 IDE 打开项目目录。本项目推荐使用 [Visual Studio Code](https://code.visualstudio.com/) + [PHP Intelephense](https://marketplace.visualstudio.com/items?itemName=bmewburn.vscode-intelephense-client) + [PHP Server](https://marketplace.visualstudio.com/items?itemName=brapifra.phpserver) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) 进行进行开发，可以获得较为出色的代码提示效果
 
 ## 📜 开源许可
 
