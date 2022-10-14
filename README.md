@@ -27,9 +27,9 @@
     -   PHP [pdo_sqlite](https://www.php.net/manual/ref.pdo-sqlite.php) 以使用 SQLite 数据库
     -   PHP [curl](https://www.php.net/manual/book.curl.php) 以获取在线内容（如自动更新、主题）
     -   PHP [mbstring](https://www.php.net/manual/book.mbstring.php) 以生成文字网站图标及配置时基验证
-    -   PHP [intl](https://www.php.net/manual/book.intl.php) 以验证域名
+    -   PHP [intl](https://www.php.net/manual/book.intl.php) 以获取准确的根域名信息
     -   PHP [fileinfo](https://www.php.net/manual/book.fileinfo.php) 以在线获取网站图标（可选）
-    -   PHP file_uploads 启用了上传机制以导入 Chrome /Edge 收藏夹
+    -   PHP file_uploads 启用了上传机制以导入 Chrome / Edge 收藏夹
     -   PHP upload_max_filesize 与最大文件上传大小匹配，建议至少为 8 MiB
 -   支持所有 **现代浏览器**（极为有限的 Internet Explorer 支持）
 
