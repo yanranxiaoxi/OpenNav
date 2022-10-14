@@ -1,3 +1,6 @@
+<?php require_once __DIR__ . '/../Public/index.php'; ?>
+<?php require_once __DIR__ . '/../Controller/Login.php'; ?>
+
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
 	<head>
@@ -412,3 +415,5 @@
 		</script>
 	</body>
 </html>
+
+<? exit(); ?>

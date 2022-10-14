@@ -1,3 +1,5 @@
+<?php require_once __DIR__ . '/../../../Public/index.php'; ?>
+<?php require_once __DIR__ . '/../../../Controller/User.php'; ?>
 <?php require_once('../Template/Admin/Header.php'); ?>
 <?php require_once('../Template/Admin/Left.php'); ?>
 
@@ -71,3 +73,5 @@
 		});
 	})
 </script>
+
+<?php exit(); ?>

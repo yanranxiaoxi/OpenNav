@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../../Public/index.php'; ?>
 <?php
 if (!$is_login) {
 	exit('鉴权失败！');

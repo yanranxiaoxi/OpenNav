@@ -1,3 +1,6 @@
+<?php require_once __DIR__ . '/../Public/index.php'; ?>
+<?php require_once __DIR__ . '/../Controller/Click.php'; ?>
+
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
 	<head>
@@ -126,3 +129,5 @@
 		<script type="text/javascript" src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 	</body>
 </html>
+
+<? exit(); ?>

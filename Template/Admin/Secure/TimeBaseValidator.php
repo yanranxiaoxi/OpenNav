@@ -1,3 +1,5 @@
+<?php require_once __DIR__ . '/../../../Public/index.php'; ?>
+<?php require_once __DIR__ . '/../../../Controller/TimeBaseValidator.php'; ?>
 <?php require_once('../Template/Admin/Header.php'); ?>
 <?php require_once('../Template/Admin/Left.php'); ?>
 
@@ -94,3 +96,5 @@
 		layer.msg('复制失败！', {icon: 5});
 	});
 </script>
+
+<?php exit(); ?>

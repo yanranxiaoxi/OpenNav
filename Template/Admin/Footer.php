@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../../Public/index.php'; ?>
 
 			<div class="layui-footer">
 				<!-- 底部固定区域 -->

@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../../Public/index.php'; ?>
 <div class="layui-side layui-bg-black">
 	<div class="layui-side-scroll">
 
