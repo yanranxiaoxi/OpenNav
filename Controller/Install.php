@@ -33,8 +33,8 @@ $php_version = floatval(PHP_VERSION);
 $php_extensions = get_loaded_extensions();
 
 // 检查 PHP 版本是否支持
-if ($php_version <= 7.3) {
-	exit('当前 PHP 版本' . $php_version . '不满足要求，需要 PHP ≥ 7.4');
+if ($php_version < 8.0) {
+	exit('当前 PHP 版本' . $php_version . '不满足要求，需要 PHP ≥ 8.0');
 }
 
 // 检查 PHP 是否支持 SQLite (PDO) 插件
