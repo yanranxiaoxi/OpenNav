@@ -9,6 +9,8 @@
  * @link		https://opennav.soraharu.com/
  */
 
+require_once __DIR__ . '/../Public/index.php';
+
 /**
  * 访问权限判定
  */
@@ -18,3 +20,5 @@ if (ALLOW_HTTP_CRON === true) {
 } else {
 	exit('非法访问请求！');
 }
+
+exit();

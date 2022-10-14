@@ -11,6 +11,8 @@
  * @link		https://opennav.soraharu.com/
  */
 
+require_once __DIR__ . '/../Public/index.php';
+
 use Favicon\Favicon;
 use Favicon\FaviconDLType;
 
@@ -147,3 +149,5 @@ if ($page === 'Offline') {
 	header('Content-Type: image/svg+xml; charset=utf-8');
 	exit($icon);
 }
+
+exit();

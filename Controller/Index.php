@@ -9,6 +9,8 @@
  * @link		https://opennav.soraharu.com/
  */
 
+require_once __DIR__ . '/../Public/index.php';
+
 /**
  * 检查主题
  */
@@ -79,3 +81,5 @@ $theme_directory_root = './themes/' . $options_theme . '/';
  * 载入主题模板文件
  */
 require_once './themes/' . $options_theme . '/index.php';
+
+exit();

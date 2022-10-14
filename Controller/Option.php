@@ -9,6 +9,8 @@
  * @link		https://opennav.soraharu.com/
  */
 
+require_once __DIR__ . '/../Public/index.php';
+
 // 获取分页参数
 $page = empty($_GET['page']) ? '' : htmlspecialchars(trim($_GET['page']));
 
@@ -157,3 +159,5 @@ if ($page === 'DeleteSubscribe') {
 	$helper->setOptionsSettingsSubscribe_AuthRequired($options_settings_subscribe);
 	$helper->returnSuccess();
 }
+
+exit();

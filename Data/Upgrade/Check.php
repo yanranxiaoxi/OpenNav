@@ -1,4 +1,7 @@
 <?php
+
+require_once __DIR__ . '/../../Public/index.php';
+
 if (CONFIG_VERSION !== VERSION) {
 	$current_version = CONFIG_VERSION;
 	while ($current_version !== VERSION) {

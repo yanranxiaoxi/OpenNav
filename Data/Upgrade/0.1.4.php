@@ -1,4 +1,8 @@
 <?php
+
+require_once __DIR__ . '/../../Public/index.php';
+require_once __DIR__ . '/Check.php';
+
 if ($current_version === '0.1.4') {
 	$helper->setGlobalConfig_AuthRequired('DATABASE_TYPE', DATABASE_TYPE, 'SQLite');
 	@$database->query('DROP INDEX <on_categorys_fid_IDX>');

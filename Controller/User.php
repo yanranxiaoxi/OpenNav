@@ -9,6 +9,8 @@
  * @link		https://opennav.soraharu.com/
  */
 
+require_once __DIR__ . '/../Public/index.php';
+
 // 获取分页参数
 $page = empty($_GET['page']) ? 'Options' : htmlspecialchars(trim($_GET['page']));
 
@@ -106,3 +108,5 @@ if ($page === 'LogoutAll') {
 	header('Location: ./index.php?c=Login');
 	exit();
 }
+
+exit();

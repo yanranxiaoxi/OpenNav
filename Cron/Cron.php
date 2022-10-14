@@ -9,6 +9,9 @@
  * @link		https://opennav.soraharu.com/
  */
 
+require_once __DIR__ . '/../Public/index.php';
+require_once __DIR__ . '/../Controller/Corn.php';
+
 use Favicon\Favicon;
 use Favicon\FaviconDLType;
 
@@ -206,3 +209,5 @@ if (isset($theme_config['online_favicon'])) {
 fclose($log_file);
 // 修改日志文件为只读
 // chmod('../Cache/Log/' . $timestamp . '.cron.log', 0444);
+
+exit();

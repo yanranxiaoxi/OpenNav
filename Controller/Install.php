@@ -9,6 +9,8 @@
  * @link		https://opennav.soraharu.com/
  */
 
+require_once __DIR__ . '/../Public/index.php';
+
 use RobThree\Auth\TwoFactorAuth;
 use OpenNav\Helper\GlobalHelper;
 
@@ -27,14 +29,12 @@ if (file_exists('../Data/Config.php')) {
 /**
  * 检查运行环境
  */
-// 获取 PHP 版本
-$php_version = floatval(PHP_VERSION);
 // 获取 PHP 插件列表
 $php_extensions = get_loaded_extensions();
 
 // 检查 PHP 版本是否支持
-if ($php_version < 8.0) {
-	exit('当前 PHP 版本' . $php_version . '不满足要求，需要 PHP ≥ 8.0');
+if (PHP_VERSION_ID < 80000) {
+	exit('当前 PHP 版本' . PHP_VERSION . '不满足要求，需要 PHP ≥ 8.0');
 }
 
 // 检查 PHP 是否支持 SQLite (PDO) 插件
@@ -127,3 +127,5 @@ if ($page === 'Install') {
 	header('Content-Type: application/json; charset=utf-8');
 	exit(json_encode($data));
 }
+
+exit();

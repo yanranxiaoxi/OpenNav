@@ -10,6 +10,8 @@
  * @link		https://opennav.soraharu.com/
  */
 
+require_once __DIR__ . '/../Public/index.php';
+
 use RobThree\Auth\TwoFactorAuth;
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
@@ -70,3 +72,5 @@ if ($page === 'Setup') {
 	require_once '../Template/Admin/Secure/TimeBaseValidator.php';
 	exit();
 }
+
+exit();

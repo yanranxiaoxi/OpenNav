@@ -9,6 +9,8 @@
  * @link		https://opennav.soraharu.com/
  */
 
+require_once __DIR__ . '/../Public/index.php';
+
 // 获取分页参数
 $page = empty($_GET['page']) ? 'Index' : htmlspecialchars(trim($_GET['page']));
 
@@ -132,3 +134,5 @@ if ($page === 'ImportLinks') {
 	require_once '../Template/Admin/ImportLinks.php';
 	exit();
 }
+
+exit();

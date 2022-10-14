@@ -9,6 +9,8 @@
  * @link		https://opennav.soraharu.com/
  */
 
+require_once __DIR__ . '/../Public/index.php';
+
 use RobThree\Auth\TwoFactorAuth;
 
 // 获取分页参数
@@ -118,3 +120,5 @@ if ($page === 'Logout') {
 		exit('注销失败，请检查 Cookie 状态并手动清除！');
 	}
 }
+
+exit();

@@ -10,6 +10,8 @@
  * @link		https://opennav.soraharu.com/
  */
 
+require_once __DIR__ . '/../Public/index.php';
+
 use Spatie\SimpleExcel\SimpleExcelReader;
 
 // 获取分页参数
@@ -133,9 +135,9 @@ if ($page === 'ImportLinks') {
 		}
 	} elseif ($file_suffix === 'xlsx' || $file_suffix === 'csv') {
 		// #TODO#
-		$excel_reader = new SimpleExcelReader();
-		$excel_reader->create('../Cache/Upload/' . $staging_file_name);
-		$links = $excel_reader->getRows();
+		// $excel_reader = new SimpleExcelReader();
+		// $excel_reader->create('../Cache/Upload/' . $staging_file_name);
+		// $links = $excel_reader->getRows();
 	} else {
 		$helper->throwError(403, '文件类型不正确！');
 	}
@@ -198,3 +200,5 @@ if ($page === 'ImportLinks') {
 
 	$helper->returnSuccess();
 }
+
+exit();

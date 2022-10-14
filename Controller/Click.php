@@ -9,6 +9,8 @@
  * @link		https://opennav.soraharu.com/
  */
 
+require_once __DIR__ . '/../Public/index.php';
+
 /**
  * 访问权限判定
  */
@@ -66,3 +68,5 @@ if (
 }
 // 直接跳转
 header('location: ' . $link['url']);
+
+exit();

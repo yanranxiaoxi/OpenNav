@@ -9,6 +9,8 @@
  * @link		https://opennav.soraharu.com/
  */
 
+require_once __DIR__ . '/../Public/index.php';
+
 // 获取分页参数
 $page = empty($_GET['page']) ? '' : htmlspecialchars(trim($_GET['page']));
 
@@ -36,3 +38,5 @@ if ($page === 'CheckLatestVersion') {
 		$helper->throwError(404, '无法获取最新版本！');
 	}
 }
+
+exit();
