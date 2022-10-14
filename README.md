@@ -1,3 +1,5 @@
+![OpenNav](https://socialify.api.soraharu.com/yanranxiaoxi/OpenNav/image?description=1&font=Inter&forks=1&language=1&logo=https%3A%2F%2Fraw.githubusercontent.com%2Fyanranxiaoxi%2FOpenNav%2Fmain%2FPublic%2Fassets%2Fimages%2Flogos%2Fopennav.png&name=1&owner=1&pattern=Diagonal%20Stripes&stargazers=1&theme=Light)
+
 # OpenNav
 
 ⭐ 开放、自由的个人网络收藏夹 ⭐
