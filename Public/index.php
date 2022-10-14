@@ -9,6 +9,8 @@
  * @link		https://opennav.soraharu.com/
  */
 
+declare(strict_types=1);
+
 namespace OpenNav;
 
 /**
