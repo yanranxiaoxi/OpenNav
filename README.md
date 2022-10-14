@@ -33,7 +33,7 @@
     -   PHP upload_max_filesize 与最大文件上传大小匹配，建议至少为 8 MiB
 -   支持所有 **现代浏览器**（极为有限的 Internet Explorer 支持）
 
-## ⚙️ 部署
+## ⚙️ 从发布版本部署（推荐）
 
 1. 前往本项目发布页 [GitLab](https://gitlab.soraharu.com/XiaoXi/OpenNav/-/releases) | [GitHub](https://github.com/yanranxiaoxi/OpenNav/releases) 获取最新编译版本软件包，包名为 `OpenNav-compiled.zip`
 2. 将软件包上传至服务器站点目录中，并解压
@@ -53,17 +53,47 @@
         https://opennav.yourdomain.com/index.php?c=Cron
         ```
 
-> 本项目当前处于开发阶段，可能会出现较多未知错误，请在遇到无法解决的错误时首先尝试查询本程序是否存在更新版本，如确认处在最新版本，可开启 Issue 并附上您的复现过程，开发者将会尽快进行回应
+## ⚙️ 从源代码部署
+
+1. 确保您的服务器已安装 [NodeJS](https://nodejs.org/)、[Composer](https://getcomposer.org/)
+2. 执行以下命令拉取源代码
+
+    ```shell
+    git clone --depth=1 https://gitlab.soraharu.com/XiaoXi/OpenNav.git
+
+    # 或者，也可以从 GitHub 仓库拉取
+
+    git clone --depth=1 https://github.com/yanranxiaoxi/OpenNav.git
+    ```
+
+3. 进入源代码目录并编译、安装、获取默认主题
+
+    ```shell
+    cd ./OpenNav/
+    npm run ins
+
+    # 如将要进行开发，可替换执行如下命令以获取额外的开发依赖项
+    npm run ins:dev
+    ```
+
+4. 设置站点运行目录为项目文件夹内的 `Public` 目录
+5. 继续执行 **从发布版本部署** 的第 4 步骤
+
+> **Warning**
+>
+> 从源代码部署仅建议用于开发环境，本项目当前处于快速迭代开发阶段，未经过完整验证的源代码可能会出现较多未知错误，请在遇到无法解决的错误时首先尝试使用 `git reset --hard upstream/main && git clean -fdx && git pull` 拉取最新版本源代码，如确认处在最新版本，可开启 Issue 并附上您的复现过程，开发者将会尽快予以回应
 
 ## 📜 开源许可
 
-本项目支持个人及非商业社会团体免费使用所有功能（仅额外的主题、去除前端版权标识、插入付费广告需要授权激活使用）。
+本项目支持个人及非商业社会团体 **免费使用所有主线功能**（仅额外的主题、去除前端版权标识、插入付费广告等商业性质功能需要授权激活使用）。
 
 个人（支持个人商用）及非商业社会团体可支付 **[99 CNY]** 获取永久使用授权。
 
 商业用途企业需支付 **[299 CNY]** 以获取永久使用授权。
 
-基于 [Mozilla Public License Version 2.0](https://choosealicense.com/licenses/mpl-2.0/) 许可进行开源，但包含以下附加条款：
+主线功能基于 [Mozilla Public License Version 2.0](https://choosealicense.com/licenses/mpl-2.0/) 许可进行开源，商业性质功能具有 [专属许可协议](https://gitlab.soraharu.com/XiaoXi/OpenNav/-/blob/main/LICENSE#L381)。
+
+所有使用者、贡献者仍需遵循以下附加条款：
 
 1. 未获取永久使用授权的个人、团体、企业 **不属于** 许可的开源对象；
 2. 对本项目进行修改、重构、衍生开发等再演绎过程时不可去除任何授权限制代码；

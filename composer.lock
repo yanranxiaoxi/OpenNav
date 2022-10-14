@@ -349,16 +349,16 @@
 		},
 		{
 			"name": "illuminate/collections",
-			"version": "v9.32.0",
+			"version": "v9.35.1",
 			"source": {
 				"type": "git",
 				"url": "https://github.com/illuminate/collections.git",
-				"reference": "a533ba3fce4e288a42f6287e1b9a685cdbc14f9f"
+				"reference": "32e3cd051cf1d12c1e7d5f7bb5a52d0dae8b7a8b"
 			},
 			"dist": {
 				"type": "zip",
-				"url": "https://api.github.com/repos/illuminate/collections/zipball/a533ba3fce4e288a42f6287e1b9a685cdbc14f9f",
-				"reference": "a533ba3fce4e288a42f6287e1b9a685cdbc14f9f",
+				"url": "https://api.github.com/repos/illuminate/collections/zipball/32e3cd051cf1d12c1e7d5f7bb5a52d0dae8b7a8b",
+				"reference": "32e3cd051cf1d12c1e7d5f7bb5a52d0dae8b7a8b",
 				"shasum": ""
 			},
 			"require": {
@@ -396,11 +396,11 @@
 				"issues": "https://github.com/laravel/framework/issues",
 				"source": "https://github.com/laravel/framework"
 			},
-			"time": "2022-09-16T14:22:26+00:00"
+			"time": "2022-10-06T14:13:23+00:00"
 		},
 		{
 			"name": "illuminate/conditionable",
-			"version": "v9.32.0",
+			"version": "v9.35.1",
 			"source": {
 				"type": "git",
 				"url": "https://github.com/illuminate/conditionable.git",
@@ -444,7 +444,7 @@
 		},
 		{
 			"name": "illuminate/contracts",
-			"version": "v9.32.0",
+			"version": "v9.35.1",
 			"source": {
 				"type": "git",
 				"url": "https://github.com/illuminate/contracts.git",
@@ -490,7 +490,7 @@
 		},
 		{
 			"name": "illuminate/macroable",
-			"version": "v9.32.0",
+			"version": "v9.35.1",
 			"source": {
 				"type": "git",
 				"url": "https://github.com/illuminate/macroable.git",
@@ -534,16 +534,16 @@
 		},
 		{
 			"name": "illuminate/support",
-			"version": "v9.32.0",
+			"version": "v9.35.1",
 			"source": {
 				"type": "git",
 				"url": "https://github.com/illuminate/support.git",
-				"reference": "c4703da1b54b754b7a02024e7a53a65557aef569"
+				"reference": "1ca5ac4d81a9c1ad976686283c4dde80dab29333"
 			},
 			"dist": {
 				"type": "zip",
-				"url": "https://api.github.com/repos/illuminate/support/zipball/c4703da1b54b754b7a02024e7a53a65557aef569",
-				"reference": "c4703da1b54b754b7a02024e7a53a65557aef569",
+				"url": "https://api.github.com/repos/illuminate/support/zipball/1ca5ac4d81a9c1ad976686283c4dde80dab29333",
+				"reference": "1ca5ac4d81a9c1ad976686283c4dde80dab29333",
 				"shasum": ""
 			},
 			"require": {
@@ -554,7 +554,7 @@
 				"illuminate/conditionable": "^9.0",
 				"illuminate/contracts": "^9.0",
 				"illuminate/macroable": "^9.0",
-				"nesbot/carbon": "^2.53.1",
+				"nesbot/carbon": "^2.62.1",
 				"php": "^8.0.2",
 				"voku/portable-ascii": "^2.0"
 			},
@@ -596,7 +596,7 @@
 				"issues": "https://github.com/laravel/framework/issues",
 				"source": "https://github.com/laravel/framework"
 			},
-			"time": "2022-09-26T13:37:45+00:00"
+			"time": "2022-10-11T13:44:57+00:00"
 		},
 		{
 			"name": "jeremykendall/php-domain-parser",
@@ -1024,16 +1024,16 @@
 		},
 		{
 			"name": "spatie/simple-excel",
-			"version": "2.2.0",
+			"version": "2.3.0",
 			"source": {
 				"type": "git",
 				"url": "https://github.com/spatie/simple-excel.git",
-				"reference": "c5048f5025606cd3bd10ae824cd73613161e9fc9"
+				"reference": "741527835370b34134d685324f8502cae6735fed"
 			},
 			"dist": {
 				"type": "zip",
-				"url": "https://api.github.com/repos/spatie/simple-excel/zipball/c5048f5025606cd3bd10ae824cd73613161e9fc9",
-				"reference": "c5048f5025606cd3bd10ae824cd73613161e9fc9",
+				"url": "https://api.github.com/repos/spatie/simple-excel/zipball/741527835370b34134d685324f8502cae6735fed",
+				"reference": "741527835370b34134d685324f8502cae6735fed",
 				"shasum": ""
 			},
 			"require": {
@@ -1066,8 +1066,7 @@
 			"homepage": "https://github.com/spatie/simple-excel",
 			"keywords": ["simple-excel", "spatie"],
 			"support": {
-				"issues": "https://github.com/spatie/simple-excel/issues",
-				"source": "https://github.com/spatie/simple-excel/tree/2.2.0"
+				"source": "https://github.com/spatie/simple-excel/tree/2.3.0"
 			},
 			"funding": [
 				{
@@ -1075,7 +1074,7 @@
 					"type": "github"
 				}
 			],
-			"time": "2022-09-02T13:31:43+00:00"
+			"time": "2022-10-11T11:37:13+00:00"
 		},
 		{
 			"name": "symfony/polyfill-mbstring",
@@ -1224,16 +1223,16 @@
 		},
 		{
 			"name": "symfony/translation",
-			"version": "v6.1.4",
+			"version": "v6.1.6",
 			"source": {
 				"type": "git",
 				"url": "https://github.com/symfony/translation.git",
-				"reference": "45d0f5bb8df7255651ca91c122fab604e776af03"
+				"reference": "e6cd330e5a072518f88d65148f3f165541807494"
 			},
 			"dist": {
 				"type": "zip",
-				"url": "https://api.github.com/repos/symfony/translation/zipball/45d0f5bb8df7255651ca91c122fab604e776af03",
-				"reference": "45d0f5bb8df7255651ca91c122fab604e776af03",
+				"url": "https://api.github.com/repos/symfony/translation/zipball/e6cd330e5a072518f88d65148f3f165541807494",
+				"reference": "e6cd330e5a072518f88d65148f3f165541807494",
 				"shasum": ""
 			},
 			"require": {
@@ -1294,7 +1293,7 @@
 			"description": "Provides tools to internationalize your application",
 			"homepage": "https://symfony.com",
 			"support": {
-				"source": "https://github.com/symfony/translation/tree/v6.1.4"
+				"source": "https://github.com/symfony/translation/tree/v6.1.6"
 			},
 			"funding": [
 				{
@@ -1310,7 +1309,7 @@
 					"type": "tidelift"
 				}
 			],
-			"time": "2022-08-02T16:17:38+00:00"
+			"time": "2022-10-07T08:04:03+00:00"
 		},
 		{
 			"name": "symfony/translation-contracts",
