@@ -73,7 +73,7 @@ $options_settings_site['subtitle'] = empty($options_settings_site['subtitle'])
 	? '开放、自由的个人网络收藏夹'
 	: $options_settings_site['subtitle'];
 // 主题根目录
-$theme_directory_root = './theme/' . $options_theme . '/';
+$theme_directory_root = './themes/' . $options_theme . '/';
 
 /**
  * 载入主题模板文件
