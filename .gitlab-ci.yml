@@ -16,6 +16,7 @@ prettier-test:
         - linuxdocker
     image: node:latest
     script:
+        - npm run ins:devnode
         - npm run check
     allow_failure: true
 

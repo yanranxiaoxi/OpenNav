@@ -3,6 +3,7 @@
 	"scripts": {
 		"ins": "composer install && cd ./Public/ && npm run ins && git clone --depth=1 https://gitlab.soraharu.com/XiaoXi/OpenNav-Material-Design.git ./themes/material-design/ && cd ./themes/material-design/ && npm run ins",
 		"ins:dev": "npm install && composer install && cd ./Public/ && npm run ins && git clone --depth=1 https://gitlab.soraharu.com/XiaoXi/OpenNav-Material-Design.git ./themes/material-design/ && cd ./themes/material-design/ && npm run ins",
+		"ins:devnode": "npm install",
 		"ins:node": "cd ./Public/ && npm run ins",
 		"ins:composer": "composer install",
 		"ins:theme": "git clone --depth=1 https://gitlab.soraharu.com/XiaoXi/OpenNav-Material-Design.git ./Public/themes/material-design/ && cd ./Public/themes/material-design/ && npm run ins",
