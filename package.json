@@ -1,12 +1,13 @@
 {
 	"name": "opennav",
 	"scripts": {
-		"ins": "composer install && cd ./Public/ && npm run ins && cd ./themes/ && git clone --depth=1 https://gitlab.soraharu.com/XiaoXi/OpenNav-Material-Design.git ./themes/material-design/ && cd ./themes/material-design/ && npm run ins",
+		"ins": "composer install && cd ./Public/ && npm run ins && git clone --depth=1 https://gitlab.soraharu.com/XiaoXi/OpenNav-Material-Design.git ./themes/material-design/ && cd ./themes/material-design/ && npm run ins",
 		"ins:dev": "npm install && composer install && cd ./Public/ && npm run ins && git clone --depth=1 https://gitlab.soraharu.com/XiaoXi/OpenNav-Material-Design.git ./themes/material-design/ && cd ./themes/material-design/ && npm run ins",
 		"ins:node": "cd ./Public/ && npm run ins",
 		"ins:composer": "composer install",
-		"ins:theme": "cd ./Public/themes/ && git clone --depth=1 https://gitlab.soraharu.com/XiaoXi/OpenNav-Material-Design.git ./themes/material-design/ && cd ./themes/material-design/ && npm run ins",
-		"fix": "prettier --write ."
+		"ins:theme": "git clone --depth=1 https://gitlab.soraharu.com/XiaoXi/OpenNav-Material-Design.git ./Public/themes/material-design/ && cd ./Public/themes/material-design/ && npm run ins",
+		"fix": "prettier --write .",
+		"check": "prettier --check ."
 	},
 	"devDependencies": {
 		"@prettier/plugin-php": "^0.19.1",
