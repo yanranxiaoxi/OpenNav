@@ -28,8 +28,8 @@ npm-install:
     tags:
         - linuxdocker
     image: node:latest
-    only:
-        - main
+    rules:
+        - if: $CI_COMMIT_BRANCH == "main"
     script:
         - npm run ins:node
     artifacts:
@@ -42,8 +42,8 @@ composer-install:
     tags:
         - linuxdocker
     image: composer:2
-    only:
-        - main
+    rules:
+        - if: $CI_COMMIT_BRANCH == "main"
     script:
         - composer install --ignore-platform-req=ext-intl
     artifacts:
@@ -59,8 +59,8 @@ package:
     stage: package
     tags:
         - windowsserver2022powershell
-    only:
-        - main
+    rules:
+        - if: $CI_COMMIT_BRANCH == "main"
     dependencies:
         - npm-install
         - composer-install
@@ -102,8 +102,6 @@ upload:
     stage: upload
     tags:
         - windowsserver2022powershell
-    only:
-        - main
     rules:
         - if: $CI_COMMIT_TAG
     dependencies:
@@ -125,8 +123,6 @@ deploy-xiaoxi:
     stage: deploy
     tags:
         - windowsserver2022powershell
-    only:
-        - main
     rules:
         - if: $CI_COMMIT_TAG
     dependencies:
@@ -144,8 +140,6 @@ release:
     tags:
         - linuxdocker
     image: registry.gitlab.com/gitlab-org/release-cli:latest
-    only:
-        - main
     rules:
         - if: $CI_COMMIT_TAG
     dependencies: []
