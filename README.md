@@ -103,11 +103,20 @@
     npm run ins:dev
     ```
 
-5. 使用合适的 IDE 打开项目目录。本项目推荐使用 [Visual Studio Code](https://code.visualstudio.com/) + [PHP Intelephense](https://marketplace.visualstudio.com/items?itemName=bmewburn.vscode-intelephense-client) + [PHP Server](https://marketplace.visualstudio.com/items?itemName=brapifra.phpserver) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) 进行进行开发，可以获得较为出色的代码提示效果
-6. 进行您的开发
-7. 提交 Commit 前，请使用 `npm run fix` 格式化代码
-8. 发起 Pull Request 并阐明您所做出的更改
-9. 感谢您的贡献！~
+5. 使用合适的 IDE 打开项目目录。本项目推荐使用 [Visual Studio Code](https://code.visualstudio.com/) + [PHP Intelephense](https://marketplace.visualstudio.com/items?itemName=bmewburn.vscode-intelephense-client) + [PHP Server](https://marketplace.visualstudio.com/items?itemName=brapifra.phpserver) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) 进行开发，可以获得较为出色的代码提示效果
+6. （可选）如您使用以上推荐环境进行开发，可配置 `.vscode/settings.json` 为以下内容，开启代码自动格式化
+
+    ```json
+    {
+    	"editor.formatOnSave": true,
+    	"editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+    ```
+
+7. 进行您的开发
+8. 提交 Commit 前，请使用 `npm run fix` 格式化代码
+9. 发起 Pull Request 并阐明您所做出的更改
+10. 感谢您的贡献！~
 
 ## 📜 开源许可
 
