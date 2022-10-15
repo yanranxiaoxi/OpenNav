@@ -38,16 +38,20 @@
 1. 前往本项目发布页 [GitLab](https://gitlab.soraharu.com/XiaoXi/OpenNav/-/releases) | [GitHub](https://github.com/yanranxiaoxi/OpenNav/releases) 获取最新编译版本软件包，包名为 `OpenNav-compiled.zip`
 2. 将软件包上传至服务器站点目录中，并解压
 3. 设置站点运行目录为解压出的 `Public` 目录
-4. 访问你的网站，如果一切正常，将会显示 **安装 OpenNav** 页面，在安装时系统会自动进行运行环境检查，如出现错误，请仔细阅读报错提示，如出现无提示的错误，可提交 Issue 寻求帮助
+4. 访问你的网站，如果一切正常，将会显示 **安装 OpenNav** 页面，在安装时系统会自动进行运行环境检查，如出现错误，请仔细阅读报错提示，如遇到无法解决的错误，可提交 Issue 寻求帮助
 5. 配置周期任务
 
     - 方式一：添加到系统 crontab
 
+        > 请将 `/path/to/your/opennavroot` 修改为您的 OpenNav 目录
+
         ```
-        30 2 * * * php /path/to/your/wwwroot/Cron/Cron.php
+        30 2 * * * php /path/to/your/opennavroot/Cron/Cron.php
         ```
 
-    - 方式二：使用工具周期性访问以下地址（建议每 24 小时访问一次）
+    - 方式二：使用工具周期性（建议为 24 小时）访问以下地址
+
+        > 请将 `opennav.yourdomain.com` 修改为您的域名
 
         ```
         https://opennav.yourdomain.com/index.php?c=Cron
@@ -83,20 +87,27 @@
 ## 🛠 参与开发
 
 1. 确保您的计算机已安装 [NodeJS](https://nodejs.org/)、[Composer](https://getcomposer.org/)
-2. 执行以下命令拉取源代码
+2. Fork 本项目仓库到您的 GitHub、GitLab 或其他受支持的 Git 托管平台
+3. 克隆您的 Fork 仓库到本地
+
+    > 请按实际情况修改 `whereyourgit.com` 和 `yourusername`
 
     ```shell
-    git clone --depth=3 https://github.com/yanranxiaoxi/OpenNav.git
+    git clone --depth=3 https://whereyourgit.com/yourusername/OpenNav.git
     ```
 
-3. 进入项目目录并编译、安装、获取默认主题
+4. 进入项目目录并编译、安装、获取默认主题
 
     ```shell
     cd ./OpenNav/
     npm run ins:dev
     ```
 
-4. 使用合适的 IDE 打开项目目录。本项目推荐使用 [Visual Studio Code](https://code.visualstudio.com/) + [PHP Intelephense](https://marketplace.visualstudio.com/items?itemName=bmewburn.vscode-intelephense-client) + [PHP Server](https://marketplace.visualstudio.com/items?itemName=brapifra.phpserver) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) 进行进行开发，可以获得较为出色的代码提示效果
+5. 使用合适的 IDE 打开项目目录。本项目推荐使用 [Visual Studio Code](https://code.visualstudio.com/) + [PHP Intelephense](https://marketplace.visualstudio.com/items?itemName=bmewburn.vscode-intelephense-client) + [PHP Server](https://marketplace.visualstudio.com/items?itemName=brapifra.phpserver) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) 进行进行开发，可以获得较为出色的代码提示效果
+6. 进行您的开发
+7. 提交 Commit 前，请使用 `npm run fix` 格式化代码
+8. 发起 Pull Request 并阐明您所做出的更改
+9. 感谢您的贡献！~
 
 ## 📜 开源许可
 
