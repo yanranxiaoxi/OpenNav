@@ -103,7 +103,7 @@
     npm run ins:dev
     ```
 
-5. 使用合适的 IDE 打开项目目录。本项目推荐使用 [Visual Studio Code](https://code.visualstudio.com/) + [PHP Intelephense](https://marketplace.visualstudio.com/items?itemName=bmewburn.vscode-intelephense-client) + [PHP Server](https://marketplace.visualstudio.com/items?itemName=brapifra.phpserver) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) 进行开发，可以获得较为出色的代码提示效果
+5. 使用合适的 IDE 打开项目目录。本项目推荐使用 [Visual Studio Code](https://code.visualstudio.com/) + [PHP Intelephense](https://marketplace.visualstudio.com/items?itemName=bmewburn.vscode-intelephense-client) + [PHP Server](https://marketplace.visualstudio.com/items?itemName=brapifra.phpserver) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) + [EditorConfig](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig) 进行开发，可以获得较为出色的代码提示效果
 6. （可选）如您使用以上推荐环境进行开发，可配置 `.vscode/settings.json` 为以下内容，开启代码自动格式化
 
     ```json

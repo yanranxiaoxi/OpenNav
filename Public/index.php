@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace OpenNav;
+namespace OpenNav\Public;
 
 /**
  * 载入类库文件
@@ -20,7 +20,7 @@ require_once '../vendor/autoload.php';
 require_once '../Class/GlobalHelper.php';
 
 use Medoo\Medoo;
-use OpenNav\Helper\GlobalHelper;
+use OpenNav\Class\GlobalHelper;
 
 /**
  * 载入配置文件

@@ -9,8 +9,10 @@
  * @link		https://opennav.soraharu.com/
  */
 
-require_once __DIR__ . '/../Public/index.php';
-require_once __DIR__ . '/../Controller/Corn.php';
+namespace OpenNav\Cron;
+
+// require_once __DIR__ . '/../Public/index.php';
+// require_once __DIR__ . '/../Controller/Corn.php';
 
 use Favicon\Favicon;
 use Favicon\FaviconDLType;
@@ -41,7 +43,7 @@ if (file_exists('../Cache/Log/.cron.error')) {
 	unlink('../Cache/Log/.cron.error');
 }
 // 创建 Error 信息文件
-function cronError() {
+function cronError(): void {
 	file_put_contents('../Cache/Log/.cron.error', '');
 }
 

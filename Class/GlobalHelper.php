@@ -12,14 +12,26 @@
  * @link		https://opennav.soraharu.com/
  */
 
-namespace OpenNav\Helper;
+namespace OpenNav\Class;
 
+use Medoo\Medoo;
+
+/** OpenNav 全局 Helper 类 */
 class GlobalHelper {
+	/**
+	 * 传入的 Medoo 数据库对象
+	 *
+	 * @var Medoo
+	 */
 	private $database;
-	public function __construct($database) {
+
+	/**
+	 * 类构造函数
+	 *
+	 * @param Medoo $database Medoo 数据库对象
+	 */
+	public function __construct(?Medoo $database) {
 		$this->database = $database;
-		// 返回 JSON 类型
-		// header('Content-Type: application/json; charset=utf-8');
 	}
 
 	/**
@@ -27,7 +39,7 @@ class GlobalHelper {
 	 *
 	 * @return string|null 访客 IP 地址
 	 */
-	private function getVisitorIP() {
+	private function getVisitorIP(): ?string {
 		foreach (
 			[
 				'HTTP_CLIENT_IP',
@@ -63,7 +75,7 @@ class GlobalHelper {
 	 * @param int $code 错误代码
 	 * @param string $message 错误提示
 	 */
-	public function throwError($code = 403, $message = 'error') {
+	public function throwError(int $code = 403, string $message = 'error'): void {
 		$data = [
 			'code' => $code,
 			'message' => $message
@@ -77,7 +89,7 @@ class GlobalHelper {
 	 *
 	 * @param array $data 待返回的数据
 	 */
-	public function returnSuccess($data = []) {
+	public function returnSuccess(array $data = []): void {
 		if (is_array($data)) {
 			if (empty($data['code'])) {
 				$data['code'] = 200;
@@ -101,7 +113,7 @@ class GlobalHelper {
 	 *
 	 * @return	string|false		获取到的数据，false 代表请求失败
 	 */
-	public function curlGet($url, $post_array = [], $timeout = 10) {
+	public function curlGet(string $url, array $post_array = [], int $timeout = 10): string|bool {
 		$curl = curl_init($url);
 		// 设置 UserAgent
 		curl_setopt(
@@ -132,7 +144,7 @@ class GlobalHelper {
 	 *
 	 * @return bool 登录状态
 	 */
-	public function isLogin() {
+	public function isLogin(): bool {
 		$visitor_ip = $this->getVisitorIP();
 		$visitor_infomation = $visitor_ip === null ? $_SERVER['HTTP_USER_AGENT'] : $visitor_ip;
 		$local_key = USERNAME . PASSWORD . COOKIE_SECRET_KEY . 'opennav' . $visitor_infomation;
@@ -190,7 +202,7 @@ class GlobalHelper {
 	 *
 	 * @return bool 设置状态
 	 */
-	public function setLogin_AuthRequired() {
+	public function setLogin_AuthRequired(): bool {
 		$visitor_ip = $this->getVisitorIP();
 		$visitor_infomation = $visitor_ip === null ? $_SERVER['HTTP_USER_AGENT'] : $visitor_ip;
 		$local_key = USERNAME . PASSWORD . COOKIE_SECRET_KEY . 'opennav' . $visitor_infomation;
@@ -234,7 +246,7 @@ class GlobalHelper {
 	 *
 	 * @return bool 设置状态
 	 */
-	public function setLoginByOnlyTimeBaseValidator_AuthRequired() {
+	public function setLoginByOnlyTimeBaseValidator_AuthRequired(): bool {
 		$visitor_ip = $this->getVisitorIP();
 		$visitor_infomation = $visitor_ip === null ? $_SERVER['HTTP_USER_AGENT'] : $visitor_ip;
 		$local_key = USERNAME . PASSWORD . COOKIE_SECRET_KEY . 'opennav' . $visitor_infomation;
@@ -270,7 +282,7 @@ class GlobalHelper {
 	 *
 	 * @return bool 设置状态
 	 */
-	public function removeLogin() {
+	public function removeLogin(): bool {
 		setcookie('opennav_session_mode', '', time() - 3600, '/', null, false, true);
 		// 设置 Session Cookie
 		return setcookie('opennav_session_key', '', time() - 3600, '/', null, false, true);
@@ -281,7 +293,7 @@ class GlobalHelper {
 	 *
 	 * @return bool 暗色模式状态
 	 */
-	public function isDarkMode() {
+	public function isDarkMode(): bool {
 		$cookie_theme_layout = isset($_COOKIE['opennav_theme_layout'])
 			? $_COOKIE['opennav_theme_layout']
 			: '';
@@ -300,7 +312,7 @@ class GlobalHelper {
 	 *
 	 * @return	string	随机密钥
 	 */
-	public function getRandomKey($length = 64, $symbol = false) {
+	public function getRandomKey(int $length = 64, bool $symbol = false): string {
 		$charset = $symbol
 			? 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_[]{}<>~`+=,.;:/?|'
 			: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -316,7 +328,7 @@ class GlobalHelper {
 	 *
 	 * @return array 一级分类二维数组
 	 */
-	public function getParentCategories() {
+	public function getParentCategories(): array {
 		$parent_categories = [];
 		if ($this->isLogin()) {
 			// 查询一级分类
@@ -340,7 +352,7 @@ class GlobalHelper {
 	 *
 	 * @return array 一级分类二维数组
 	 */
-	public function getParentCategories_AuthRequired() {
+	public function getParentCategories_AuthRequired(): array {
 		$parent_categories = $this->database->select('on_categories', '*', [
 			'fid' => 0,
 			'ORDER' => ['id' => 'ASC']
@@ -353,7 +365,7 @@ class GlobalHelper {
 	 *
 	 * @return array 一级分类二维数组 [id, title]
 	 */
-	public function getParentCategoriesIdTitle_AuthRequired() {
+	public function getParentCategoriesIdTitle_AuthRequired(): array {
 		$parent_categories = $this->database->select(
 			'on_categories',
 			['id', 'title'],
@@ -372,7 +384,7 @@ class GlobalHelper {
 	 *
 	 * @return	array	二级分类二维数组
 	 */
-	public function getChildCategoriesByParentCategoryId($parent_category_id) {
+	public function getChildCategoriesByParentCategoryId(int $parent_category_id): array {
 		$child_categories = [];
 		if ($this->isLogin()) {
 			// 查询二级分类
@@ -396,7 +408,7 @@ class GlobalHelper {
 	 *
 	 * @return array 分类二维数组
 	 */
-	public function getCategories() {
+	public function getCategories(): array {
 		$categories = [];
 		if ($this->isLogin()) {
 			// 查询一级分类
@@ -451,7 +463,7 @@ class GlobalHelper {
 	 *
 	 * @return array 分类二维数组 [id, title]
 	 */
-	public function getCategoriesIdTitle_AuthRequired() {
+	public function getCategoriesIdTitle_AuthRequired(): array {
 		$categories = $this->database->select(
 			'on_categories',
 			['id', 'title'],
@@ -469,7 +481,7 @@ class GlobalHelper {
 	 *
 	 * @return	array	分类数组
 	 */
-	public function getCategoryByCategoryId($category_id) {
+	public function getCategoryByCategoryId(int $category_id): array {
 		$category_value = [];
 		if ($this->isLogin()) {
 			$category_value = $this->database->get('on_categories', '*', [
@@ -491,7 +503,7 @@ class GlobalHelper {
 	 *
 	 * @return	array	分类数组
 	 */
-	public function getCategoryByCategoryId_AuthRequired($category_id) {
+	public function getCategoryByCategoryId_AuthRequired(int $category_id): array {
 		$category_value = $this->database->get('on_categories', '*', [
 			'id' => $category_id
 		]);
@@ -507,7 +519,7 @@ class GlobalHelper {
 	 *
 	 * @return	string	分类 title
 	 */
-	public function getCategoryTitleByCategoryId_AuthRequired($category_id) {
+	public function getCategoryTitleByCategoryId_AuthRequired(int $category_id): string {
 		$category_value_title = $this->database->get('on_categories', 'title', [
 			'id' => $category_id
 		]);
@@ -521,7 +533,9 @@ class GlobalHelper {
 	 *
 	 * @return	string|array	分类 title，如输入的分类 ID 为数组，则返回值为数组
 	 */
-	public function getCategoriesTitleByCategoriesId_AuthRequired($categories_id) {
+	public function getCategoriesTitleByCategoriesId_AuthRequired(
+		int|array $categories_id
+	): string|array {
 		$categories_title = $this->database->select('on_categories', 'title', [
 			'id' => $categories_id
 		]);
@@ -539,7 +553,7 @@ class GlobalHelper {
 	 *
 	 * @return	array	分类数组 [fid, property]
 	 */
-	public function getCategoryFidPropertyByCategoryId_AuthRequired($category_id) {
+	public function getCategoryFidPropertyByCategoryId_AuthRequired(int $category_id): array {
 		$category_value = $this->database->get(
 			'on_categories',
 			['fid', 'property'],
@@ -557,7 +571,7 @@ class GlobalHelper {
 	 *
 	 * @return	array	链接二维数组
 	 */
-	public function getLinksByCategoryId($category_id) {
+	public function getLinksByCategoryId(int $category_id): array {
 		$links = [];
 		if ($this->isLogin()) {
 			$links = $this->database->select('on_links', '*', [
@@ -579,7 +593,7 @@ class GlobalHelper {
 	 *
 	 * @return array 链接数组 url
 	 */
-	public function getLinksUrl_AuthRequired() {
+	public function getLinksUrl_AuthRequired(): array {
 		return $this->database->select('on_links', 'url');
 	}
 
@@ -590,7 +604,7 @@ class GlobalHelper {
 	 *
 	 * @return	array	链接数组 url
 	 */
-	public function getLinkByLinkId($link_id) {
+	public function getLinkByLinkId(int $link_id): array {
 		$link_value = [];
 		if ($this->isLogin()) {
 			$link_value = $this->database->get('on_links', '*', [
@@ -612,7 +626,7 @@ class GlobalHelper {
 	 *
 	 * @return	array	链接数组
 	 */
-	public function getLinkByLinkId_AuthRequired($link_id) {
+	public function getLinkByLinkId_AuthRequired(int $link_id): array {
 		$link_value = $this->database->get('on_links', '*', [
 			'id' => $link_id
 		]);
@@ -629,7 +643,7 @@ class GlobalHelper {
 	 *
 	 * @return	array	分类二维数组
 	 */
-	public function getCategoriesPagination_AuthRequired($pages = 0, $limit = 0) {
+	public function getCategoriesPagination_AuthRequired(int $pages = 0, int $limit = 0): array {
 		$categories = [];
 		// 查询分类
 		if ($pages > 0 && $limit > 0) {
@@ -657,7 +671,7 @@ class GlobalHelper {
 	 *
 	 * @return	array	链接二维数组
 	 */
-	public function getLinksPagination_AuthRequired($pages = 0, $limit = 0) {
+	public function getLinksPagination_AuthRequired(int $pages = 0, int $limit = 0): array {
 		$links = [];
 		// 查询分类
 		if ($pages > 0 && $limit > 0) {
@@ -680,7 +694,7 @@ class GlobalHelper {
 	 *
 	 * @return int 分类总数
 	 */
-	public function countCategories_AuthRequired() {
+	public function countCategories_AuthRequired(): int {
 		return $this->database->count('on_categories');
 	}
 
@@ -689,7 +703,7 @@ class GlobalHelper {
 	 *
 	 * @return int 链接总数
 	 */
-	public function countLinks_AuthRequired() {
+	public function countLinks_AuthRequired(): int {
 		return $this->database->count('on_links');
 	}
 
@@ -700,7 +714,7 @@ class GlobalHelper {
 	 *
 	 * @return int 链接总数
 	 */
-	public function countLinksByCategoryId_AuthRequired($category_id) {
+	public function countLinksByCategoryId_AuthRequired(int $category_id): int {
 		return $this->database->count('on_links', [
 			'fid' => $category_id
 		]);
@@ -714,7 +728,10 @@ class GlobalHelper {
 	 *
 	 * @return	int|true|string			修改状态，失败时返回 string
 	 */
-	public function addCategory_AuthRequired($category_data, $return_id = false) {
+	public function addCategory_AuthRequired(
+		array $category_data,
+		bool $return_id = false
+	): int|bool|string {
 		if ($category_data['weight'] < 0 || $category_data['weight'] > 999) {
 			return '权重范围为 0-999';
 		}
@@ -768,7 +785,10 @@ class GlobalHelper {
 	 *
 	 * @return	int|true|string		添加状态，失败时返回 string
 	 */
-	public function addLink_AuthRequired($link_data, $return_id = false) {
+	public function addLink_AuthRequired(
+		array $link_data,
+		bool $return_id = false
+	): int|bool|string {
 		if ($link_data['weight'] < 0 || $link_data['weight'] > 999) {
 			return '权重范围为 0-999';
 		}
@@ -825,7 +845,10 @@ class GlobalHelper {
 	 *
 	 * @return	true|string				修改状态，失败时返回 string
 	 */
-	public function updateCategory_AuthRequired($category_id, $category_data) {
+	public function updateCategory_AuthRequired(
+		int $category_id,
+		array $category_data
+	): bool|string {
 		if ($category_id === $category_data['fid']) {
 			return '分类的 ID 与父级分类的 ID 不能相同！';
 		}
@@ -882,7 +905,7 @@ class GlobalHelper {
 	 *
 	 * @return	true|string			修改状态，失败时返回 string
 	 */
-	public function updateLink_AuthRequired($link_id, $link_data) {
+	public function updateLink_AuthRequired(int $link_id, array $link_data): bool|string {
 		if ($link_data['weight'] < 0 || $link_data['weight'] > 999) {
 			return '权重范围为 0-999';
 		}
@@ -926,7 +949,7 @@ class GlobalHelper {
 	 *
 	 * @return	bool	删除状态
 	 */
-	public function deleteCategory_AuthRequired($category_id) {
+	public function deleteCategory_AuthRequired(int $category_id): bool {
 		$category_value = $this->database->get('on_categories', 'fid', [
 			'id' => $category_id
 		]);
@@ -954,7 +977,7 @@ class GlobalHelper {
 	 *
 	 * @param int $link_id 链接 ID
 	 */
-	public function deleteLink_AuthRequired($link_id) {
+	public function deleteLink_AuthRequired(int $link_id): void {
 		$this->database->delete('on_links', [
 			'id' => $link_id
 		]);
@@ -969,7 +992,7 @@ class GlobalHelper {
 	 *
 	 * @return	bool	设置状态
 	 */
-	public function setLinkValueClick($link_id, $mode = 'add', $count = 1) {
+	public function setLinkValueClick(int $link_id, string $mode = 'add', int $count = 1): bool {
 		$link_value_click = $this->database->get('on_links', 'click', [
 			'id' => $link_id
 		]);
@@ -1001,7 +1024,7 @@ class GlobalHelper {
 	 *
 	 * @return string 主题
 	 */
-	public function getOptionsTheme() {
+	public function getOptionsTheme(): string {
 		$options_theme = $this->database->get('on_options', 'value', [
 			'key' => 'theme'
 		]);
@@ -1013,7 +1036,7 @@ class GlobalHelper {
 	 *
 	 * @param string $options_theme 主题
 	 */
-	public function setOptionsTheme_AuthRequired($options_theme) {
+	public function setOptionsTheme_AuthRequired(string $options_theme): void {
 		$options_theme = $this->database->update(
 			'on_options',
 			[
@@ -1030,7 +1053,7 @@ class GlobalHelper {
 	 *
 	 * @return array 站点设置
 	 */
-	public function getOptionsSettingsSite() {
+	public function getOptionsSettingsSite(): array {
 		$options_settings_site = $this->database->get('on_options', 'value', [
 			'key' => 'settings_site'
 		]);
@@ -1043,7 +1066,7 @@ class GlobalHelper {
 	 *
 	 * @param array $options_settings_site 站点设置
 	 */
-	public function setOptionsSettingsSite_AuthRequired($options_settings_site) {
+	public function setOptionsSettingsSite_AuthRequired(array $options_settings_site): void {
 		$options_settings_site = serialize($options_settings_site);
 		$options_settings_site = $this->database->update(
 			'on_options',
@@ -1061,7 +1084,7 @@ class GlobalHelper {
 	 *
 	 * @return array 过渡页设置
 	 */
-	public function getOptionsSettingsTransitionPage() {
+	public function getOptionsSettingsTransitionPage(): array {
 		$options_settings_transition_page = $this->database->get('on_options', 'value', [
 			'key' => 'settings_transition_page'
 		]);
@@ -1075,8 +1098,8 @@ class GlobalHelper {
 	 * @param array $options_settings_transition_page 过渡页设置
 	 */
 	public function setOptionsSettingsTransitionPage_AuthRequired(
-		$options_settings_transition_page
-	) {
+		array $options_settings_transition_page
+	): void {
 		$options_settings_transition_page = serialize($options_settings_transition_page);
 		$options_settings_transition_page = $this->database->update(
 			'on_options',
@@ -1094,7 +1117,7 @@ class GlobalHelper {
 	 *
 	 * @return array 订阅设置
 	 */
-	public function getOptionsSettingsSubscribe_AuthRequired() {
+	public function getOptionsSettingsSubscribe_AuthRequired(): array {
 		$options_settings_subscribe = $this->database->get('on_options', 'value', [
 			'key' => 'settings_subscribe'
 		]);
@@ -1107,7 +1130,9 @@ class GlobalHelper {
 	 *
 	 * @param array $options_settings_subscribe 订阅设置
 	 */
-	public function setOptionsSettingsSubscribe_AuthRequired($options_settings_subscribe) {
+	public function setOptionsSettingsSubscribe_AuthRequired(
+		array $options_settings_subscribe
+	): void {
 		$options_settings_subscribe = serialize($options_settings_subscribe);
 		$options_settings_subscribe = $this->database->update(
 			'on_options',
@@ -1125,7 +1150,7 @@ class GlobalHelper {
 	 *
 	 * @return bool 订阅状态
 	 */
-	public function isSubscribe() {
+	public function isSubscribe(): bool {
 		// 获取选项数组
 		$options_settings_subscribe = $this->getOptionsSettingsSubscribe_AuthRequired();
 		// 处理 domain 变量并存入选项数组
@@ -1158,9 +1183,11 @@ class GlobalHelper {
 	/**
 	 * 获取主题信息「Logic Safety」
 	 *
-	 * @return array|null 主题信息
+	 * @param	string		$options_theme	主题名称
+	 *
+	 * @return	array|null	主题信息
 	 */
-	public function getThemeInfo($options_theme) {
+	public function getThemeInfo(string $options_theme): ?array {
 		$theme_info_file = './themes/' . $options_theme . '/opennav.info.json';
 		if (file_exists($theme_info_file)) {
 			$theme_info = file_get_contents($theme_info_file);
@@ -1174,9 +1201,11 @@ class GlobalHelper {
 	/**
 	 * 获取主题配置「Logic Safety」
 	 *
-	 * @return array|null 主题配置
+	 * @param	string		$options_theme	主题名称
+	 *
+	 * @return	array|null	主题配置
 	 */
-	public function getThemeConfig($options_theme) {
+	public function getThemeConfig(string $options_theme): ?array {
 		$theme_config_file = './themes/' . $options_theme . '/opennav.config.json';
 		if (file_exists($theme_config_file)) {
 			$theme_config = file_get_contents($theme_config_file);
@@ -1196,7 +1225,11 @@ class GlobalHelper {
 	 *
 	 * @return bool 修改状态
 	 */
-	public function setGlobalConfig_AuthRequired($key, $old_value, $value) {
+	public function setGlobalConfig_AuthRequired(
+		string $key,
+		string|int|bool $old_value,
+		string|int|bool $value
+	): bool {
 		if (!empty($key)) {
 			$global_config = file_get_contents('../Data/Config.php');
 
@@ -1247,7 +1280,7 @@ class GlobalHelper {
 	 *
 	 * @return array RGB 颜色数组
 	 */
-	public function hsvToRgb($h, $s, $v) {
+	public function hsvToRgb(int $h, int $s, int $v): array {
 		$r = $g = $b = 0;
 
 		$i = floor($h * 6);
