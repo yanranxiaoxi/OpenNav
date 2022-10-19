@@ -11,8 +11,11 @@
 
 namespace OpenNav\Cron;
 
-// require_once __DIR__ . '/../Public/index.php';
-// require_once __DIR__ . '/../Controller/Corn.php';
+// 直接 Cron 模式
+$cron_mode = true;
+
+require_once __DIR__ . '/../Public/index.php';
+require_once __DIR__ . '/../Controller/Cron.php';
 
 use Favicon\Favicon;
 use Favicon\FaviconDLType;
@@ -130,7 +133,7 @@ foreach ($caches as $directory_name => $cache_info) {
 						cronError();
 						$log_status_string = 'ERROR';
 						$cache_lore_string =
-							'has expired. However, an error occurred while deleting the file.';
+							'has expired. However, an error occurred while deleting this file.';
 					}
 				} else {
 					$log_status_string = 'INFO';
@@ -173,7 +176,7 @@ if (isset($theme_config['online_favicon'])) {
 			'timeout' => 2592000 // 30 days
 		];
 		$favicon->cache($settings_favicon);
-		$links_url = $helper->getLinksUrl_AuthRequired(); // 此处不会有任何返回，该数据安全
+		$links_url = $helper->getLinksUrl_AuthRequired(); // 此处不会有任何前端返回，该数据安全
 		foreach ($links_url as $link_value_url) {
 			$url_regex = '/^(https?:\/\/)[\S]+$/';
 			if (preg_match($url_regex, $link_value_url)) {
@@ -202,6 +205,45 @@ if (isset($theme_config['online_favicon'])) {
 			fwrite($log_file, $log_string);
 		}
 	}
+}
+
+/**
+ * 更新 PublicSuffixList
+ */
+$public_suffix_list_data_url = 'https://publicsuffix.org/list/public_suffix_list.dat';
+$public_suffix_list_data = $helper->curlGet($public_suffix_list_data_url, null, 300);
+if ($public_suffix_list_data) {
+	if (file_put_contents('../Data/PublicSuffixList.dat', $public_suffix_list_data)) {
+		fwrite(
+			$log_file,
+			'[' .
+				date('Y-m-d H:i') .
+				'] ' .
+				'INFO: Download => (' .
+				$public_suffix_list_data_url .
+				') OK. PublicSuffixList has been updated!'
+		);
+	} else {
+		fwrite(
+			$log_file,
+			'[' .
+				date('Y-m-d H:i') .
+				'] ' .
+				'ERROR: Download => (' .
+				$public_suffix_list_data_url .
+				') OK. But PublicSuffixList cannot be updated!'
+		);
+	}
+} else {
+	fwrite(
+		$log_file,
+		'[' .
+			date('Y-m-d H:i') .
+			'] ' .
+			'ERROR: Download => (' .
+			$public_suffix_list_data_url .
+			') failure. Could not update PublicSuffixList.'
+	);
 }
 
 /**
