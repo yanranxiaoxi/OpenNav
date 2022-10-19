@@ -15,6 +15,8 @@
 namespace OpenNav\Class;
 
 use Medoo\Medoo;
+use Pdp\Rules;
+use Pdp\Domain;
 
 /** OpenNav 全局 Helper 类 */
 class GlobalHelper {
@@ -37,9 +39,9 @@ class GlobalHelper {
 	/**
 	 * 获取访客 IP 地址「Logic Safety」
 	 *
-	 * @return string|null 访客 IP 地址
+	 * @return string|false 访客 IP 地址
 	 */
-	private function getVisitorIP(): ?string {
+	private function getVisitorIP(): string|bool {
 		foreach (
 			[
 				'HTTP_CLIENT_IP',
@@ -52,21 +54,17 @@ class GlobalHelper {
 			]
 			as $key
 		) {
-			if (array_key_exists($key, $_SERVER) === true) {
+			if (array_key_exists($key, $_SERVER)) {
 				foreach (array_map('trim', explode(',', $_SERVER[$key])) as $ip) {
-					if (
-						filter_var(
-							$ip,
-							FILTER_VALIDATE_IP,
-							FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
-						) !== false
-					) {
-						return $ip;
-					}
+					return filter_var(
+						$ip,
+						FILTER_VALIDATE_IP,
+						FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+					);
 				}
 			}
 		}
-		return null;
+		return false;
 	}
 
 	/**
@@ -107,13 +105,13 @@ class GlobalHelper {
 	/**
 	 * 使用 PHP Client URL 请求获取数据「Logic Safety」
 	 *
-	 * @param	string	$url		预请求的 URL 地址
-	 * @param	array	$post_array	需要 POST 发送的数据
-	 * @param	int		$timeout	请求超时时间，以秒为单位
+	 * @param	string		$url		预请求的 URL 地址
+	 * @param	array|null	$post_array	需要 POST 发送的数据
+	 * @param	int			$timeout	请求超时时间，以秒为单位
 	 *
-	 * @return	string|false		获取到的数据，false 代表请求失败
+	 * @return	string|false			获取到的数据，false 代表请求失败
 	 */
-	public function curlGet(string $url, array $post_array = [], int $timeout = 10): string|bool {
+	public function curlGet(string $url, ?array $post_array, int $timeout = 10): string|bool {
 		$curl = curl_init($url);
 		// 设置 UserAgent
 		curl_setopt(
@@ -146,7 +144,7 @@ class GlobalHelper {
 	 */
 	public function isLogin(): bool {
 		$visitor_ip = $this->getVisitorIP();
-		$visitor_infomation = $visitor_ip === null ? $_SERVER['HTTP_USER_AGENT'] : $visitor_ip;
+		$visitor_infomation = $visitor_ip ? $visitor_ip : $_SERVER['HTTP_USER_AGENT'];
 		$local_key = USERNAME . PASSWORD . COOKIE_SECRET_KEY . 'opennav' . $visitor_infomation;
 		$local_key_hash = hash('sha256', $local_key);
 		// 获取 Session Cookie
@@ -204,7 +202,7 @@ class GlobalHelper {
 	 */
 	public function setLogin_AuthRequired(): bool {
 		$visitor_ip = $this->getVisitorIP();
-		$visitor_infomation = $visitor_ip === null ? $_SERVER['HTTP_USER_AGENT'] : $visitor_ip;
+		$visitor_infomation = $visitor_ip ? $visitor_ip : $_SERVER['HTTP_USER_AGENT'];
 		$local_key = USERNAME . PASSWORD . COOKIE_SECRET_KEY . 'opennav' . $visitor_infomation;
 		$local_key_hash = hash('sha256', $local_key);
 		setcookie(
@@ -248,7 +246,7 @@ class GlobalHelper {
 	 */
 	public function setLoginByOnlyTimeBaseValidator_AuthRequired(): bool {
 		$visitor_ip = $this->getVisitorIP();
-		$visitor_infomation = $visitor_ip === null ? $_SERVER['HTTP_USER_AGENT'] : $visitor_ip;
+		$visitor_infomation = $visitor_ip ? $visitor_ip : $_SERVER['HTTP_USER_AGENT'];
 		$local_key = USERNAME . PASSWORD . COOKIE_SECRET_KEY . 'opennav' . $visitor_infomation;
 		$local_key_hash = hash('sha256', $local_key);
 		setcookie('opennav_session_mode', 'timebase', time() + 60 * 30, '/', null, false, true);
