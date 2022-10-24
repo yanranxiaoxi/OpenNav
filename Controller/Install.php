@@ -12,7 +12,7 @@
 require_once __DIR__ . '/../Public/index.php';
 
 use RobThree\Auth\TwoFactorAuth;
-use OpenNav\Helper\GlobalHelper;
+use OpenNav\Class\GlobalHelper;
 
 $helper = new GlobalHelper(null);
 
