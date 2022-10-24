@@ -1152,8 +1152,10 @@ class GlobalHelper {
 		// 获取选项数组
 		$options_settings_subscribe = $this->getOptionsSettingsSubscribe_AuthRequired();
 		// 处理 domain 变量并存入选项数组
-		$domain_array = explode(':', htmlspecialchars(trim($_SERVER['HTTP_HOST'])));
-		$options_settings_subscribe['domain'] = $domain_array[0];
+		$public_suffix_list = Rules::fromPath('../Data/PublicSuffixList.dat');
+		$domain = Domain::fromIDNA2008($_SERVER['HTTP_HOST']);
+		$result = $public_suffix_list->resolve($domain);
+		$options_settings_subscribe['domain'] = $result->registrableDomain()->toString();
 		// 请求查询接口返回数据
 		$curl_subscribe_data = $this->curlGet(
 			API_URL . 'CheckSubscribe.php',
