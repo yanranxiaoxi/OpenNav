@@ -34,15 +34,14 @@ if ($page === 'Options') {
  */
 if ($page === 'SetOptions') {
 	if (!empty($_POST['username']) && !empty($_POST['login_authentication_mode'])) {
-		$email = empty($_POST['email']) ? '' : $_POST['email'];
 		$login_authentication_mode = empty($_POST['login_authentication_mode'])
 			? 0
 			: intval($_POST['login_authentication_mode']);
 		$username_regex = '/^[0-9a-zA-Z]{3,32}$/';
-		$email_regex = '/^[0-9a-zA-Z_-]+@[0-9a-zA-Z-]+(\.[0-9a-zA-Z-]+)+$/';
+		$email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL, FILTER_FLAG_EMAIL_UNICODE);
 		if (!preg_match($username_regex, $_POST['username'])) {
 			$helper->throwError(403, '用户名格式不正确！');
-		} elseif (!empty($_POST['email']) && !preg_match($email_regex, $_POST['email'])) {
+		} elseif (!empty($_POST['email']) && $email) {
 			$helper->throwError(403, '电子邮箱格式不正确！');
 		} elseif (
 			$login_authentication_mode !== 3 &&

@@ -98,11 +98,11 @@
 					}
 
 					// 正则验证电子邮箱
-					const email_regex = /^[0-9a-zA-Z_-]+@[0-9a-zA-Z-]+(\.[0-9a-zA-Z-]+)+$/;
-					if (data.field.email !== '' && !email_regex.test(data.field.email)) {
-						layer.msg('请输入正确的电子邮箱！', {icon: 5});
-						return false;
-					}
+					// const email_regex = /^[0-9a-zA-Z_-]+@[0-9a-zA-Z-]+(\.[0-9a-zA-Z-]+)+$/;
+					// if (data.field.email !== '' && !email_regex.test(data.field.email)) {
+					// 	layer.msg('请输入正确的电子邮箱！', {icon: 5});
+					// 	return false;
+					// }
 
 					$.post('./index.php?c=Install&page=Install', data.field, function(data, status) {
 						// 如果添加成功

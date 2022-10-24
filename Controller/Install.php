@@ -73,12 +73,12 @@ if ($page === 'Install') {
 	if (!empty($_POST['username']) && !empty($_POST['password'])) {
 		$username_regex = '/^[0-9a-zA-Z]{3,32}$/';
 		$password_regex = '/^[0-9a-zA-Z!@#$%^&*()-_\[\]\{\}<>~`\+=,.;:\/?|]{6,128}$/';
-		$email_regex = '/^[0-9a-zA-Z_-]+@[0-9a-zA-Z-]+(\.[0-9a-zA-Z-]+)+$/';
+		$email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL, FILTER_FLAG_EMAIL_UNICODE);
 		if (!preg_match($username_regex, $_POST['username'])) {
 			$error_message = '用户名格式不正确！';
 		} elseif (!preg_match($password_regex, $_POST['password'])) {
 			$error_message = '密码格式不正确！';
-		} elseif (!empty($_POST['email']) && !preg_match($email_regex, $_POST['email'])) {
+		} elseif (!empty($_POST['email']) && $email) {
 			$error_message = '电子邮箱格式不正确！';
 		} else {
 			$authenticator = new TwoFactorAuth();
@@ -95,7 +95,7 @@ if ($page === 'Install') {
 				password_hash($_POST['password'], PASSWORD_DEFAULT),
 				$config_file_content
 			);
-			$config_file_content = str_replace('{email}', $_POST['email'], $config_file_content);
+			$config_file_content = str_replace('{email}', $email, $config_file_content);
 			$config_file_content = str_replace(
 				'{totp_secret_key}',
 				$totp_secret_key,
