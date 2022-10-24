@@ -1324,4 +1324,112 @@ class GlobalHelper {
 
 		return [floor($r * 255), floor($g * 255), floor($b * 255)];
 	}
+
+	/**
+	 * 验证电子邮箱合法性
+	 *
+	 * @param	string	$email			电子邮箱
+	 * @param	bool	$return_string	是否返回字符串
+	 *
+	 * @return	string|bool				合法性
+	 */
+	public function validateEmail(string $email, bool $return_string = false): string|bool {
+		$email = filter_var($email, FILTER_VALIDATE_EMAIL, FILTER_FLAG_EMAIL_UNICODE);
+		if ($email !== false) {
+			if ($return_string) {
+				return $email;
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * 验证密码合法性
+	 *
+	 * @param	string	$password		密码
+	 * @param	bool	$return_string	是否返回字符串
+	 *
+	 * @return	string|bool				合法性
+	 */
+	public function validatePassword(string $password, bool $return_string = false): string|bool {
+		$password_regex = '/^[0-9a-zA-Z!@#$%^&*()-_\[\]\{\}<>~`\+=,.;:\/?|]{6,128}$/';
+		if (preg_match($password_regex, $password)) {
+			if ($return_string) {
+				return $password;
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * 验证用户名合法性
+	 *
+	 * @param	string	$username		用户名
+	 * @param	bool	$return_string	是否返回字符串
+	 *
+	 * @return	string|bool				合法性
+	 */
+	public function validateUsername(string $username, bool $return_string = false): string|bool {
+		$username_regex = '/^[0-9a-zA-Z]{3,32}$/';
+		if (preg_match($username_regex, $username)) {
+			if ($return_string) {
+				return $username;
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * 验证 URL 合法性
+	 *
+	 * @param	string	$url			URL
+	 * @param	bool	$return_string	是否返回字符串
+	 *
+	 * @return	string|bool				合法性
+	 */
+	public function validateUrl(string $url, bool $return_string = false): string|bool {
+		$url = filter_var($url, FILTER_VALIDATE_URL);
+		if ($url !== false) {
+			if ($return_string) {
+				return $url;
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * 验证授权密钥合法性
+	 *
+	 * @param	string	$license_key	授权密钥
+	 * @param	bool	$return_string	是否返回字符串
+	 *
+	 * @return	string|bool				合法性
+	 */
+	public function validateLicenseKey(
+		string $license_key,
+		bool $return_string = false
+	): string|bool {
+		$license_key_regex = '/^ON-[0-9A-Z]{20}$/';
+		if (preg_match($license_key_regex, $license_key)) {
+			if ($return_string) {
+				return $license_key;
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
+	}
 }
