@@ -66,6 +66,9 @@ package:
         - npm-install
         - composer-install
     script:
+        - Invoke-WebRequest
+          -Uri "https://publicsuffix.org/list/public_suffix_list.dat"
+          -OutFile ".\Data\PublicSuffixList.dat";
         - Set-Location ".\Public\";
         - Move-Item ".\node_modules\" ".\node_modules_old\";
         - ${nodeModulesDirArray} =
