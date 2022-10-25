@@ -82,7 +82,7 @@ require_once '../Data/Upgrade/Check.php';
 // 获取控制器，并使用二进制安全的方式剥去字符串左右的空白与其中的 HTML 标签
 $controller = !empty($_GET['c'])
 	? htmlspecialchars(trim($_GET['c']))
-	: ($cron_mode
+	: (!empty($cron_mode)
 		? 'Cron'
 		: 'Index');
 // 获取登录状态
