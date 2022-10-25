@@ -80,7 +80,7 @@ if ($page === 'Install') {
 			$authenticator = new TwoFactorAuth();
 			$totp_secret_key = $authenticator->createSecret();
 			$cookie_secret_key = $helper->getRandomKey();
-			$config_file_content = file_get_contents('../Data/Config.sample.php');
+			$config_file_content = file_get_contents('../Binary/Config.sample.php');
 			$config_file_content = str_replace(
 				'{username}',
 				$_POST['username'],

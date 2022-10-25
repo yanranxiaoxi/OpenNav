@@ -58,7 +58,7 @@ if ($page === 'UploadLinksFile') {
 }
 
 /**
- * 导入书签文件
+ * 导入链接文件
  */
 if ($page === 'ImportLinks') {
 	if (empty($_POST['property'])) {
@@ -82,6 +82,11 @@ if ($page === 'ImportLinks') {
 	ini_set('max_execution_time', 300); // 5 minutes
 
 	if ($file_suffix === 'html' || $file_suffix === 'htm') {
+		$helper->backupDatabase_AuthRequired()
+			? $helper->emptyCategoriesTable_AuthRequired() &&
+				$helper->emptyLinksTable_AuthRequired()
+			: $helper->throwError(403, '数据库备份失败，导入被中止！');
+
 		$links = []; // 链接组
 		$categories = []; // 分类组
 		$default_category_id = 0; // 默认分类 ID
@@ -196,17 +201,28 @@ if ($page === 'ImportLinks') {
 		$helper->backupDatabase_AuthRequired()
 			? $helper->emptyCategoriesTable_AuthRequired() &&
 				$helper->emptyLinksTable_AuthRequired()
-			: $helper->throwError(403, '数据库备份失败，导入被终止！');
+			: $helper->throwError(403, '数据库备份失败，导入被中止！');
 
-		$excel_file = SimpleExcelReader::create('../Cache/Upload/' . $staging_file_name);
-		$excel_file
+		$excel_reader = SimpleExcelReader::create('../Cache/Upload/' . $staging_file_name);
+		$excel_reader
 			->fromSheetName('categories')
 			->getRows()
 			->each(function (array $row_properties): void {
-				global $helper;
-				$helper->addCategory_AuthRequired($row_properties);
+				if ($row_properties['fid'] === 0) {
+					global $helper;
+					$helper->addCategory_AuthRequired($row_properties);
+				}
 			});
-		$excel_file
+		$excel_reader
+			->fromSheetName('categories')
+			->getRows()
+			->each(function (array $row_properties): void {
+				if ($row_properties['fid'] !== 0) {
+					global $helper;
+					$helper->addCategory_AuthRequired($row_properties);
+				}
+			});
+		$excel_reader
 			->fromSheetName('links')
 			->getRows()
 			->each(function (array $row_properties): void {

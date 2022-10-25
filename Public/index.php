@@ -53,7 +53,7 @@ if (DATABASE_TYPE === 'MariaDB' || DATABASE_TYPE === 'MySQL') {
 } else {
 	// 检查数据库是否存在，不存在则复制数据库
 	if (!file_exists('../Data/Database.db3') || filesize('../Data/Database.db3') === 0) {
-		if (!copy('../Data/Database.sample.db3', '../Data/Database.db3')) {
+		if (!copy('../Binary/Database.sample.db3', '../Data/Database.db3')) {
 			exit('数据库初始化失败，请检查 Data 目录是否拥有写入权限！');
 		}
 	}
@@ -78,7 +78,7 @@ ini_set('max_execution_time', 60);
 // 设置 Contect-Type 请求头为 text/html
 header('Content-Type: text/html; charset=utf-8');
 // 检查更新
-require_once '../Data/Upgrade/Check.php';
+require_once '../Binary/Upgrade/Check.php';
 // 获取控制器，并使用二进制安全的方式剥去字符串左右的空白与其中的 HTML 标签
 $controller = !empty($_GET['c'])
 	? htmlspecialchars(trim($_GET['c']))

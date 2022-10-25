@@ -1158,6 +1158,41 @@ class GlobalHelper {
 	}
 
 	/**
+	 * 获取分类 [id, fid, weight, title, font_icon, description, property]「Auth Required」
+	 *
+	 * @return array 分类二维数组
+	 */
+	public function getCategoriesIdFidWeightTitleFonticonDescriptionProperty_AuthRequired(): array {
+		return $this->database->select('on_categories', [
+			'id',
+			'fid',
+			'weight',
+			'title',
+			'font_icon',
+			'description',
+			'property'
+		]);
+	}
+
+	/**
+	 * 获取链接 [id, fid, weight, title, url, url_standby, description, property]「Auth Required」
+	 *
+	 * @return array 链接二维数组
+	 */
+	public function getLinksIdFidWeightTitleUrlUrlstandbyDescriptionProperty_AuthRequired(): array {
+		return $this->database->select('on_links', [
+			'id',
+			'fid',
+			'weight',
+			'title',
+			'url',
+			'url_standby',
+			'description',
+			'property'
+		]);
+	}
+
+	/**
 	 * 设置指定链接的点击数「Logic Safety」
 	 *
 	 * @param	int		$link_id	链接 ID
