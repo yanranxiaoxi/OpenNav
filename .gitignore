@@ -1,4 +1,6 @@
 /.vscode/
+/Cache/Database/*
+!/Cache/Database/.gitkeep
 /Cache/Favicon/*
 !/Cache/Favicon/.gitkeep
 /Cache/Log/*

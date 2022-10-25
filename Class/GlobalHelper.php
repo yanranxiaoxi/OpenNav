@@ -728,7 +728,7 @@ class GlobalHelper {
 	/**
 	 * 添加分类「Auth Required」
 	 *
-	 * @param	array	$category_data	分类数据：[fid, weight, title, font_icon, description, property]
+	 * @param	array	$category_data	分类数据：[id, fid, weight, title, font_icon, description, property]
 	 * @param	bool	$return_id		是否返回分类 ID
 	 *
 	 * @return	int|true|string			修改状态，失败时返回 string
@@ -737,16 +737,46 @@ class GlobalHelper {
 		array $category_data,
 		bool $return_id = false
 	): int|bool|string {
+		// 基础数据处理及默认值
+		// id
+		if (!empty($category_data['id'])) {
+			intval($category_data['id']);
+			if ($category_data['id'] < 1) {
+				return 'ID 不合法！';
+			}
+		}
+		// fid
+		empty($category_data['fid']) ? ($category_data['fid'] = 0) : intval($category_data['fid']);
+		// weight
+		empty($category_data['weight'])
+			? ($category_data['weight'] = 0)
+			: intval($category_data['weight']);
+		// title
+		if (empty($category_data['title'])) {
+			return '标题不能为空！';
+		} else {
+			strval($category_data['title']);
+		}
+		// font_icon
+		empty($category_data['font_icon'])
+			? ($category_data['font_icon'] = 'fa-bookmark-o')
+			: strval($category_data['font_icon']);
+		// description
+		empty($category_data['description'])
+			? ($category_data['description'] = '')
+			: strval($category_data['description']);
+		// property
+		empty($category_data['property'])
+			? ($category_data['property'] = 0)
+			: intval($category_data['property']);
+
+		// 数据范围判断
 		if ($category_data['weight'] < 0 || $category_data['weight'] > 999) {
 			return '权重范围为 0-999';
 		}
 		if ($category_data['property'] !== 0 && $category_data['property'] !== 1) {
 			return '私有状态只能为是(1)或否(0)';
 		}
-		if (empty($category_data['title']) || empty($category_data['font_icon'])) {
-			return '必填项不能为空！';
-		}
-		// 判断字符串型数据长度合法性
 		if (strlen($category_data['title']) > 64) {
 			return '标题长度不能超过 64 位（中文字符占 3 位）';
 		}
@@ -756,13 +786,14 @@ class GlobalHelper {
 		if (strlen($category_data['description']) > 256) {
 			return '描述长度不能超过 256 位（中文字符占 3 位）';
 		}
-		// 当分类 fid 不为 0 时，查询分类 fid 是否为一级分类的 id
-		if ($category_data['fid'] !== 0) {
-			$parent_categories = $this->database->select('on_categories', 'id', [
-				'fid' => 0
+
+		// 当分类 fid 大于等于 1 时，查询分类 fid 是否对应一个一级分类的 id
+		if ($category_data['fid'] >= 1) {
+			$has_parent_category = $this->database->has('on_categories', [
+				'id' => $category_data['fid']
 			]);
 			// 如果不是一级分类的 id，则数据不合法
-			if (!in_array($category_data['fid'], $parent_categories)) {
+			if (!$has_parent_category) {
 				return '父级分类必须为一级分类！';
 			} else {
 				// 否则数据合法，写入数据库
@@ -785,7 +816,7 @@ class GlobalHelper {
 	/**
 	 * 添加链接「Auth Required」
 	 *
-	 * @param	array	$link_data	链接数据：[fid, weight, title, url, url_standby, description, property]
+	 * @param	array	$link_data	链接数据：[id, fid, weight, title, url, url_standby, description, property]
 	 * @param	bool	$return_id	是否返回链接 ID
 	 *
 	 * @return	int|true|string		添加状态，失败时返回 string
@@ -794,16 +825,54 @@ class GlobalHelper {
 		array $link_data,
 		bool $return_id = false
 	): int|bool|string {
+		// 基础数据处理及默认值
+		// id
+		if (!empty($link_data['id'])) {
+			intval($link_data['id']);
+			if ($link_data['id'] < 1) {
+				return 'ID 不合法！';
+			}
+		}
+		// fid
+		if (empty($link_data['fid'])) {
+			return '所属分类不能为空！';
+		} else {
+			intval($link_data['fid']);
+		}
+		// weight
+		empty($link_data['weight']) ? ($link_data['weight'] = 0) : intval($link_data['weight']);
+		// title
+		if (empty($link_data['title'])) {
+			return '标题不能为空！';
+		} else {
+			strval($link_data['title']);
+		}
+		// url
+		if (empty($link_data['url'])) {
+			return 'URL 不能为空！';
+		} else {
+			strval($link_data['url']);
+		}
+		// url_standby
+		empty($link_data['url_standby'])
+			? ($link_data['url_standby'] = '')
+			: strval($link_data['url_standby']);
+		// description
+		empty($link_data['description'])
+			? ($link_data['description'] = '')
+			: strval($link_data['description']);
+		// property
+		empty($link_data['property'])
+			? ($link_data['property'] = 0)
+			: intval($link_data['property']);
+
+		// 数据范围判断
 		if ($link_data['weight'] < 0 || $link_data['weight'] > 999) {
 			return '权重范围为 0-999';
 		}
 		if ($link_data['property'] !== 0 && $link_data['property'] !== 1) {
 			return '私有状态只能为是(1)或否(0)';
 		}
-		if (empty($link_data['title']) || empty($link_data['url'])) {
-			return '必填项不能为空！';
-		}
-		// 判断字符串型数据长度合法性
 		if (strlen($link_data['title']) > 64) {
 			return '标题长度不能超过 64 位（中文字符占 3 位）';
 		}
@@ -816,7 +885,6 @@ class GlobalHelper {
 		if (strlen($link_data['description']) > 256) {
 			return '描述长度不能超过 256 位（中文字符占 3 位）';
 		}
-		// 判断数据合法性
 		if (!$this->validateUrl($link_data['url'])) {
 			return '链接不合法！';
 		}
@@ -826,10 +894,10 @@ class GlobalHelper {
 			}
 		}
 
-		$category = $this->database->get('on_categories', 'id', [
+		$has_parent_category = $this->database->has('on_categories', [
 			'id' => $link_data['fid']
 		]);
-		if (empty($category)) {
+		if (!$has_parent_category) {
 			return '所属分类不存在！';
 		}
 		// 数据合法，写入数据库
@@ -854,19 +922,39 @@ class GlobalHelper {
 		int $category_id,
 		array $category_data
 	): bool|string {
-		if ($category_id === $category_data['fid']) {
-			return '分类的 ID 与父级分类的 ID 不能相同！';
+		// 基础数据处理及默认值
+		// fid
+		empty($category_data['fid']) ? ($category_data['fid'] = 0) : intval($category_data['fid']);
+		// weight
+		empty($category_data['weight'])
+			? ($category_data['weight'] = 0)
+			: intval($category_data['weight']);
+		// title
+		if (empty($category_data['title'])) {
+			return '必填项不能为空！';
+		} else {
+			strval($category_data['title']);
 		}
+		// font_icon
+		empty($category_data['font_icon'])
+			? ($category_data['font_icon'] = 'fa-bookmark-o')
+			: strval($category_data['font_icon']);
+		// description
+		empty($category_data['description'])
+			? ($category_data['description'] = '')
+			: strval($category_data['description']);
+		// property
+		empty($category_data['property'])
+			? ($category_data['property'] = 0)
+			: intval($category_data['property']);
+
+		// 数据范围判断
 		if ($category_data['weight'] < 0 || $category_data['weight'] > 999) {
 			return '权重范围为 0-999';
 		}
 		if ($category_data['property'] !== 0 && $category_data['property'] !== 1) {
 			return '私有状态只能为是(1)或否(0)';
 		}
-		if (empty($category_data['title']) || empty($category_data['font_icon'])) {
-			return '必填项不能为空！';
-		}
-		// 判断字符串型数据长度合法性
 		if (strlen($category_data['title']) > 64) {
 			return '标题长度不能超过 64 位（中文字符占 3 位）';
 		}
@@ -876,13 +964,14 @@ class GlobalHelper {
 		if (strlen($category_data['description']) > 256) {
 			return '描述长度不能超过 256 位（中文字符占 3 位）';
 		}
-		// 当分类 fid 不为 0 时，查询分类 fid 是否为一级分类的 id
-		if ($category_data['fid'] !== 0) {
-			$parent_categories = $this->database->select('on_categories', 'id', [
-				'fid' => 0
+
+		// 当分类 fid 大于等于 1 时，查询分类 fid 是否对应一个一级分类的 id
+		if ($category_data['fid'] >= 1) {
+			$has_parent_category = $this->database->has('on_categories', [
+				'id' => $category_data['fid']
 			]);
 			// 如果不是一级分类的 id，则数据不合法
-			if (!in_array($category_data['fid'], $parent_categories)) {
+			if (!$has_parent_category) {
 				return '父级分类必须为一级分类！';
 			} else {
 				// 否则数据合法，写入数据库
@@ -911,16 +1000,47 @@ class GlobalHelper {
 	 * @return	true|string			修改状态，失败时返回 string
 	 */
 	public function updateLink_AuthRequired(int $link_id, array $link_data): bool|string {
+		// 基础数据处理及默认值
+		// fid
+		if (empty($link_data['fid'])) {
+			return '所属分类不能为空！';
+		} else {
+			intval($link_data['fid']);
+		}
+		// weight
+		empty($link_data['weight']) ? ($link_data['weight'] = 0) : intval($link_data['weight']);
+		// title
+		if (empty($link_data['title'])) {
+			return '标题不能为空！';
+		} else {
+			strval($link_data['title']);
+		}
+		// url
+		if (empty($link_data['url'])) {
+			return 'URL 不能为空！';
+		} else {
+			strval($link_data['url']);
+		}
+		// url_standby
+		empty($link_data['url_standby'])
+			? ($link_data['url_standby'] = '')
+			: strval($link_data['url_standby']);
+		// description
+		empty($link_data['description'])
+			? ($link_data['description'] = '')
+			: strval($link_data['description']);
+		// property
+		empty($link_data['property'])
+			? ($link_data['property'] = 0)
+			: intval($link_data['property']);
+
+		// 数据范围判断
 		if ($link_data['weight'] < 0 || $link_data['weight'] > 999) {
 			return '权重范围为 0-999';
 		}
 		if ($link_data['property'] !== 0 && $link_data['property'] !== 1) {
 			return '私有状态只能为是(1)或否(0)';
 		}
-		if (empty($link_data['title']) || empty($link_data['url'])) {
-			return '必填项不能为空！';
-		}
-		// 判断字符串型数据长度合法性
 		if (strlen($link_data['title']) > 64) {
 			return '标题长度不能超过 64 位（中文字符占 3 位）';
 		}
@@ -933,7 +1053,6 @@ class GlobalHelper {
 		if (strlen($link_data['description']) > 256) {
 			return '描述长度不能超过 256 位（中文字符占 3 位）';
 		}
-		// 判断数据合法性
 		if (!$this->validateUrl($link_data['url'])) {
 			return '链接不合法！';
 		}
@@ -943,10 +1062,10 @@ class GlobalHelper {
 			}
 		}
 
-		$category = $this->database->get('on_categories', 'id', [
+		$has_parent_category = $this->database->has('on_categories', [
 			'id' => $link_data['fid']
 		]);
-		if (empty($category)) {
+		if (!$has_parent_category) {
 			return '所属分类不存在！';
 		}
 		// 数据合法，写入数据库
@@ -968,16 +1087,16 @@ class GlobalHelper {
 		$category_value = $this->database->get('on_categories', 'fid', [
 			'id' => $category_id
 		]);
-		$child_categories = null;
+		$has_child_category = false;
 		if ($category_value['fid'] === 0) {
-			$child_categories = $this->database->select('on_categories', 'id', [
+			$has_child_category = $this->database->has('on_categories', [
 				'fid' => $category_id
 			]);
 		}
-		$links = $this->database->select('on_links', 'id', [
+		$has_link = $this->database->has('on_links', [
 			'fid' => $category_id
 		]);
-		if (empty($child_categories) && empty($links)) {
+		if (!$has_child_category && !$has_link) {
 			$this->database->delete('on_categories', [
 				'id' => $category_id
 			]);
@@ -1469,5 +1588,30 @@ class GlobalHelper {
 		$domain = Domain::fromIDNA2008($url);
 		$result = $public_suffix_list->resolve($domain);
 		return $result->registrableDomain()->toString();
+	}
+
+	/**
+	 * 清空 categories 数据表「Auth Required」
+	 */
+	public function emptyCategoriesTable_AuthRequired(): void {
+		$this->database->delete('on_categories', '*');
+		$this->database->update('sqlite_sequence', ['seq' => 0], ['name' => 'on_categories']);
+	}
+
+	/**
+	 * 清空 links 数据表「Auth Required」
+	 */
+	public function emptyLinksTable_AuthRequired(): void {
+		$this->database->delete('on_links', '*');
+		$this->database->update('sqlite_sequence', ['seq' => 0], ['name' => 'on_links']);
+	}
+
+	/**
+	 * 备份数据库「Auth Required」
+	 *
+	 * @return bool 备份状态
+	 */
+	public function backupDatabase_AuthRequired(): bool {
+		return copy('../Data/Database.db3', '../Cache/Database/' . time() . '.database.bak');
 	}
 }
