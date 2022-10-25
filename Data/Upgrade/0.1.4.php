@@ -15,6 +15,7 @@ if ($current_version === '0.1.4') {
 	@$database->query('CREATE INDEX <on_categories_title_IDX> ON <on_categories> (<title>)');
 	@$database->query('CREATE INDEX <on_categories_weight_IDX> ON <on_categories> (<weight> DESC)');
 	@$database->drop('on_database_upgrade_logs');
+	@$database->delete('sqlite_sequence', ['name' => 'on_database_upgrade_logs']);
 
 	$helper->setGlobalConfig_AuthRequired('CONFIG_VERSION', CONFIG_VERSION, '0.1.5');
 	$current_version = '0.1.5';
