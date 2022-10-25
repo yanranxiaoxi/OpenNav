@@ -178,8 +178,7 @@ if (isset($theme_config['online_favicon'])) {
 		$favicon->cache($settings_favicon);
 		$links_url = $helper->getLinksUrl_AuthRequired(); // 此处不会有任何前端返回，该数据安全
 		foreach ($links_url as $link_value_url) {
-			$url_regex = '/^(https?:\/\/)[\S]+$/';
-			if (preg_match($url_regex, $link_value_url)) {
+			if ($helper->validateUrl($link_value_url)) {
 				$favion_status = $favicon->get($link_value_url, FaviconDLType::DL_FILE_PATH);
 				if ($favion_status !== false) {
 					$log_status_string = 'INFO';

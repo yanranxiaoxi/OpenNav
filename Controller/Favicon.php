@@ -38,9 +38,8 @@ if ($page === 'Online') {
 	if (empty($_GET['url'])) {
 		exit('缺少参数！');
 	}
-	// 使用正则检测 URL 是否合法
-	$url_regex = '/^(https?:\/\/)[\S]+$/';
-	if (!preg_match($url_regex, $_GET['url'])) {
+	// 检测 URL 是否合法
+	if (!$helper->validateUrl($_POST['url'])) {
 		$icon = file_get_contents('./assets/images/default-favicon.ico');
 		header('Cache-Control: max-age=604800');
 		header('Content-Type: image/x-icon; charset=utf-8');

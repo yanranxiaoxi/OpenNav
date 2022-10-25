@@ -111,13 +111,20 @@ class GlobalHelper {
 	 *
 	 * @return	string|false			获取到的数据，false 代表请求失败
 	 */
-	public function curlGet(string $url, ?array $post_array, int $timeout = 10): string|bool {
+	public function curlGet(
+		string $url,
+		?array $post_array = null,
+		int $timeout = 10
+	): string|bool {
+		if (!$this->validateUrl($url)) {
+			return false;
+		}
 		$curl = curl_init($url);
 		// 设置 UserAgent
 		curl_setopt(
 			$curl,
 			CURLOPT_USERAGENT,
-			'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36'
+			'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36'
 		);
 		curl_setopt($curl, CURLOPT_FAILONERROR, true);
 		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
@@ -810,15 +817,15 @@ class GlobalHelper {
 			return '描述长度不能超过 256 位（中文字符占 3 位）';
 		}
 		// 判断数据合法性
-		$url_regex = '/^(https?:\/\/)[\S]+$/';
-		if (!preg_match($url_regex, $link_data['url'])) {
+		if (!$this->validateUrl($link_data['url'])) {
 			return '链接不合法！';
 		}
 		if (!empty($link_data['url_standby'])) {
-			if (!preg_match($url_regex, $link_data['url_standby'])) {
+			if (!$this->validateUrl($link_data['url_standby'])) {
 				return '外部等待页链接不合法！';
 			}
 		}
+
 		$category = $this->database->get('on_categories', 'id', [
 			'id' => $link_data['fid']
 		]);
@@ -926,6 +933,16 @@ class GlobalHelper {
 		if (strlen($link_data['description']) > 256) {
 			return '描述长度不能超过 256 位（中文字符占 3 位）';
 		}
+		// 判断数据合法性
+		if (!$this->validateUrl($link_data['url'])) {
+			return '链接不合法！';
+		}
+		if (!empty($link_data['url_standby'])) {
+			if (!$this->validateUrl($link_data['url_standby'])) {
+				return '外部等待页链接不合法！';
+			}
+		}
+
 		$category = $this->database->get('on_categories', 'id', [
 			'id' => $link_data['fid']
 		]);
@@ -1032,6 +1049,8 @@ class GlobalHelper {
 	/**
 	 * 修改主题选项「Auth Required」
 	 *
+	 * @todo #TODO# 数据校验
+	 *
 	 * @param string $options_theme 主题
 	 */
 	public function setOptionsTheme_AuthRequired(string $options_theme): void {
@@ -1061,6 +1080,8 @@ class GlobalHelper {
 
 	/**
 	 * 修改站点设置选项「Auth Required」
+	 *
+	 * @todo #TODO# 数据校验
 	 *
 	 * @param array $options_settings_site 站点设置
 	 */
@@ -1092,6 +1113,8 @@ class GlobalHelper {
 
 	/**
 	 * 修改过渡页设置选项「Auth Required」
+	 *
+	 * @todo #TODO# 数据校验
 	 *
 	 * @param array $options_settings_transition_page 过渡页设置
 	 */
@@ -1126,6 +1149,8 @@ class GlobalHelper {
 	/**
 	 * 修改订阅设置选项「Auth Required」
 	 *
+	 * @todo #TODO# 数据校验
+	 *
 	 * @param array $options_settings_subscribe 订阅设置
 	 */
 	public function setOptionsSettingsSubscribe_AuthRequired(
@@ -1152,10 +1177,9 @@ class GlobalHelper {
 		// 获取选项数组
 		$options_settings_subscribe = $this->getOptionsSettingsSubscribe_AuthRequired();
 		// 处理 domain 变量并存入选项数组
-		$public_suffix_list = Rules::fromPath('../Data/PublicSuffixList.dat');
-		$domain = Domain::fromIDNA2008($_SERVER['HTTP_HOST']);
-		$result = $public_suffix_list->resolve($domain);
-		$options_settings_subscribe['domain'] = $result->registrableDomain()->toString();
+		$options_settings_subscribe['domain'] = $this->getPublicSuffixListRegistrableDomain(
+			$_SERVER['HTTP_HOST']
+		);
 		// 请求查询接口返回数据
 		$curl_subscribe_data = $this->curlGet(
 			API_URL . 'CheckSubscribe.php',
@@ -1326,7 +1350,7 @@ class GlobalHelper {
 	}
 
 	/**
-	 * 验证电子邮箱合法性
+	 * 验证电子邮箱合法性「Logic Safety」
 	 *
 	 * @param	string	$email			电子邮箱
 	 * @param	bool	$return_string	是否返回字符串
@@ -1347,7 +1371,7 @@ class GlobalHelper {
 	}
 
 	/**
-	 * 验证密码合法性
+	 * 验证密码合法性「Logic Safety」
 	 *
 	 * @param	string	$password		密码
 	 * @param	bool	$return_string	是否返回字符串
@@ -1368,7 +1392,7 @@ class GlobalHelper {
 	}
 
 	/**
-	 * 验证用户名合法性
+	 * 验证用户名合法性「Logic Safety」
 	 *
 	 * @param	string	$username		用户名
 	 * @param	bool	$return_string	是否返回字符串
@@ -1389,7 +1413,7 @@ class GlobalHelper {
 	}
 
 	/**
-	 * 验证 URL 合法性
+	 * 验证 URL 合法性「Logic Safety」
 	 *
 	 * @param	string	$url			URL
 	 * @param	bool	$return_string	是否返回字符串
@@ -1410,7 +1434,7 @@ class GlobalHelper {
 	}
 
 	/**
-	 * 验证授权密钥合法性
+	 * 验证授权密钥合法性「Logic Safety」
 	 *
 	 * @param	string	$license_key	授权密钥
 	 * @param	bool	$return_string	是否返回字符串
@@ -1421,7 +1445,7 @@ class GlobalHelper {
 		string $license_key,
 		bool $return_string = false
 	): string|bool {
-		$license_key_regex = '/^ON-[0-9A-Z]{20}$/';
+		$license_key_regex = '/^ON-[0-9A-Z]{5}-[0-9A-Z]{5}-[0-9A-Z]{5}-[0-9A-Z]{5}$/';
 		if (preg_match($license_key_regex, $license_key)) {
 			if ($return_string) {
 				return $license_key;
@@ -1431,5 +1455,19 @@ class GlobalHelper {
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * 获取 PublicSuffixList 根域名「Logic Safety」
+	 *
+	 * @param	string	$url	URL
+	 *
+	 * @return	string	PublicSuffixList 根域名
+	 */
+	public function getPublicSuffixListRegistrableDomain(string $url): string {
+		$public_suffix_list = Rules::fromPath('../Data/PublicSuffixList.dat');
+		$domain = Domain::fromIDNA2008($url);
+		$result = $public_suffix_list->resolve($domain);
+		return $result->registrableDomain()->toString();
 	}
 }

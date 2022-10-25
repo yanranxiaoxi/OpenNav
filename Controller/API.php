@@ -297,9 +297,8 @@ if ($page === 'GetLinkInfo') {
 	if (empty($_POST['url'])) {
 		$helper->throwError(403, 'URL 不能为空！');
 	}
-	// 使用正则检测 URL 是否合法
-	$url_regex = '/^(https?:\/\/)[\S]+$/';
-	if (!preg_match($url_regex, $_POST['url'])) {
+	// 检测 URL 是否合法
+	if (!$helper->validateUrl($_POST['url'])) {
 		$helper->throwError(403, 'URL 格式不正确！');
 	}
 	$meta_tags = get_meta_tags($_POST['url']);

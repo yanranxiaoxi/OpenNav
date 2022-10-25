@@ -54,7 +54,7 @@ define('ALLOW_HTTP_CRON', true);
  * 系统设置
  */
 // Gravatar API 地址
-define('GRAVATAR_API_URL', 'https://secure.gravatar.com');
+define('GRAVATAR_API_URL', 'https://gravatar.soraharu.com');
 // TOTP SecretKey
 define('TOTP_SECRET_KEY', '{totp_secret_key}');
 // COOKIE SecretKey

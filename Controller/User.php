@@ -37,11 +37,9 @@ if ($page === 'SetOptions') {
 		$login_authentication_mode = empty($_POST['login_authentication_mode'])
 			? 0
 			: intval($_POST['login_authentication_mode']);
-		$username_regex = '/^[0-9a-zA-Z]{3,32}$/';
-		$email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL, FILTER_FLAG_EMAIL_UNICODE);
-		if (!preg_match($username_regex, $_POST['username'])) {
+		if (!$helper->validateUsername($_POST['username'])) {
 			$helper->throwError(403, '用户名格式不正确！');
-		} elseif (!empty($_POST['email']) && $email) {
+		} elseif (!empty($_POST['email']) && !$helper->validateEmail($_POST['email'])) {
 			$helper->throwError(403, '电子邮箱格式不正确！');
 		} elseif (
 			$login_authentication_mode !== 3 &&
@@ -52,7 +50,7 @@ if ($page === 'SetOptions') {
 			$helper->throwError(403, '验证方式的组合不合法！');
 		} else {
 			$helper->setGlobalConfig_AuthRequired('USERNAME', USERNAME, $_POST['username']);
-			$helper->setGlobalConfig_AuthRequired('EMAIL', EMAIL, $email);
+			$helper->setGlobalConfig_AuthRequired('EMAIL', EMAIL, $_POST['email']);
 			$helper->setGlobalConfig_AuthRequired(
 				'LOGIN_AUTHENTICATION_MODE',
 				LOGIN_AUTHENTICATION_MODE,
@@ -78,8 +76,7 @@ if ($page === 'Password') {
  */
 if ($page === 'SetPassword') {
 	if (!empty($_POST['password'])) {
-		$password_regex = '/^[0-9a-zA-Z!@#$%^&*()-_\[\]\{\}<>~`\+=,.;:\/?|]{6,128}$/';
-		if (!preg_match($password_regex, $_POST['password'])) {
+		if (!$helper->validatePassword($_POST['password'])) {
 			$helper->throwError(403, '密码格式不正确！');
 		} else {
 			$helper->setGlobalConfig_AuthRequired(

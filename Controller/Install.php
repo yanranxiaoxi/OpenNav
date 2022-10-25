@@ -69,17 +69,13 @@ if ($page === 'Init') {
  * 进入安装流程
  */
 if ($page === 'Install') {
-	$error_message = '';
 	if (!empty($_POST['username']) && !empty($_POST['password'])) {
-		$username_regex = '/^[0-9a-zA-Z]{3,32}$/';
-		$password_regex = '/^[0-9a-zA-Z!@#$%^&*()-_\[\]\{\}<>~`\+=,.;:\/?|]{6,128}$/';
-		$email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL, FILTER_FLAG_EMAIL_UNICODE);
-		if (!preg_match($username_regex, $_POST['username'])) {
-			$error_message = '用户名格式不正确！';
-		} elseif (!preg_match($password_regex, $_POST['password'])) {
-			$error_message = '密码格式不正确！';
-		} elseif (!empty($_POST['email']) && $email) {
-			$error_message = '电子邮箱格式不正确！';
+		if (!$helper->validateUsername($_POST['username'])) {
+			$helper->throwError(403, '用户名格式不正确！');
+		} elseif (!$helper->validatePassword($_POST['password'])) {
+			$helper->throwError(403, '密码格式不正确！');
+		} elseif (!empty($_POST['email']) && !$helper->validateEmail($_POST['email'])) {
+			$helper->throwError(403, '电子邮箱格式不正确！');
 		} else {
 			$authenticator = new TwoFactorAuth();
 			$totp_secret_key = $authenticator->createSecret();
@@ -95,7 +91,7 @@ if ($page === 'Install') {
 				password_hash($_POST['password'], PASSWORD_DEFAULT),
 				$config_file_content
 			);
-			$config_file_content = str_replace('{email}', $email, $config_file_content);
+			$config_file_content = str_replace('{email}', $_POST['email'], $config_file_content);
 			$config_file_content = str_replace(
 				'{totp_secret_key}',
 				$totp_secret_key,
@@ -107,25 +103,13 @@ if ($page === 'Install') {
 				$config_file_content
 			);
 			if (!file_put_contents('../Data/Config.php', $config_file_content)) {
-				$error_message = '配置文件写入失败，请检查 Data 目录是否拥有写入权限！';
+				$helper->throwError(403, '配置文件写入失败，请检查 Data 目录是否拥有写入权限！');
 			}
 		}
 	} else {
-		$error_message = '用户名或密码不正确！';
+		$helper->throwError(403, '用户名或密码不正确！');
 	}
-	if (empty($error_message)) {
-		$data = [
-			'code' => 200,
-			'message' => '安装成功！请等待页面跳转 ...'
-		];
-	} else {
-		$data = [
-			'code' => 403,
-			'message' => $error_message
-		];
-	}
-	header('Content-Type: application/json; charset=utf-8');
-	exit(json_encode($data));
+	$helper->returnSuccess();
 }
 
 exit();
