@@ -72,7 +72,7 @@ if ($page === 'ImportLinks') {
 	// 获取文件后缀
 	$file_suffix = explode('.', $file_name);
 	$file_suffix = strtolower(end($file_suffix));
-	// 获取私有状态 #TODO#
+	// 获取私有状态
 	$property = intval($_POST['property']);
 	// 判断文件是否存在
 	if (!file_exists('../Cache/Upload/' . $staging_file_name)) {
@@ -81,10 +81,11 @@ if ($page === 'ImportLinks') {
 	// 设置导入任务运行时限
 	ini_set('max_execution_time', 300); // 5 minutes
 
-	$links = []; // 链接组
-	$categories = []; // 分类组
-	$default_category_id = 0; // 默认分类 ID
-	if ($file_suffix === 'html') {
+	if ($file_suffix === 'html' || $file_suffix === 'htm') {
+		$links = []; // 链接组
+		$categories = []; // 分类组
+		$default_category_id = 0; // 默认分类 ID
+
 		// 解析 HTML 数据
 		$staging_file_content = file_get_contents('../Cache/Upload/' . $staging_file_name);
 		$staging_file_content_array = explode("\n", $staging_file_content); // 分割文本
@@ -133,72 +134,90 @@ if ($page === 'ImportLinks') {
 				$latest_addition = 0;
 			}
 		}
-	} elseif ($file_suffix === 'xlsx' || $file_suffix === 'csv') {
-		// #TODO#
-		// $excel_reader = new SimpleExcelReader();
-		// $excel_reader->create('../Cache/Upload/' . $staging_file_name);
-		// $links = $excel_reader->getRows();
-	} else {
-		$helper->throwError(403, '文件类型不正确！');
-	}
 
-	// 导入默认分类
-	$category_data = [
-		'fid' => 0,
-		'weight' => 0,
-		'title' => '导入的无分类链接',
-		'font_icon' => 'fa-bookmark-o',
-		'description' => '',
-		'property' => $property
-	];
-	$state = $helper->addCategory_AuthRequired($category_data, true);
-	if (is_int($state)) {
-		$default_category_id = $state;
-	} else {
-		$helper->throwError(500, '导入失败，内部服务器错误！');
-	}
-
-	// 导入分类
-	foreach ($categories as $key => $category) {
+		// 导入默认分类
 		$category_data = [
 			'fid' => 0,
 			'weight' => 0,
-			'title' => $category['title'],
+			'title' => '导入的无分类链接',
 			'font_icon' => 'fa-bookmark-o',
-			'description' => $category['description'],
+			'description' => '',
 			'property' => $property
 		];
 		$state = $helper->addCategory_AuthRequired($category_data, true);
 		if (is_int($state)) {
-			$categories[$key]['id'] = $state;
+			$default_category_id = $state;
 		} else {
-			// 忽视错误并设置为默认分类
-			$categories[$key]['id'] = $default_category_id;
+			$helper->throwError(500, '导入失败，内部服务器错误！');
 		}
-	}
 
-	// 导入链接
-	foreach ($links as $link) {
-		$category = $link['category'];
-		$link_data = [
-			'fid' => $categories[$category]['id'],
-			'weight' => 0,
-			'title' => $link['title'],
-			'url' => $link['url'],
-			'url_standby' => '',
-			'description' => $link['description'],
-			'property' => $property
-		];
-		$state = $helper->addLink_AuthRequired($link_data);
-	}
+		// 导入分类
+		foreach ($categories as $key => $category) {
+			$category_data = [
+				'fid' => 0,
+				'weight' => 0,
+				'title' => $category['title'],
+				'font_icon' => 'fa-bookmark-o',
+				'description' => $category['description'],
+				'property' => $property
+			];
+			$state = $helper->addCategory_AuthRequired($category_data, true);
+			if (is_int($state)) {
+				$categories[$key]['id'] = $state;
+			} else {
+				// 忽视错误并设置为默认分类
+				$categories[$key]['id'] = $default_category_id;
+			}
+		}
 
-	// 检测默认分类是否存在链接
-	if ($helper->countLinksByCategoryId_AuthRequired($default_category_id) === 0) {
-		// 如不存在，则删除默认分类
-		$helper->deleteCategory_AuthRequired($default_category_id);
-	}
+		// 导入链接
+		foreach ($links as $link) {
+			$category = $link['category'];
+			$link_data = [
+				'fid' => $categories[$category]['id'],
+				'weight' => 0,
+				'title' => $link['title'],
+				'url' => $link['url'],
+				'url_standby' => '',
+				'description' => $link['description'],
+				'property' => $property
+			];
+			$state = $helper->addLink_AuthRequired($link_data);
+		}
 
-	$helper->returnSuccess();
+		// 检测默认分类是否存在链接
+		if ($helper->countLinksByCategoryId_AuthRequired($default_category_id) === 0) {
+			// 如不存在，则删除默认分类
+			$helper->deleteCategory_AuthRequired($default_category_id);
+		}
+
+		$helper->returnSuccess();
+	} elseif ($file_suffix === 'xlsx' || $file_suffix === 'csv') {
+		$helper->backupDatabase_AuthRequired()
+			? $helper->emptyCategoriesTable_AuthRequired() &&
+				$helper->emptyLinksTable_AuthRequired()
+			: $helper->throwError(403, '数据库备份失败，导入被终止！');
+
+		$excel_file = SimpleExcelReader::create('../Cache/Upload/' . $staging_file_name);
+		$excel_file
+			->fromSheetName('categories')
+			->getRows()
+			->each(function (array $row_properties): void {
+				global $helper;
+				$helper->addCategory_AuthRequired($row_properties);
+			});
+		$excel_file
+			->fromSheetName('links')
+			->getRows()
+			->each(function (array $row_properties): void {
+				global $helper;
+				$helper->addLink_AuthRequired($row_properties);
+			});
+
+		$helper->returnSuccess();
+	} else {
+		$helper->throwError(403, '文件类型不正确！');
+	}
 }
 
 exit();
