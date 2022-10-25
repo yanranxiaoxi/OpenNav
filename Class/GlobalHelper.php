@@ -755,16 +755,16 @@ class GlobalHelper {
 		if (empty($category_data['title'])) {
 			return '标题不能为空！';
 		} else {
-			strval($category_data['title']);
+			htmlspecialchars(trim(strval($category_data['title'])));
 		}
 		// font_icon
 		empty($category_data['font_icon'])
 			? ($category_data['font_icon'] = 'fa-bookmark-o')
-			: strval($category_data['font_icon']);
+			: htmlspecialchars(trim(strval($category_data['font_icon'])));
 		// description
 		empty($category_data['description'])
 			? ($category_data['description'] = '')
-			: strval($category_data['description']);
+			: htmlspecialchars(trim(strval($category_data['description'])));
 		// property
 		empty($category_data['property'])
 			? ($category_data['property'] = 0)
@@ -787,24 +787,35 @@ class GlobalHelper {
 			return '描述长度不能超过 256 位（中文字符占 3 位）';
 		}
 
+		$data = [
+			'fid' => $category_data['fid'],
+			'weight' => $category_data['weight'],
+			'title' => $category_data['title'],
+			'font_icon' => $category_data['font_icon'],
+			'description' => $category_data['description'],
+			'property' => $category_data['property']
+		];
+		if (!empty($category_data['id'])) {
+			$data['id'] = $category_data['id'];
+		}
 		// 当分类 fid 大于等于 1 时，查询分类 fid 是否对应一个一级分类的 id
-		if ($category_data['fid'] >= 1) {
+		if ($data['fid'] >= 1) {
 			$has_parent_category = $this->database->has('on_categories', [
-				'id' => $category_data['fid']
+				'id' => $data['fid']
 			]);
 			// 如果不是一级分类的 id，则数据不合法
 			if (!$has_parent_category) {
 				return '父级分类必须为一级分类！';
 			} else {
 				// 否则数据合法，写入数据库
-				$category_data['add_time'] = time();
-				$this->database->insert('on_categories', $category_data);
+				$data['add_time'] = time();
+				$this->database->insert('on_categories', $data);
 				return true;
 			}
 		} else {
 			// 否则数据合法，写入数据库
-			$category_data['add_time'] = time();
-			$this->database->insert('on_categories', $category_data);
+			$data['add_time'] = time();
+			$this->database->insert('on_categories', $data);
 			if ($return_id === true) {
 				return intval($this->database->id());
 			} else {
@@ -845,22 +856,22 @@ class GlobalHelper {
 		if (empty($link_data['title'])) {
 			return '标题不能为空！';
 		} else {
-			strval($link_data['title']);
+			htmlspecialchars(trim(strval($link_data['title'])));
 		}
 		// url
 		if (empty($link_data['url'])) {
 			return 'URL 不能为空！';
 		} else {
-			strval($link_data['url']);
+			htmlspecialchars(trim(strval($link_data['url'])));
 		}
 		// url_standby
 		empty($link_data['url_standby'])
 			? ($link_data['url_standby'] = '')
-			: strval($link_data['url_standby']);
+			: htmlspecialchars(trim(strval($link_data['url_standby'])));
 		// description
 		empty($link_data['description'])
 			? ($link_data['description'] = '')
-			: strval($link_data['description']);
+			: htmlspecialchars(trim(strval($link_data['description'])));
 		// property
 		empty($link_data['property'])
 			? ($link_data['property'] = 0)
@@ -894,15 +905,27 @@ class GlobalHelper {
 			}
 		}
 
+		$data = [
+			'fid' => $link_data['fid'],
+			'weight' => $link_data['weight'],
+			'title' => $link_data['title'],
+			'url' => $link_data['url'],
+			'url_standby' => $link_data['url_standby'],
+			'description' => $link_data['description'],
+			'property' => $link_data['property']
+		];
+		if (!empty($link_data['id'])) {
+			$data['id'] = $link_data['id'];
+		}
 		$has_parent_category = $this->database->has('on_categories', [
-			'id' => $link_data['fid']
+			'id' => $data['fid']
 		]);
 		if (!$has_parent_category) {
 			return '所属分类不存在！';
 		}
 		// 数据合法，写入数据库
-		$link_data['add_time'] = time();
-		$this->database->insert('on_links', $link_data);
+		$data['add_time'] = time();
+		$this->database->insert('on_links', $data);
 		if ($return_id === true) {
 			return intval($this->database->id());
 		} else {
@@ -933,16 +956,16 @@ class GlobalHelper {
 		if (empty($category_data['title'])) {
 			return '必填项不能为空！';
 		} else {
-			strval($category_data['title']);
+			htmlspecialchars(trim(strval($category_data['title'])));
 		}
 		// font_icon
 		empty($category_data['font_icon'])
 			? ($category_data['font_icon'] = 'fa-bookmark-o')
-			: strval($category_data['font_icon']);
+			: htmlspecialchars(trim(strval($category_data['font_icon'])));
 		// description
 		empty($category_data['description'])
 			? ($category_data['description'] = '')
-			: strval($category_data['description']);
+			: htmlspecialchars(trim(strval($category_data['description'])));
 		// property
 		empty($category_data['property'])
 			? ($category_data['property'] = 0)
@@ -965,26 +988,34 @@ class GlobalHelper {
 			return '描述长度不能超过 256 位（中文字符占 3 位）';
 		}
 
+		$data = [
+			'fid' => $category_data['fid'],
+			'weight' => $category_data['weight'],
+			'title' => $category_data['title'],
+			'font_icon' => $category_data['font_icon'],
+			'description' => $category_data['description'],
+			'property' => $category_data['property']
+		];
 		// 当分类 fid 大于等于 1 时，查询分类 fid 是否对应一个一级分类的 id
-		if ($category_data['fid'] >= 1) {
+		if ($data['fid'] >= 1) {
 			$has_parent_category = $this->database->has('on_categories', [
-				'id' => $category_data['fid']
+				'id' => $data['fid']
 			]);
 			// 如果不是一级分类的 id，则数据不合法
 			if (!$has_parent_category) {
 				return '父级分类必须为一级分类！';
 			} else {
 				// 否则数据合法，写入数据库
-				$category_data['update_time'] = time();
-				$this->database->update('on_categories', $category_data, [
+				$data['update_time'] = time();
+				$this->database->update('on_categories', $data, [
 					'id' => $category_id
 				]);
 				return true;
 			}
 		} else {
 			// 否则数据合法，写入数据库
-			$category_data['update_time'] = time();
-			$this->database->update('on_categories', $category_data, [
+			$data['update_time'] = time();
+			$this->database->update('on_categories', $data, [
 				'id' => $category_id
 			]);
 			return true;
@@ -1013,22 +1044,22 @@ class GlobalHelper {
 		if (empty($link_data['title'])) {
 			return '标题不能为空！';
 		} else {
-			strval($link_data['title']);
+			htmlspecialchars(trim(strval($link_data['title'])));
 		}
 		// url
 		if (empty($link_data['url'])) {
 			return 'URL 不能为空！';
 		} else {
-			strval($link_data['url']);
+			htmlspecialchars(trim(strval($link_data['url'])));
 		}
 		// url_standby
 		empty($link_data['url_standby'])
 			? ($link_data['url_standby'] = '')
-			: strval($link_data['url_standby']);
+			: htmlspecialchars(trim(strval($link_data['url_standby'])));
 		// description
 		empty($link_data['description'])
 			? ($link_data['description'] = '')
-			: strval($link_data['description']);
+			: htmlspecialchars(trim(strval($link_data['description'])));
 		// property
 		empty($link_data['property'])
 			? ($link_data['property'] = 0)
@@ -1062,15 +1093,24 @@ class GlobalHelper {
 			}
 		}
 
+		$data = [
+			'fid' => $link_data['fid'],
+			'weight' => $link_data['weight'],
+			'title' => $link_data['title'],
+			'url' => $link_data['url'],
+			'url_standby' => $link_data['url_standby'],
+			'description' => $link_data['description'],
+			'property' => $link_data['property']
+		];
 		$has_parent_category = $this->database->has('on_categories', [
-			'id' => $link_data['fid']
+			'id' => $data['fid']
 		]);
 		if (!$has_parent_category) {
 			return '所属分类不存在！';
 		}
 		// 数据合法，写入数据库
-		$link_data['update_time'] = time();
-		$this->database->update('on_links', $link_data, [
+		$data['update_time'] = time();
+		$this->database->update('on_links', $data, [
 			'id' => $link_id
 		]);
 		return true;

@@ -70,16 +70,14 @@ if ($page === 'Categories') {
  * 删除分类
  */
 if ($page === 'DeleteCategory') {
-	if (!empty($_POST['id'])) {
-		$category_id = intval($_POST['id']);
-		$state = $helper->deleteCategory_AuthRequired($category_id);
-		if ($state) {
-			$helper->returnSuccess();
-		} else {
-			$helper->throwError(403, '无法删除该分类，可能是该分类下拥有子分类或链接。');
-		}
+	if (empty($_POST['id'])) {
+		$helper->throwError(403, '未指定分类 ID');
+	}
+	$state = $helper->deleteCategory_AuthRequired(intval($_POST['id']));
+	if ($state) {
+		$helper->returnSuccess();
 	} else {
-		$helper->throwError(403, '参数错误！');
+		$helper->throwError(403, '无法删除该分类，可能是该分类下拥有子分类或链接。');
 	}
 }
 
@@ -87,36 +85,14 @@ if ($page === 'DeleteCategory') {
  * 修改分类
  */
 if ($page === 'EditCategory') {
-	if (empty($_POST['property'])) {
-		$_POST['property'] = 0;
+	if (empty($_POST['id'])) {
+		$helper->throwError(403, '未指定分类 ID');
 	}
-	if (
-		isset($_POST['id']) &&
-		isset($_POST['fid']) &&
-		isset($_POST['weight']) &&
-		!empty($_POST['title']) &&
-		!empty($_POST['font_icon'])
-	) {
-		$category_id = intval($_POST['id']);
-		$description = empty($_POST['description'])
-			? ''
-			: htmlspecialchars(trim($_POST['description']));
-		$category_data = [
-			'fid' => intval($_POST['fid']),
-			'weight' => intval($_POST['weight']),
-			'title' => htmlspecialchars(trim($_POST['title'])),
-			'font_icon' => htmlspecialchars(trim($_POST['font_icon'])),
-			'description' => $description,
-			'property' => intval($_POST['property'])
-		];
-		$state = $helper->updateCategory_AuthRequired($category_id, $category_data);
-		if ($state === true) {
-			$helper->returnSuccess();
-		} else {
-			$helper->throwError(403, '分类修改失败！');
-		}
+	$state = $helper->updateCategory_AuthRequired(intval($_POST['id']), $_POST);
+	if ($state === true) {
+		$helper->returnSuccess();
 	} else {
-		$helper->throwError(403, '参数错误！');
+		$helper->throwError(403, $state);
 	}
 }
 
@@ -124,34 +100,11 @@ if ($page === 'EditCategory') {
  * 添加分类
  */
 if ($page === 'AddCategory') {
-	if (empty($_POST['property'])) {
-		$_POST['property'] = 0;
-	}
-	if (
-		isset($_POST['fid']) &&
-		isset($_POST['weight']) &&
-		!empty($_POST['title']) &&
-		!empty($_POST['font_icon'])
-	) {
-		$description = empty($_POST['description'])
-			? ''
-			: htmlspecialchars(trim($_POST['description']));
-		$category_data = [
-			'fid' => intval($_POST['fid']),
-			'weight' => intval($_POST['weight']),
-			'title' => htmlspecialchars(trim($_POST['title'])),
-			'font_icon' => htmlspecialchars(trim($_POST['font_icon'])),
-			'description' => $description,
-			'property' => intval($_POST['property'])
-		];
-		$state = $helper->addCategory_AuthRequired($category_data);
-		if ($state === true) {
-			$helper->returnSuccess();
-		} else {
-			$helper->throwError(403, '分类添加失败！');
-		}
+	$state = $helper->addCategory_AuthRequired($_POST);
+	if ($state === true) {
+		$helper->returnSuccess();
 	} else {
-		$helper->throwError(403, '参数错误！');
+		$helper->throwError(403, $state);
 	}
 }
 
@@ -200,53 +153,25 @@ if ($page === 'Links') {
  * 删除链接
  */
 if ($page === 'DeleteLink') {
-	if (!empty($_POST['id'])) {
-		$link_id = intval($_POST['id']);
-		$helper->deleteLink_AuthRequired($link_id);
-		$helper->returnSuccess();
-	} else {
-		$helper->throwError(403, '参数错误！');
+	if (empty($_POST['id'])) {
+		$helper->throwError(403, '未指定链接 ID');
 	}
+	$helper->deleteLink_AuthRequired(intval($_POST['id']));
+	$helper->returnSuccess();
 }
 
 /**
  * 修改链接
  */
 if ($page === 'EditLink') {
-	if (empty($_POST['property'])) {
-		$_POST['property'] = 0;
+	if (empty($_POST['id'])) {
+		$helper->throwError(403, '未指定链接 ID');
 	}
-	if (
-		isset($_POST['id']) &&
-		isset($_POST['fid']) &&
-		isset($_POST['weight']) &&
-		!empty($_POST['title']) &&
-		!empty($_POST['url'])
-	) {
-		$link_id = intval($_POST['id']);
-		$description = empty($_POST['description'])
-			? ''
-			: htmlspecialchars(trim($_POST['description']));
-		$url_standby = empty($_POST['url_standby'])
-			? ''
-			: htmlspecialchars(trim($_POST['url_standby']));
-		$link_data = [
-			'fid' => intval($_POST['fid']),
-			'weight' => intval($_POST['weight']),
-			'title' => htmlspecialchars(trim($_POST['title'])),
-			'url' => htmlspecialchars(trim($_POST['url'])),
-			'url_standby' => $url_standby,
-			'description' => $description,
-			'property' => intval($_POST['property'])
-		];
-		$state = $helper->updateLink_AuthRequired($link_id, $link_data);
-		if ($state === true) {
-			$helper->returnSuccess();
-		} else {
-			$helper->throwError(403, '链接修改失败！');
-		}
+	$state = $helper->updateLink_AuthRequired(intval($_POST['id']), $_POST);
+	if ($state === true) {
+		$helper->returnSuccess();
 	} else {
-		$helper->throwError(403, '参数错误！');
+		$helper->throwError(403, $state);
 	}
 }
 
@@ -254,38 +179,11 @@ if ($page === 'EditLink') {
  * 添加链接
  */
 if ($page === 'AddLink') {
-	if (empty($_POST['property'])) {
-		$_POST['property'] = 0;
-	}
-	if (
-		isset($_POST['fid']) &&
-		isset($_POST['weight']) &&
-		!empty($_POST['title']) &&
-		!empty($_POST['url'])
-	) {
-		$description = empty($_POST['description'])
-			? ''
-			: htmlspecialchars(trim($_POST['description']));
-		$url_standby = empty($_POST['url_standby'])
-			? ''
-			: htmlspecialchars(trim($_POST['url_standby']));
-		$link_data = [
-			'fid' => intval($_POST['fid']),
-			'weight' => intval($_POST['weight']),
-			'title' => htmlspecialchars(trim($_POST['title'])),
-			'url' => htmlspecialchars(trim($_POST['url'])),
-			'url_standby' => $url_standby,
-			'description' => $description,
-			'property' => intval($_POST['property'])
-		];
-		$state = $helper->addLink_AuthRequired($link_data);
-		if ($state === true) {
-			$helper->returnSuccess();
-		} else {
-			$helper->throwError(403, '链接添加失败！');
-		}
+	$state = $helper->addLink_AuthRequired($_POST);
+	if ($state === true) {
+		$helper->returnSuccess();
 	} else {
-		$helper->throwError(403, '参数错误！');
+		$helper->throwError(403, $state);
 	}
 }
 
