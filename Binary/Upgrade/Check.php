@@ -5,7 +5,7 @@ require_once __DIR__ . '/../../Public/index.php';
 if (CONFIG_VERSION !== VERSION) {
 	$current_version = CONFIG_VERSION;
 	while ($current_version !== VERSION) {
-		require_once '../Binary/Upgrade/' . $current_version . '.php';
+		require_once '../Binary/Upgrade/Version/' . $current_version . '.php';
 	}
 	exit('更新已完成，请刷新页面！');
 }

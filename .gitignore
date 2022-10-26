@@ -9,9 +9,8 @@
 !/Cache/Log/.gitkeep
 /Cache/Upload/*
 !/Cache/Upload/.gitkeep
-/Data/config.php
-/Data/database.db3
-/Data/PublicSuffixList.dat
+/Data/*
+!/Data/.gitkeep
 /node_modules/
 /Public/node_modules/
 /Public/themes/*

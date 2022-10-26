@@ -1,6 +1,6 @@
 <?php
 /**
- * OpenNav 全局配置文件
+ * OpenNav 用户全局配置文件
  *
  * @author		XiaoXi <admin@soraharu.com>
  * @copyright	All rights reserved by XiaoXi
@@ -59,10 +59,6 @@ define('GRAVATAR_API_URL', 'https://gravatar.soraharu.com');
 define('TOTP_SECRET_KEY', '{totp_secret_key}');
 // COOKIE SecretKey
 define('COOKIE_SECRET_KEY', '{cookie_secret_key}');
-// 在线服务 API 地址
-define('API_URL', 'https://opennav.soraharu.com/API/v1/');
-// 检查更新 API 地址
-define('CHECK_UPDATE_API_URL', 'https://gitlab.soraharu.com/api/v4/projects/90/releases');
 // DEBUG 模式
 define('DEBUG_MODE', false);
 // 当前配置版本

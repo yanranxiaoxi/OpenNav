@@ -37,7 +37,7 @@ class GlobalHelper {
 	}
 
 	/**
-	 * 获取访客 IP 地址「Logic Safety」
+	 * 获取访客 IP 地址「Private」
 	 *
 	 * @return string|false 访客 IP 地址
 	 */
@@ -1435,13 +1435,41 @@ class GlobalHelper {
 	}
 
 	/**
-	 * 修改全局配置「Auth Required」
+	 * 获取全局配置值「Private」
 	 *
-	 * @param string $key 全局变量名
-	 * @param string|int|bool $old_value 全局变量原值
-	 * @param string|int|bool $value 全局变量将要修改为的值
+	 * @param	string	$config_content	全局配置文件内容
+	 * @param	string	$key			全局变量名
 	 *
-	 * @return bool 修改状态
+	 * @return	string|int|bool|null	全局变量值，null 为无法获取
+	 */
+	private function getGlobalConfigValue(string $config_content, string $key): ?string {
+		$config_content_array = explode("\n", $config_content);
+		foreach ($config_content_array as $config_content_line) {
+			if (
+				preg_match('/define(\'' . $key . '\', \'(.+)\');/i', $config_content_line, $match)
+			) {
+				if (substr($match[1], 0, 1) === '\'') {
+					return substr($match[1], 1, strlen($match[1]) - 2);
+				} elseif ($match[1] === 'true') {
+					return true;
+				} elseif ($match[1] === 'false') {
+					return false;
+				} else {
+					return intval($match[1]);
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * 修改用户全局配置「Auth Required」
+	 *
+	 * @param	string			$key		全局变量名
+	 * @param	string|int|bool	$old_value	全局变量原值
+	 * @param	string|int|bool	$value		全局变量新值
+	 *
+	 * @return	bool			修改状态
 	 */
 	public function setGlobalConfig_AuthRequired(
 		string $key,
@@ -1486,6 +1514,60 @@ class GlobalHelper {
 			}
 		} else {
 			return false;
+		}
+	}
+
+	/**
+	 * 重置用户全局配置「Auth Required」
+	 *
+	 * @param	array	$key_array			全局变量名数组
+	 * @param	array	$value_array		全局变量新值数组
+	 *
+	 * @return	bool	修改状态
+	 */
+	public function resetGlobalConfig_AuthRequired(array $key_array, array $value_array): bool {
+		if (count($key_array) !== count($value_array)) {
+			return false;
+		}
+		$global_config = file_get_contents('../Binary/Config.sample.php');
+		for ($i = 0; $i < count($key_array); $i++) {
+			$old_value = $this->getGlobalConfigValue($global_config, $key_array[$i]);
+			if (is_string($old_value) && !empty($old_value)) {
+				$str_search = 'define(\'' . $key_array[$i] . '\', \'' . $old_value . '\');';
+			} elseif ((is_int($old_value) || is_bool($old_value)) && !empty($old_value)) {
+				$str_search = 'define(\'' . $key_array[$i] . '\', ' . $old_value . ');';
+			} elseif ($old_value === '') {
+				$str_search = 'define(\'' . $key_array[$i] . '\', \'\');';
+			} elseif ($old_value === 0) {
+				$str_search = 'define(\'' . $key_array[$i] . '\', 0);';
+			} elseif ($old_value === false) {
+				$str_search = 'define(\'' . $key_array[$i] . '\', false);';
+			} else {
+				return false;
+			}
+			if (is_string($value_array[$i]) && !empty($value_array[$i])) {
+				$str_replace = 'define(\'' . $key_array[$i] . '\', \'' . $value_array[$i] . '\');';
+			} elseif (
+				(is_int($value_array[$i]) || is_bool($value_array[$i])) &&
+				!empty($value_array[$i])
+			) {
+				$str_replace = 'define(\'' . $key_array[$i] . '\', ' . $value_array[$i] . ');';
+			} elseif ($value_array[$i] === '') {
+				$str_replace = 'define(\'' . $key_array[$i] . '\', \'\');';
+			} elseif ($value_array[$i] === 0) {
+				$str_replace = 'define(\'' . $key_array[$i] . '\', 0);';
+			} elseif ($value_array[$i] === false) {
+				$str_replace = 'define(\'' . $key_array[$i] . '\', false);';
+			} else {
+				return false;
+			}
+
+			$global_config = str_replace($str_search, $str_replace, $global_config);
+		}
+		if (!file_put_contents('../Data/Config.php', $global_config)) {
+			return false;
+		} else {
+			return true;
 		}
 	}
 

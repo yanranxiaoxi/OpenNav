@@ -14,10 +14,11 @@ declare(strict_types=1);
 namespace OpenNav\Public;
 
 /**
- * 载入类库文件
+ * 载入前置文件
  */
 require_once '../vendor/autoload.php';
 require_once '../Class/GlobalHelper.php';
+require_once '../Binary/SystemConfig.php';
 
 use Medoo\Medoo;
 use OpenNav\Class\GlobalHelper;
@@ -67,16 +68,10 @@ $helper = new GlobalHelper($database);
 /**
  * 初始参数
  */
-// 程序版本
-define('VERSION', '0.1.5');
 // 关闭 PHP 警告提示
 if (DEBUG_MODE === false) {
 	error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING ^ E_DEPRECATED);
 }
-// 设置 PHP 超时时限
-ini_set('max_execution_time', 60);
-// 设置 Contect-Type 请求头为 text/html
-header('Content-Type: text/html; charset=utf-8');
 // 检查更新
 require_once '../Binary/Upgrade/Check.php';
 // 获取控制器，并使用二进制安全的方式剥去字符串左右的空白与其中的 HTML 标签
