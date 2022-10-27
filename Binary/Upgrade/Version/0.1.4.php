@@ -1,10 +1,10 @@
 <?php
 
-require_once __DIR__ . '/../../Public/index.php';
-require_once __DIR__ . '/Check.php';
+require_once __DIR__ . '/../../../Public/index.php';
+require_once __DIR__ . '/../Check.php';
 
 if ($current_version === '0.1.4') {
-	$helper->setGlobalConfig_AuthRequired('DATABASE_TYPE', DATABASE_TYPE, 'SQLite');
+	// $helper->setGlobalConfig_AuthRequired('DATABASE_TYPE', DATABASE_TYPE, 'SQLite');
 	@$database->query('DROP INDEX <on_categorys_fid_IDX>');
 	@$database->query('DROP INDEX <on_categorys_id_IDX>');
 	@$database->query('DROP INDEX <on_categorys_name_IDX>');
@@ -18,7 +18,10 @@ if ($current_version === '0.1.4') {
 	@$database->delete('sqlite_sequence', ['name' => 'on_database_upgrade_logs']);
 	unlink('../Data/Config.sample.php');
 	unlink('../Data/Database.sample.db3');
+	// 存在配置文件修正，需要重置配置文件
+	unlink('../Data/Config.php');
 
-	$helper->setGlobalConfig_AuthRequired('CONFIG_VERSION', CONFIG_VERSION, '0.1.5');
+	// $helper->setGlobalConfig_AuthRequired('CONFIG_VERSION', CONFIG_VERSION, '0.1.5');
 	$current_version = '0.1.5';
+	$need_reflush = true;
 }

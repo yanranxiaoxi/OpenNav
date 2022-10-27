@@ -1437,6 +1437,8 @@ class GlobalHelper {
 	/**
 	 * 获取全局配置值「Private」
 	 *
+	 * @todo	#TODO#	未测试
+	 *
 	 * @param	string	$config_content	全局配置文件内容
 	 * @param	string	$key			全局变量名
 	 *
@@ -1519,6 +1521,8 @@ class GlobalHelper {
 
 	/**
 	 * 重置用户全局配置「Auth Required」
+	 *
+	 * @todo	#TODO#	未测试
 	 *
 	 * @param	array	$key_array			全局变量名数组
 	 * @param	array	$value_array		全局变量新值数组
