@@ -607,7 +607,7 @@ class GlobalHelper {
 	 *
 	 * @param	int		$link_id	链接 ID
 	 *
-	 * @return	array	链接数组 url
+	 * @return	array	链接数组
 	 */
 	public function getLinkByLinkId(int $link_id): array {
 		$link_value = [];
