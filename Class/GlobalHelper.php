@@ -996,14 +996,19 @@ class GlobalHelper {
 			'description' => $category_data['description'],
 			'property' => $category_data['property']
 		];
-		// 当分类 fid 大于等于 1 时，查询分类 fid 是否对应一个一级分类的 id
+		// 当分类 fid 大于等于 1 时，查询分类 fid 是否对应一个一级分类的 id，且分类是否不存在任何子分类
 		if ($data['fid'] >= 1) {
 			$has_parent_category = $this->database->has('on_categories', [
 				'id' => $data['fid']
 			]);
+			$has_child_category = $this->database->has('on_categories', [
+				'fid' => $category_id
+			]);
 			// 如果不是一级分类的 id，则数据不合法
 			if (!$has_parent_category) {
 				return '父级分类必须为一级分类！';
+			} elseif ($has_child_category) {
+				return '该分类存在子分类，不允许变更为二级分类！';
 			} else {
 				// 否则数据合法，写入数据库
 				$data['update_time'] = time();
