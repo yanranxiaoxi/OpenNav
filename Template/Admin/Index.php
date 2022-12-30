@@ -43,8 +43,8 @@
 	$.post('./index.php?c=Upgrade&page=CheckLatestVersion', function(data, status) {
 		$("#getting_version").hide();
 		if (data.code === 200) {
-			$("#latest_version").text(data.version);
-			let latest_version = data.version.split('.');
+			$("#latest_version").text(data.data.version);
+			let latest_version = data.data.version.split('.');
 			let current_version = $("#current_version").text().split('.');
 			latest_version[0] = parseInt(latest_version[0]);
 			latest_version[1] = parseInt(latest_version[1]);
