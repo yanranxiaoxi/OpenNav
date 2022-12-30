@@ -1751,7 +1751,9 @@ class GlobalHelper {
 	 */
 	public function getPublicSuffixListRegistrableDomain(string $url): string {
 		$public_suffix_list = Rules::fromPath('../Data/PublicSuffixList.dat');
+		if (explode(':', $url)) {
 			$url = substr($url, 0, strrpos($url, ':'));
+		}
 		$domain = Domain::fromIDNA2008($url);
 		$result = $public_suffix_list->resolve($domain);
 		return $result->registrableDomain()->toString();
