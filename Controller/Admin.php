@@ -128,6 +128,14 @@ if ($page === 'Subscribe') {
 }
 
 /**
+ * 进入更新流程
+ */
+if ($page === 'Upgrade') {
+	require_once '../Template/Admin/Option/Upgrade.php';
+	exit();
+}
+
+/**
  * 进入导入链接流程
  */
 if ($page === 'ImportLinks') {

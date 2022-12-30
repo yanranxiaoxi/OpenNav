@@ -36,7 +36,7 @@ if ($timestamp - $last_timestamp < 7150) {
  * 任务初始化
  */
 // 设置周期任务运行时限
-ini_set('max_execution_time', 7000); // 2 hours - 200 seconds
+set_time_limit(7000); // 2 hours - 200 seconds
 // 保存执行时间戳
 file_put_contents('../Cache/Log/.cron.timestamp', strval($timestamp));
 // 新建日志文件
@@ -115,6 +115,9 @@ foreach ($caches as $directory_name => $cache_info) {
 $caches = [
 	'Favicon' => [
 		'/^[0-9a-z]{20}\.offline\.svg$/' => 15552000 // 180 days
+	],
+	'Upgrade' => [
+		'/^\d{1,}\.\d{1,}\.\d{1,}\.zip$/' => 604800 // 7 days
 	]
 ];
 foreach ($caches as $directory_name => $cache_info) {

@@ -105,7 +105,7 @@ class GlobalHelper {
 	/**
 	 * 使用 PHP Client URL 请求获取数据「Logic Safety」
 	 *
-	 * @param	string		$url		预请求的 URL 地址
+	 * @param	string		$url		欲请求的 URL 地址
 	 * @param	array|null	$post_array	需要 POST 发送的数据
 	 * @param	int			$timeout	请求超时时间，以秒为单位
 	 *
@@ -120,12 +120,8 @@ class GlobalHelper {
 			return false;
 		}
 		$curl = curl_init($url);
-		// 设置 UserAgent
-		curl_setopt(
-			$curl,
-			CURLOPT_USERAGENT,
-			'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36'
-		);
+
+		curl_setopt($curl, CURLOPT_USERAGENT, USER_AGENT);
 		curl_setopt($curl, CURLOPT_FAILONERROR, true);
 		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -141,6 +137,40 @@ class GlobalHelper {
 		$data = curl_exec($curl);
 		curl_close($curl);
 		return $data;
+	}
+
+	/**
+	 * 使用 PHP Client URL 请求下载文件「Auth Required」
+	 *
+	 * @param	string	$url			欲请求的 URL 地址
+	 * @param	string	$file_address	文件保存位置，以 OpenNav 根目录为起始
+	 * @param	int		$timeout		请求超时时间，以秒为单位
+	 *
+	 * @return	bool	下载状态
+	 */
+	public function curlDownload_AuthRequired(
+		string $url,
+		string $file_address,
+		int $timeout = 60
+	): bool {
+		if (!$this->validateUrl($url)) {
+			return false;
+		}
+		$file_point = fopen($file_address, 'w+');
+		$curl = curl_init($url);
+
+		curl_setopt($curl, CURLOPT_USERAGENT, USER_AGENT);
+		curl_setopt($curl, CURLOPT_FAILONERROR, true);
+		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
+		curl_setopt($curl, CURLOPT_FILE, $file_point);
+
+		$curl_status = curl_exec($curl);
+		curl_close($curl);
+
+		return $curl_status;
 	}
 
 	/**

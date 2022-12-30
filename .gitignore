@@ -7,6 +7,8 @@
 !/Cache/Favicon/.gitkeep
 /Cache/Log/*
 !/Cache/Log/.gitkeep
+/Cache/Upgrade/*
+!/Cache/Upgrade/.gitkeep
 /Cache/Upload/*
 !/Cache/Upload/.gitkeep
 /Data/*

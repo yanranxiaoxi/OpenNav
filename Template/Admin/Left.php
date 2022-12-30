@@ -31,6 +31,7 @@
 					<!-- #TODO# --><!-- <dd><a href="./index.php?c=Admin&page=Theme">主题设置</a></dd> -->
 					<dd><a href="./index.php?c=Admin&page=TransitionPage">过渡页面</a></dd>
 					<dd><a href="./index.php?c=Admin&page=Subscribe">订阅设置</a></dd>
+					<dd><a href="./index.php?c=Admin&page=Upgrade">更新程序</a></dd>
 					<!-- #TODO# --><!-- <dd><a href="./index.php?c=Admin&page=GetAPI">获取 API</a></dd> -->
 				</dl>
 			</li>

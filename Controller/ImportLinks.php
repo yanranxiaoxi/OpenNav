@@ -79,7 +79,7 @@ if ($page === 'ImportLinks') {
 		$helper->throwError(403, '文件不存在！');
 	}
 	// 设置导入任务运行时限
-	ini_set('max_execution_time', 300); // 5 minutes
+	set_time_limit(300); // 5 minutes
 
 	if ($file_suffix === 'html' || $file_suffix === 'htm') {
 		$helper->backupDatabase_AuthRequired()
