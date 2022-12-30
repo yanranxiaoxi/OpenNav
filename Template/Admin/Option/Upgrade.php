@@ -56,7 +56,7 @@
 				<div class="layui-form-item">
 					<button class="layui-btn" lay-submit lay-filter="do_upgrade">一键更新</button>
 					<button class="layui-btn layui-btn-primary layui-border-red" lay-submit lay-filter="do_reinstall">修复程序（重新安装）</button>
-					<a class="layui-btn layui-btn-primary" rel="nofollow" target="_blank" title="下载软件包" href="#"><i class="fa fa-cloud-download"></i> 下载软件包</a>
+					<a class="layui-btn layui-btn-primary" rel="nofollow" target="_blank" title="下载软件包" href="#" id="download_package_button"><i class="fa fa-cloud-download"></i> 下载软件包</a>
 				</div>
 
 			</form>
@@ -72,21 +72,24 @@
 	$.post('./index.php?c=Upgrade&page=CheckLatestVersion', function(data, status) {
 		if (data.code === 200) {
 			const releasedDate = new Date(data.data.released_at);
-			$("#latest_version").val(data.data.version);
-			$("#latest_version_date").val([
+			$('#latest_version').val(data.data.version);
+			$('#latest_version_date').val([
 				releasedDate.getFullYear().toString(),
 				(releasedDate.getMonth() + 1).toString(),
 				releasedDate.getDate().toString(),
 			].join('-'));
-			$("#download_link").val(data.data.download_link);
+			$('#download_link').val(data.data.download_link);
 			if (data.data.download_cache) {
-				$("#download_cache").val('true (v' + data.data.version + ')');
+				$('#download_cache').val('true (v' + data.data.version + ')');
 			} else {
-				$("#download_cache").val('false');
+				$('#download_cache').val('false');
 			}
+			$('#download_package_button').attr('href', data.data.download_link);
 		} else {
-			$("#latest_version").val(data.message);
-			$("#download_link").val(data.message);
+			$('#latest_version').val(data.message);
+			$('#latest_version_date').val(data.message);
+			$('#download_link').val(data.message);
+			$('#download_cache').val(data.message);
 		}
 	});
 
