@@ -29,6 +29,9 @@
 			<div class="layui-col-lg4">
 				<div class="admin-msg">打赏咖啡：<a href="https://www.buymeacoffee.com/yanranxiaoxi" title="前往打赏页" rel="nofollow" target="_blank">By Me A Coffee</a></div>
 			</div>
+			<div class="layui-col-lg4">
+				<div class="admin-msg">服务监控：<a href="https://status.soraharu.com/" title="API 服务在线监控" rel="nofollow" target="_blank">https://status.soraharu.com/</a></div>
+			</div>
 
 			</div>
 		</div>
