@@ -54,9 +54,9 @@
 				</div>
 
 				<div class="layui-form-item">
-					<button class="layui-btn" lay-submit lay-filter="do_upgrade">一键更新</button>
-					<button class="layui-btn layui-btn-primary layui-border-red" lay-submit lay-filter="do_reinstall">修复程序（重新安装）</button>
-					<a class="layui-btn layui-btn-primary" rel="nofollow" target="_blank" title="下载软件包" href="#" id="download_package_button"><i class="fa fa-cloud-download"></i> 下载软件包</a>
+					<button class="layui-btn layui-btn-disabled" lay-submit lay-filter="do_upgrade" id="do_upgrade_button" disabled="disabled">一键更新</button>
+					<button class="layui-btn layui-btn-primary layui-border-red layui-btn-disabled" lay-submit lay-filter="do_reinstall" id="do_reinstall_button" disabled="disabled">修复程序（重新安装）</button>
+					<a class="layui-btn layui-btn-primary layui-btn-disabled" rel="nofollow" target="_blank" title="下载软件包" href="#" id="download_package_button"><i class="fa fa-cloud-download"></i> 下载软件包</a>
 				</div>
 
 			</form>
@@ -71,6 +71,7 @@
 	// 获取最新版本
 	$.post('./index.php?c=Upgrade&page=CheckLatestVersion', function(data, status) {
 		if (data.code === 200) {
+			// 填充数据
 			const releasedDate = new Date(data.data.released_at);
 			$('#latest_version').val(data.data.version);
 			$('#latest_version_date').val([
@@ -85,6 +86,12 @@
 				$('#download_cache').val('false');
 			}
 			$('#download_package_button').attr('href', data.data.download_link);
+			// 启用按钮
+			$('#do_upgrade_button').removeAttr('disabled');
+			$('#do_reinstall_button').removeAttr('disabled');
+			$('#do_upgrade_button').removeClass('layui-btn-disabled');
+			$('#do_reinstall_button').removeClass('layui-btn-disabled');
+			$('#download_package_button').removeClass('layui-btn-disabled');
 		} else {
 			$('#latest_version').val(data.message);
 			$('#latest_version_date').val(data.message);
@@ -97,7 +104,7 @@
 		// 一键更新选项
 		layui.form.on('submit(do_upgrade)', function(data) {
 			const loading_msg = layer.load(2, {time: 3 * 60 * 1000});
-			layer.msg('正在下载软件包，最多等待 3 分钟 ...', {icon: 4});
+			layer.msg('正在下载软件包，最多等待 3 分钟 ...', {icon: 0});
 			$.post('./index.php?c=Upgrade&page=GetPackage', data.field, function(data, status) {
 				layer.close(loading_msg);
 				// 如果下载完成
